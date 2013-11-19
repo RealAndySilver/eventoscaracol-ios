@@ -15,7 +15,6 @@
 		75EE555E183BBFE900C52654 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE555D183BBFE900C52654 /* AppDelegate.m */; };
 		75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75EE555F183BBFE900C52654 /* Main_iPhone.storyboard */; };
 		75EE5564183BBFE900C52654 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75EE5562183BBFE900C52654 /* Main_iPad.storyboard */; };
-		75EE5567183BBFE900C52654 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5566183BBFE900C52654 /* ViewController.m */; };
 		75EE5569183BBFE900C52654 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75EE5568183BBFE900C52654 /* Images.xcassets */; };
 		75EE5570183BBFE900C52654 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE556F183BBFE900C52654 /* XCTest.framework */; };
 		75EE5571183BBFE900C52654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE554D183BBFE900C52654 /* Foundation.framework */; };
@@ -24,6 +23,8 @@
 		75EE557C183BBFE900C52654 /* EventosCaracolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE557B183BBFE900C52654 /* EventosCaracolTests.m */; };
 		75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5586183BC45300C52654 /* ServerCommunicator.m */; };
 		75EE558A183BC45300C52654 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5588183BC45300C52654 /* FileSaver.m */; };
+		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
+		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,8 +50,6 @@
 		75EE555D183BBFE900C52654 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		75EE5560183BBFE900C52654 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		75EE5563183BBFE900C52654 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		75EE5565183BBFE900C52654 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		75EE5566183BBFE900C52654 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		75EE5568183BBFE900C52654 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		75EE556E183BBFE900C52654 /* EventosCaracolTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventosCaracolTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		75EE556F183BBFE900C52654 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -61,6 +60,10 @@
 		75EE5586183BC45300C52654 /* ServerCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCommunicator.m; sourceTree = "<group>"; };
 		75EE5587183BC45300C52654 /* FileSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSaver.h; sourceTree = "<group>"; };
 		75EE5588183BC45300C52654 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
+		8BA11EBD183BDAA0003616AB /* LoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
+		8BA11EBE183BDAA0003616AB /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
+		8BA11EC0183BDB5D003616AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		8BA11EC1183BDB5D003616AB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,8 +127,10 @@
 				75EE555D183BBFE900C52654 /* AppDelegate.m */,
 				75EE555F183BBFE900C52654 /* Main_iPhone.storyboard */,
 				75EE5562183BBFE900C52654 /* Main_iPad.storyboard */,
-				75EE5565183BBFE900C52654 /* ViewController.h */,
-				75EE5566183BBFE900C52654 /* ViewController.m */,
+				8BA11EBD183BDAA0003616AB /* LoadingViewController.h */,
+				8BA11EBE183BDAA0003616AB /* LoadingViewController.m */,
+				8BA11EC0183BDB5D003616AB /* LoginViewController.h */,
+				8BA11EC1183BDB5D003616AB /* LoginViewController.m */,
 				75EE558B183BC45B00C52654 /* ServerCommunicator */,
 				75EE558C183BC46900C52654 /* Model */,
 				75EE5568183BBFE900C52654 /* Images.xcassets */,
@@ -279,9 +284,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75EE5567183BBFE900C52654 /* ViewController.m in Sources */,
 				75EE555E183BBFE900C52654 /* AppDelegate.m in Sources */,
 				75EE555A183BBFE900C52654 /* main.m in Sources */,
+				8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */,
+				8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */,
 				75EE558A183BC45300C52654 /* FileSaver.m in Sources */,
 				75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */,
 			);
@@ -502,6 +508,7 @@
 				75EE5581183BBFE900C52654 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		75EE5582183BBFE900C52654 /* Build configuration list for PBXNativeTarget "EventosCaracolTests" */ = {
 			isa = XCConfigurationList;
@@ -510,6 +517,7 @@
 				75EE5584183BBFE900C52654 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
