@@ -22,6 +22,8 @@
 		75EE5572183BBFE900C52654 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE5551183BBFE900C52654 /* UIKit.framework */; };
 		75EE557A183BBFE900C52654 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 75EE5578183BBFE900C52654 /* InfoPlist.strings */; };
 		75EE557C183BBFE900C52654 /* EventosCaracolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE557B183BBFE900C52654 /* EventosCaracolTests.m */; };
+		75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5586183BC45300C52654 /* ServerCommunicator.m */; };
+		75EE558A183BC45300C52654 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5588183BC45300C52654 /* FileSaver.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +57,10 @@
 		75EE5577183BBFE900C52654 /* EventosCaracolTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EventosCaracolTests-Info.plist"; sourceTree = "<group>"; };
 		75EE5579183BBFE900C52654 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		75EE557B183BBFE900C52654 /* EventosCaracolTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventosCaracolTests.m; sourceTree = "<group>"; };
+		75EE5585183BC45300C52654 /* ServerCommunicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerCommunicator.h; sourceTree = "<group>"; };
+		75EE5586183BC45300C52654 /* ServerCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCommunicator.m; sourceTree = "<group>"; };
+		75EE5587183BC45300C52654 /* FileSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSaver.h; sourceTree = "<group>"; };
+		75EE5588183BC45300C52654 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +126,8 @@
 				75EE5562183BBFE900C52654 /* Main_iPad.storyboard */,
 				75EE5565183BBFE900C52654 /* ViewController.h */,
 				75EE5566183BBFE900C52654 /* ViewController.m */,
+				75EE558B183BC45B00C52654 /* ServerCommunicator */,
+				75EE558C183BC46900C52654 /* Model */,
 				75EE5568183BBFE900C52654 /* Images.xcassets */,
 				75EE5554183BBFE900C52654 /* Supporting Files */,
 			);
@@ -153,6 +161,24 @@
 				75EE5578183BBFE900C52654 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		75EE558B183BC45B00C52654 /* ServerCommunicator */ = {
+			isa = PBXGroup;
+			children = (
+				75EE5585183BC45300C52654 /* ServerCommunicator.h */,
+				75EE5586183BC45300C52654 /* ServerCommunicator.m */,
+			);
+			name = ServerCommunicator;
+			sourceTree = "<group>";
+		};
+		75EE558C183BC46900C52654 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				75EE5587183BC45300C52654 /* FileSaver.h */,
+				75EE5588183BC45300C52654 /* FileSaver.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,6 +282,8 @@
 				75EE5567183BBFE900C52654 /* ViewController.m in Sources */,
 				75EE555E183BBFE900C52654 /* AppDelegate.m in Sources */,
 				75EE555A183BBFE900C52654 /* main.m in Sources */,
+				75EE558A183BC45300C52654 /* FileSaver.m in Sources */,
+				75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
