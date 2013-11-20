@@ -12,6 +12,11 @@
 
 
 #import "LoginViewController.h"
+#import "ServerCommunicator.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import "FileSaver.h"
+#import "ServerCommunicator.h"
+
 //#define kRedColor [UIColor colorWithRed:250.0/255 green:88.0/255 blue:88.0/255 alpha:1]
 #define kGreenColor [UIColor colorWithRed:64.0/255 green:174.0/255 blue:126.0/255 alpha:1]
 #define kRedColor [UIColor colorWithRed:255.0/255 green:0.0/255 blue:0.0/255 alpha:1]
@@ -28,21 +33,28 @@
     [super viewDidLoad];
     //[self deleteUserDic];
     if ([self userExists]) {
-        [self goToNextVC];
+        //[self goToNextVC];
         return;
     }
-    [self callTutorialAnimated:NO];
+    //[self callTutorialAnimated:NO];
     
-    [self.view setBackgroundColor:kColpatria];
+    //[self.view setBackgroundColor:kColpatria];
     
-    UIView *loginButtonContainer=[[UIView alloc]initWithFrame:CGRectMake(0, 130, self.view.frame.size.width, 60)];
+    /*UIView *loginButtonContainer=[[UIView alloc]initWithFrame:CGRectMake(0, 130, self.view.frame.size.width, 60)];
     loginButtonContainer.backgroundColor=kBlueColor;
     loginButtonContainer.center=CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
-    [loginButtonContainer setClipsToBounds:YES];
+    [loginButtonContainer setClipsToBounds:YES];*
     UIImageView *fbConnectImage=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"fbconnect.png"]];
     fbConnectImage.frame=CGRectMake(self.view.frame.size.width-110, 15, 100, 30);
-    [loginButtonContainer addSubview:fbConnectImage];
-    PullActionButton *loginButton=[[PullActionButton alloc]initWithFrame:CGRectMake(-190,0, 390, 60)];
+    [loginButtonContainer addSubview:fbConnectImage];*/
+    
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2, self.view.bounds.size.height/2, 50.0, 50.0)];
+    loginButton.backgroundColor = [UIColor redColor];
+    //loginButton.titleLabel.text = @"Login";
+    [self.view addSubview:loginButton];
+    [loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    /*PullActionButton *loginButton=[[PullActionButton alloc]initWithFrame:CGRectMake(-190,0, 390, 60)];
     loginButton.the_delegate=self;
     loginButton.label.text=@"Desliza para Entrar";
     loginButton.layer.shadowOffset=CGSizeMake(0.0,0.0);
@@ -54,56 +66,64 @@
     
     loginButton.icon.image=[UIImage imageNamed:@"grip.png"];
     loginButton.icon.frame=CGRectMake(loginButton.frame.size.width-30, 15, 15, 30);
-    loginButton.icon.alpha=0.5;
-    [self.view addSubview:loginButtonContainer];
+    loginButton.icon.alpha=0.5;*/
+    //[self.view addSubview:loginButtonContainer];
 }
 -(void)login{
     if (![self userExists]) {
-        [MBHUDView hudWithBody:@"Conectando" type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+        //[MBHUDView hudWithBody:@"Conectando" type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
         NSArray *permissions =
         [NSArray arrayWithObjects:@"email", nil];
         [FBSession openActiveSessionWithReadPermissions:permissions
                                            allowLoginUI:YES
                                       completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
                                           if(!error){
-                                              if (FBSession.activeSession.isOpen) {
+                                              NSLog(@"No hay error");
+                                              if (FBSession.activeSession.isOpen)
+                                              {
+                                                  NSLog(@"La sesion está abierta");
                                                   [[FBRequest requestForMe] startWithCompletionHandler:
                                                    ^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
                                                        if (!error) {
-                                                           NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+                                                           
+                                                           NSLog(@"Se pudo conectar");
+                                                           /*NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+                                                           
                                                            [dic setObject:[IAmCoder base64String:[user objectForKey:@"id"]] forKey:@"id"];
                                                            [dic setObject:[IAmCoder base64String:[user objectForKey:@"email"]] forKey:@"email"];
                                                            [dic setObject:[IAmCoder base64String:[user objectForKey:@"name"]] forKey:@"name"];
                                                            [self setDictionary:dic withKey:@"user"];
-                                                           [self signUpWithUser:dic];
+                                                           //[self signUpWithUser:dic];*/
                                                        }
                                                        else{
                                                            if (error.code==5) {
                                                                NSLog(@"No hay conexión %ld",(long)error.code);
-                                                               [MBHUDView dismissCurrentHUD];
-                                                               [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                               //[MBHUDView dismissCurrentHUD];
+                                                               //[MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                                            }
                                                        }
                                                    }];
                                               }
                                           }
                                           else{
+                                              NSLog(@"Hubo un error");
                                               if (error.code==5) {
                                                   NSLog(@"No hay conexión %ld",(long)error.code);
-                                                  [MBHUDView dismissCurrentHUD];
-                                                  [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                  //[MBHUDView dismissCurrentHUD];
+                                                  //[MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }
                                               else if (error.code==2){
                                                   NSLog(@"no autorizado error %ld",(long)error.code);
-                                                  [MBHUDView dismissCurrentHUD];
-                                                  [MBHUDView hudWithBody:@"Acceso denegado" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                  //[MBHUDView dismissCurrentHUD];
+                                                  //[MBHUDView hudWithBody:@"Acceso denegado" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }
                                           }
                                       }];
     }
     else{
         if ([self userExists]) {
-            [self signUpWithUser:[self getUserDictionary]];
+            NSLog(@"El usuario existe");
+            //[self signUpWithUser:[self getUserDictionary]];
         }
         //[self goToNextVC];
     }
@@ -112,8 +132,9 @@
     [super didReceiveMemoryWarning];
 }
 #pragma mark - server request
--(void)signUpWithUser:(NSDictionary*)user{
+/*-(void)signUpWithUser:(NSDictionary*)user{
     ServerCommunicator *server=[[ServerCommunicator alloc]init];
+    
     server.caller=self;
     server.tag=1;
     NSString *params=[NSString stringWithFormat:@"facebookId=%@&name=%@&email=%@&token=%@",[user objectForKey:@"id"],[user objectForKey:@"name"],[user objectForKey:@"email"],[self getUserToken]];
@@ -156,13 +177,13 @@
     }
     else if (server.tag==2){
     }
-}
+}*/
 #pragma mark - next vc
--(void)goToNextVC{
+/*-(void)goToNextVC{
     MyLocationViewController *mVC=[[MyLocationViewController alloc]init];
     mVC=[self.storyboard instantiateViewControllerWithIdentifier:@"MyLocation"];
     [self.navigationController pushViewController:mVC animated:YES];
-}
+}*/
 #pragma mark - user exists
 -(BOOL)userExists{
     FileSaver *file=[[FileSaver alloc]init];
@@ -196,11 +217,16 @@
     [self login];
 }
 -(IBAction)infoButton:(id)sender{
-    [self callTutorialAnimated:YES];
+    //[self callTutorialAnimated:YES];
 }
--(void)callTutorialAnimated:(BOOL)animated{
+/*-(void)callTutorialAnimated:(BOOL)animated{
     TutorialViewController *tVC=[[TutorialViewController alloc]init];
     tVC=[self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
     [self presentViewController:tVC animated:animated completion:nil];
+}*/
+
+-(void)loginButtonPressed
+{
+    [self login];
 }
 @end
