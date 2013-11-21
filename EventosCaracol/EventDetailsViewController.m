@@ -18,6 +18,8 @@
 {
     [super viewDidLoad];
     
+    self.navigationItem.title = @"Detalles Evento";
+    
     //Create the view's content and added it as subview of self.view
     UIImageView *eventImage = [[UIImageView alloc] initWithFrame:CGRectMake(20.0, 77.0, 280.0, 200.0)];
     eventImage.backgroundColor = [UIColor cyanColor];

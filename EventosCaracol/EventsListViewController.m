@@ -39,10 +39,18 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //Configure the backBarButtonItem that will be displayed in the Navigation Bar when the user moves to EventDetailsViewController
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Volver"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:nil];
+    
     self.tableView=[[UITableView alloc]initWithFrame:CGRectMake(0, self.navigationController.navigationBar.frame.origin.y+self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
     
     [self.view addSubview:_tableView];
     
+    //Table View Config
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = ROW_HEIGHT;
@@ -158,28 +166,20 @@
     else if (buttonIndex == 1)
     {
         NSLog(@"Facebook");
-        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook])
-        {
-            SLComposeViewController *facebookViewController = [[SLComposeViewController alloc] init];
-            [facebookViewController setInitialText:@"Me acabo de inscribir al evento que vamos a ir todos."];
-            [self presentViewController:facebookViewController animated:YES completion:nil];
-        }
-        
-        else
-            NSLog(@"the service is unavailable");
+       
+        SLComposeViewController *facebookViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+        [facebookViewController setInitialText:@"Me acabo de inscribir al evento que vamos a ir todos."];
+        [self presentViewController:facebookViewController animated:YES completion:nil];
     }
     
     else if (buttonIndex == 2)
     {
         NSLog(@"Twitter");
-        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
-        {
-            SLComposeViewController *twitterViewController = [[SLComposeViewController alloc] init];
-            [twitterViewController setInitialText:@"Me acbo de inscribir a este genial evento"];
-            [self presentViewController:twitterViewController animated:YES completion:nil];
-        }
-        else
-            NSLog(@"Twitter is not availbale");
+    
+        SLComposeViewController *twitterViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+        [twitterViewController setInitialText:@"Me acbo de inscribir a este genial evento"];
+        [self presentViewController:twitterViewController animated:YES completion:nil];
+ 
     }
     
     else if (buttonIndex == 3)
@@ -205,7 +205,7 @@
 
 -(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
