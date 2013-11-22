@@ -31,13 +31,13 @@
     
     //Create the view's content and added it as subview of self.view
     
-    UIImageView *eventImage = [[UIImageView alloc]
+    UIImageView *mainImageView = [[UIImageView alloc]
                                initWithFrame:CGRectMake(20.0,
                                                         self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0,
                                                         self.view.frame.size.width - 40.0,
                                                         (self.view.frame.size.height/2 - 20) -(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0))];
-    eventImage.backgroundColor = [UIColor cyanColor];
-    [self.view addSubview:eventImage];
+    mainImageView.backgroundColor = [UIColor cyanColor];
+    [self.view addSubview:mainImageView];
     
     UIButton *favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0,
                                                                           self.view.frame.size.height/2,

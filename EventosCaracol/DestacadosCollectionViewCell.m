@@ -29,6 +29,7 @@
                                                                                     self.contentView.bounds.size.height)];
         [self.featuredEventImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [self.featuredEventImageView setContentMode:UIViewContentModeScaleAspectFit];
+        self.contentView.backgroundColor = [UIColor cyanColor];
         [self.contentView addSubview:self.featuredEventImageView];
         [self.contentView addSubview:self.featuredEventNameLabel];
     }

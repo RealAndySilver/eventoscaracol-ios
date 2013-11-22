@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface EventDetailsViewController : UIViewController
-
+@property (strong, nonatomic) UIImage *mainImage;
 @end

@@ -8,6 +8,7 @@
 
 #import "DestacadosViewController.h"
 #import "DestacadosCollectionViewCell.h"
+#import "EventDetailsViewController.h"
 #import "FileSaver.h"
 
 @interface DestacadosViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -48,10 +49,11 @@
     /////////////////////////////////////////////////////////
     //Create UICollectionView
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.size.height + 20.0, self.view.frame.size.width, self.view.frame.size.height - (self.navigationController.navigationBar.frame.size.height + 20.0))
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10.0, self.navigationController.navigationBar.frame.size.height + 30.0, self.view.frame.size.width - 20.0, self.view.frame.size.height - (self.navigationController.navigationBar.frame.size.height + 30.0))
                                              collectionViewLayout:collectionViewLayout];
     
     self.collectionView.dataSource = self;
+    [self.collectionView setAlwaysBounceVertical:YES];
     self.collectionView.delegate = self;
     [self.collectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:@"featuredCell"];
     self.collectionView.backgroundColor = [UIColor clearColor];
@@ -61,9 +63,16 @@
 
 #pragma mark - UICollectionViewDelegate & UICollectionViewDataSource
 
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"me seleccioné");
+    EventDetailsViewController *eventDetailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+    [self.navigationController pushViewController:eventDetailsVC animated:YES];
+}
+
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSLog(@"%d", [self.featuredEventsArray count]);
+    NSLog(@"%lu", (unsigned long)[self.featuredEventsArray count]);
     return [self.featuredEventsArray count];
 }
 
@@ -71,15 +80,14 @@
 {
     DestacadosCollectionViewCell *featuredEventCell = (DestacadosCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"featuredCell" forIndexPath:indexPath];
     
-    featuredEventCell.featuredEventImageView.image = self.featuredEventImages[indexPath.item];
+    //featuredEventCell.featuredEventImageView.image = self.featuredEventImages[indexPath.item];
     featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"name"];
     
     return featuredEventCell;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(150, 150);
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+        return indexPath.item % 3 ? CGSizeMake(140, 120):CGSizeMake(self.collectionView.frame.size.width, 150.0);
 }
 
 @end
