@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface LoadingViewController : UIViewController
+#import "ServerCommunicator.h"
+#import "FileSaver.h"
+@interface LoadingViewController : UIViewController<ServerCommunicatorDelegate>
 
 @end

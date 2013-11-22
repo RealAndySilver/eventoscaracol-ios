@@ -7,7 +7,7 @@
 //
 
 #import "ServerCommunicator.h"
-#define ENDPOINT @"http://10.0.1.7:4000"
+#define ENDPOINT @"http://caracol.aws.af.cm/"
 //#define ENDPOINT @"http://iamstudio-sweetwater.herokuapp.com/"
 //#define ENDPOINT @"http://sweetwater.jit.su"
 
