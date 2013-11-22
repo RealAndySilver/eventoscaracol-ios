@@ -11,6 +11,7 @@
 #import "EventsListViewController.h"
 #import "EventDetailsViewController.h"
 #import "SWTableViewCell.h"
+#import "PopUpView.h"
 #import "Atom.h"
 
 @interface EventsListViewController () <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>{
@@ -252,6 +253,11 @@
 
 -(void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index
 {
+    if (index == 0)
+    {
+        [PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:nil]];
+    }
+    
     if (index == 1)
     {
         [[[UIActionSheet alloc] initWithTitle:@""
@@ -266,8 +272,6 @@
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"%d",buttonIndex);
-
     if(buttonIndex == 0)
     {
         NSLog(@"SMS");
@@ -421,5 +425,7 @@
 
     }
 }
+
+
 
 @end

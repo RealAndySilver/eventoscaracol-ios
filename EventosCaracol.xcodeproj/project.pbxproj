@@ -33,6 +33,8 @@
 		8B8BFC8D183BFE5A003552EC /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */; };
 		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
+		8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */; };
+		8BFFF27D183FA82000009526 /* PopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFFF27C183FA82000009526 /* PopUpView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +87,9 @@
 		8BA11EBE183BDAA0003616AB /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
 		8BA11EC0183BDB5D003616AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		8BA11EC1183BDB5D003616AB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonPrueba.png; path = Resources/Images/CorazonPrueba.png; sourceTree = "<group>"; };
+		8BFFF27B183FA82000009526 /* PopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopUpView.h; sourceTree = "<group>"; };
+		8BFFF27C183FA82000009526 /* PopUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopUpView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +165,8 @@
 				8BA11EC1183BDB5D003616AB /* LoginViewController.m */,
 				8B2D002F183D1BBB0007D502 /* EventsListViewController.h */,
 				8B2D0030183D1BBB0007D502 /* EventsListViewController.m */,
+				8BFFF27B183FA82000009526 /* PopUpView.h */,
+				8BFFF27C183FA82000009526 /* PopUpView.m */,
 				8B2D0042183D64920007D502 /* EventDetailsViewController.h */,
 				8B2D0043183D64920007D502 /* EventDetailsViewController.m */,
 				8B2D0032183D1D700007D502 /* SWTableViewCell.h */,
@@ -175,6 +182,7 @@
 		75EE5554183BBFE900C52654 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8BCD7D3D183FB20D00849D8A /* Images */,
 				75EE5555183BBFE900C52654 /* EventosCaracol-Info.plist */,
 				75EE5556183BBFE900C52654 /* InfoPlist.strings */,
 				75EE5559183BBFE900C52654 /* main.m */,
@@ -221,6 +229,14 @@
 				8B2D0039183D2EF30007D502 /* Location.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		8BCD7D3D183FB20D00849D8A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +319,7 @@
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
+				8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +339,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				75EE555E183BBFE900C52654 /* AppDelegate.m in Sources */,
+				8BFFF27D183FA82000009526 /* PopUpView.m in Sources */,
 				8B2D0034183D1D700007D502 /* SWTableViewCell.m in Sources */,
 				8B2D0037183D2A490007D502 /* Atom.m in Sources */,
 				75EE555A183BBFE900C52654 /* main.m in Sources */,
