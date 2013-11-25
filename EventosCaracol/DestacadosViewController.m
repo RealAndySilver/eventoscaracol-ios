@@ -33,27 +33,31 @@
     NSDictionary *myDictionary = [self.fileSaver getDictionary:@"master"][@"app"];
     self.navigationItem.title = [myDictionary objectForKey:@"name"];
     
+    [self.navigationItem setHidesBackButton:YES];
+    
     //define an array with only the featured events information
     self.featuredEventsArray = [self.fileSaver getDictionary:@"master"][@"featured"];
     
     ////////////////////////////////////////////////////////////////
     //Access the web to download the thumbs images to display, and
     //store those images into featuresEventImages array.
-    for (int i = 0; i < [self.featuredEventsArray count]; i++)
+    /*for (int i = 0; i < [self.featuredEventsArray count]; i++)
     {
         NSURL *url = [NSURL URLWithString:self.featuredEventsArray[i][@"thumb_url"]];
         UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
         self.featuredEventImages[i] = image;
-    }
+    }*/
     
     /////////////////////////////////////////////////////////
     //Create UICollectionView
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10.0, self.navigationController.navigationBar.frame.size.height + 30.0, self.view.frame.size.width - 20.0, self.view.frame.size.height - (self.navigationController.navigationBar.frame.size.height + 30.0))
-                                             collectionViewLayout:collectionViewLayout];
+    /*self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10.0, self.navigationController.navigationBar.frame.size.height + 30.0, self.view.frame.size.width - 20.0, self.view.frame.size.height - (self.navigationController.navigationBar.frame.size.height + 30.0))
+                                             collectionViewLayout:collectionViewLayout];*/
+    self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:collectionViewLayout];
     
     self.collectionView.dataSource = self;
     [self.collectionView setAlwaysBounceVertical:YES];
+    self.collectionView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.size.height + 30.0, 10.0, 10.0, 10.0);
     self.collectionView.delegate = self;
     [self.collectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:@"featuredCell"];
     self.collectionView.backgroundColor = [UIColor clearColor];
@@ -87,7 +91,7 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-        return indexPath.item % 3 ? CGSizeMake(140, 120):CGSizeMake(self.collectionView.frame.size.width, 150.0);
+        return indexPath.item % 3 ? CGSizeMake(144, 115):CGSizeMake(self.collectionView.frame.size.width - 20, 115.0);
 }
 
 @end
