@@ -29,9 +29,17 @@
                                                                                     self.contentView.bounds.size.height)];
         [self.featuredEventImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [self.featuredEventImageView setContentMode:UIViewContentModeScaleAspectFit];
+        
+        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width/2 - 25.0,
+                                                                                 self.contentView.frame.size.height/2 - 25.0,
+                                                                                 50.0,
+                                                                                 50.0)];
+        self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+        
         self.contentView.backgroundColor = [UIColor cyanColor];
         [self.contentView addSubview:self.featuredEventImageView];
         [self.contentView addSubview:self.featuredEventNameLabel];
+        [self.contentView addSubview:self.spinner];
     }
     return self;
 }

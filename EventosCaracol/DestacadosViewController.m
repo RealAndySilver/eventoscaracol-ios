@@ -9,6 +9,7 @@
 #import "DestacadosViewController.h"
 #import "DestacadosCollectionViewCell.h"
 #import "EventDetailsViewController.h"
+#import "SWRevealViewController.h"
 #import "FileSaver.h"
 
 @interface DestacadosViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
@@ -24,6 +25,19 @@
 {
     [super viewDidLoad];
     
+    [self.navigationItem setHidesBackButton:YES];
+    
+    //////////////////////////////////////////////////////
+    //Side bar menu button
+    UIBarButtonItem *sideBarButton = [[UIBarButtonItem alloc] initWithTitle:@"SideBar"
+                                                                      style:UIBarButtonItemStylePlain
+                                                                     target:self.revealViewController
+                                                                     action:@selector(revealToggle:)];
+    self.navigationItem.leftBarButtonItem = sideBarButton;
+    
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    
+    
     //Create an array to store the thumbs images to display
     self.featuredEventImages = [[NSMutableArray alloc] init];
     
@@ -32,8 +46,6 @@
     self.fileSaver = [[FileSaver alloc] init];
     NSDictionary *myDictionary = [self.fileSaver getDictionary:@"master"][@"app"];
     self.navigationItem.title = [myDictionary objectForKey:@"name"];
-    
-    [self.navigationItem setHidesBackButton:YES];
     
     //define an array with only the featured events information
     self.featuredEventsArray = [self.fileSaver getDictionary:@"master"][@"featured"];
@@ -86,6 +98,20 @@
     
     //featuredEventCell.featuredEventImageView.image = self.featuredEventImages[indexPath.item];
     featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"name"];
+    [featuredEventCell.spinner startAnimating];
+    
+    dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
+    dispatch_async(imageLoader, ^(){
+        NSURL *url = [NSURL URLWithString:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            if (image)
+            {
+                featuredEventCell.featuredEventImageView.image = image;
+            }
+            [featuredEventCell.spinner stopAnimating];
+        });
+    });
     
     return featuredEventCell;
 }

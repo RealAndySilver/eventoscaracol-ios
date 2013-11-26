@@ -559,7 +559,7 @@ static NSString * const SWSegueRightIdentifier = @"sw_right";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
+    //[self.navigationController setNavigationBarHidden:YES];
     // Uncomment the following code if you want the child controllers
     // to be loaded at this point.
     //

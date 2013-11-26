@@ -8,6 +8,8 @@
 
 #import "LoadingViewController.h"
 #import "DestacadosViewController.h"
+#import "SWRevealViewController.h"
+#import "SidebarViewController.h"
 
 @interface LoadingViewController ()
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
@@ -55,7 +57,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:NO];
+    //[self.navigationController setNavigationBarHidden:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -85,14 +87,11 @@
         if ([dictionary objectForKey:@"app"])
         {
             [self setDictionary:dictionary withName:@"master"];
-            
+            NSLog(@"%@", dictionary);
             //At this point, we have received the info from the server, so we need to stop the spinner.
             [self.spinner stopAnimating];
             
-            //Go to DestacadosViewController
-            DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
-            [self.navigationController pushViewController:destacadosVC animated:YES];
-            NSLog(@"la info está guardada");
+            [self goToMainScreen];
         }
         else
         {
@@ -100,6 +99,18 @@
         }
     }
 }
+
+-(void)goToMainScreen
+{
+    DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
+    SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
+    SWRevealViewController *revealViewController = [[SWRevealViewController alloc] initWithRearViewController:sidebarVC
+                                                                                          frontViewController:navigationController];
+    [self presentViewController:revealViewController animated:YES completion:nil];
+}
+
 -(void)serverError:(NSError *)error{
     if([self getDictionaryWithName:@"master"])
     {

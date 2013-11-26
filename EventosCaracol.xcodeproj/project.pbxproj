@@ -23,6 +23,7 @@
 		75EE557C183BBFE900C52654 /* EventosCaracolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE557B183BBFE900C52654 /* EventosCaracolTests.m */; };
 		75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5586183BC45300C52654 /* ServerCommunicator.m */; };
 		75EE558A183BC45300C52654 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5588183BC45300C52654 /* FileSaver.m */; };
+		8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */; };
 		8B2D0031183D1BBB0007D502 /* EventsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0030183D1BBB0007D502 /* EventsListViewController.m */; };
 		8B2D0034183D1D700007D502 /* SWTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0033183D1D700007D502 /* SWTableViewCell.m */; };
 		8B2D0037183D2A490007D502 /* Atom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0036183D2A490007D502 /* Atom.m */; };
@@ -34,6 +35,7 @@
 		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
 		8BA9C3B11843A20100876AA5 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */; };
+		8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B41843A60700876AA5 /* SidebarViewController.m */; };
 		8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */; };
 		8BCD7D40183FB8DC00849D8A /* DestacadosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */; };
 		8BEFF81E183FEEE1004A5C6E /* DestacadosCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BEFF81D183FEEE1004A5C6E /* DestacadosCollectionViewCell.m */; };
@@ -73,6 +75,8 @@
 		75EE5586183BC45300C52654 /* ServerCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCommunicator.m; sourceTree = "<group>"; };
 		75EE5587183BC45300C52654 /* FileSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSaver.h; sourceTree = "<group>"; };
 		75EE5588183BC45300C52654 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
+		8B1ED2511844E30E00312DCE /* MenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuTableViewCell.h; sourceTree = "<group>"; };
+		8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewCell.m; sourceTree = "<group>"; };
 		8B2D002F183D1BBB0007D502 /* EventsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsListViewController.h; sourceTree = "<group>"; };
 		8B2D0030183D1BBB0007D502 /* EventsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsListViewController.m; sourceTree = "<group>"; };
 		8B2D0032183D1D700007D502 /* SWTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWTableViewCell.h; sourceTree = "<group>"; };
@@ -92,6 +96,8 @@
 		8BA11EC1183BDB5D003616AB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		8BA9C3AF1843A20100876AA5 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		8BA9C3B31843A60700876AA5 /* SidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarViewController.h; sourceTree = "<group>"; };
+		8BA9C3B41843A60700876AA5 /* SidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarViewController.m; sourceTree = "<group>"; };
 		8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonPrueba.png; path = Resources/Images/CorazonPrueba.png; sourceTree = "<group>"; };
 		8BCD7D3E183FB8DC00849D8A /* DestacadosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DestacadosViewController.h; sourceTree = "<group>"; };
 		8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DestacadosViewController.m; sourceTree = "<group>"; };
@@ -246,6 +252,8 @@
 			children = (
 				8BA9C3AF1843A20100876AA5 /* SWRevealViewController.h */,
 				8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */,
+				8BA9C3B31843A60700876AA5 /* SidebarViewController.h */,
+				8BA9C3B41843A60700876AA5 /* SidebarViewController.m */,
 			);
 			name = SlideMenu;
 			sourceTree = "<group>";
@@ -274,6 +282,8 @@
 				8BEFF81D183FEEE1004A5C6E /* DestacadosCollectionViewCell.m */,
 				8B2D0032183D1D700007D502 /* SWTableViewCell.h */,
 				8B2D0033183D1D700007D502 /* SWTableViewCell.m */,
+				8B1ED2511844E30E00312DCE /* MenuTableViewCell.h */,
+				8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */,
 			);
 			name = "Custom Cells";
 			sourceTree = "<group>";
@@ -388,10 +398,12 @@
 				8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */,
 				8B2D0031183D1BBB0007D502 /* EventsListViewController.m in Sources */,
 				8B2D003A183D2EF30007D502 /* Location.m in Sources */,
+				8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */,
 				8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */,
 				8B2D0044183D64920007D502 /* EventDetailsViewController.m in Sources */,
 				75EE558A183BC45300C52654 /* FileSaver.m in Sources */,
 				75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */,
+				8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

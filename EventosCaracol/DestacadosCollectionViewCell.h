@@ -11,4 +11,5 @@
 @interface DestacadosCollectionViewCell : UICollectionViewCell
 @property (strong, nonatomic) UIImageView *featuredEventImageView;
 @property (strong, nonatomic) UILabel *featuredEventNameLabel;
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @end
