@@ -8,7 +8,7 @@
 
 #import "DestacadosViewController.h"
 #import "DestacadosCollectionViewCell.h"
-#import "EventDetailsViewController.h"
+#import "DetailsViewController.h"
 #import "SWRevealViewController.h"
 #import "FileSaver.h"
 
@@ -48,7 +48,7 @@
     self.navigationItem.title = [myDictionary objectForKey:@"name"];
     
     //define an array with only the featured events information
-    self.featuredEventsArray = [self.fileSaver getDictionary:@"master"][@"featured"];
+    self.featuredEventsArray = [self.fileSaver getDictionary:@"master"][@"destacados"];
     
     ////////////////////////////////////////////////////////////////
     //Access the web to download the thumbs images to display, and
@@ -82,8 +82,10 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"me seleccioné");
-    EventDetailsViewController *eventDetailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
-    [self.navigationController pushViewController:eventDetailsVC animated:YES];
+    DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+    detailsVC.objectInfo = self.featuredEventsArray[indexPath.item];
+    detailsVC.navigationBarTitle = self.featuredEventsArray[indexPath.item][@"name"];
+    [self.navigationController pushViewController:detailsVC animated:YES];
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section

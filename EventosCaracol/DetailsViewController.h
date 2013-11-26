@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EventDetailsViewController : UIViewController
-@property (strong, nonatomic) UIImage *mainImage;
+@interface DetailsViewController : UIViewController
+@property (strong, nonatomic) NSDictionary *objectInfo;
+@property (strong, nonatomic) NSString *navigationBarTitle;
 @end

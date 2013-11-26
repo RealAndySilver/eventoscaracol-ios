@@ -95,10 +95,10 @@
             </objects>
             <point key="canvasLocation" x="1837" y="460"/>
         </scene>
-        <!--Events List View Controller-->
+        <!--List View Controller-->
         <scene sceneID="o0Y-7y-JeI">
             <objects>
-                <viewController storyboardIdentifier="EventsList" id="L6G-Jd-bSs" customClass="EventsListViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventsList" id="L6G-Jd-bSs" customClass="ListViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oXr-1I-gcE"/>
                         <viewControllerLayoutGuide type="bottom" id="95a-9B-96R"/>
@@ -114,10 +114,10 @@
             </objects>
             <point key="canvasLocation" x="1837" y="-241"/>
         </scene>
-        <!--Event Details View Controller-->
+        <!--Details View Controller-->
         <scene sceneID="ybY-dv-xEa">
             <objects>
-                <viewController storyboardIdentifier="EventDetails" id="oLY-Je-WTq" customClass="EventDetailsViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EventDetails" id="oLY-Je-WTq" customClass="DetailsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ff5-6C-XX1"/>
                         <viewControllerLayoutGuide type="bottom" id="rRf-QK-1th"/>

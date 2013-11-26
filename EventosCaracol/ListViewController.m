@@ -8,18 +8,16 @@
 
 #import <Social/Social.h>
 #import <MessageUI/MessageUI.h>
-#import "EventsListViewController.h"
-#import "EventDetailsViewController.h"
+#import "ListViewController.h"
+#import "SWRevealViewController.h"
+#import "DetailsViewController.h"
 #import "SWTableViewCell.h"
 #import "PopUpView.h"
-#import "Atom.h"
 
-@interface EventsListViewController () <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>{
+@interface ListViewController () <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>{
 }
 @property (strong, nonatomic)  UITableView *tableView;
-@property (strong, nonatomic) NSArray *eventsNamesTestArray; //Of NSString
-@property (strong, nonatomic) NSArray *eventsLocationsTestArray; //Of NSString
-@property (strong, nonatomic) NSArray *eventDatesArray; //Of NSString
+@property (strong, nonatomic) NSMutableArray *menuItemsArray; //Of NSDictionary
 @property (strong, nonatomic) UIPickerView *locationPickerView;
 @property (strong, nonatomic) UIPickerView *datePickerView;
 @property (strong, nonatomic) UIView *containerLocationPickerView;
@@ -29,32 +27,7 @@
 
 #define ROW_HEIGHT 90.0
 
-@implementation EventsListViewController
-
-//This Arrays are for test purposes only!!!
-//Lazy Instantiation
--(NSArray *)eventDatesArray
-{
-    if (!_eventDatesArray)
-        _eventDatesArray = @[@"Todos los dias", @"Lunes", @"Martes", @"Miercoles", @"Jueves", @"Viernes", @"Sabado", @"Domingo"];
-    
-    return _eventDatesArray;
-}
-
--(NSArray *)eventsNamesTestArray
-{
-    if (!_eventsNamesTestArray)
-        _eventsNamesTestArray = @[@"Desfile de las flores", @"Desfile de tulipanes", @"desfile de rosas", @"desfile de petunias", @"Fiesta al  parque"];
-    
-    return _eventsNamesTestArray;
-}
-
--(NSArray *)eventsLocationsTestArray
-{
-    if (!_eventsLocationsTestArray)
-        _eventsLocationsTestArray = @[@"Todos los lugares", @"Lugar1", @"Lugar2", @"Lugar3", @"Lugar4", @"Lugar5"];
-    return _eventsLocationsTestArray;
-}
+@implementation ListViewController
 
 #pragma mark - View LifeCycle
 
@@ -62,12 +35,34 @@
 {
     [super viewDidLoad];
     
+    NSLog(@"%@", self.listArray);
+    NSLog(@"%@", self.menuID);
+    
+    /////////////////////////////////////////////////////////////////////
+    //We need to check if the menu item id of the object is equal to the id of the category.
+    self.menuItemsArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [self.listArray count]; i++)
+    {
+        //If yes, add the object to menuItemsArray
+        if ([self.listArray[i][@"menu_item_id"] isEqualToString:self.menuID])
+            [self.menuItemsArray addObject:self.listArray[i]];
+    }
+    
+    //Create a button in the navigation bar to go back to the slide menu
+    SWRevealViewController *revealViewController = [self revealViewController];
+    [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
+    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Menu"
+                                                                               style:UIBarButtonItemStylePlain
+                                                                              target:revealViewController
+                                                                              action:@selector(revealToggle:)];
+    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
+    
     //Configure the backBarButtonItem that will be displayed in the Navigation Bar when the user moves to EventDetailsViewController
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Volver"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
                                                                             action:nil];
-    self.navigationItem.title = @"Programación";
+    self.navigationItem.title = self.navigationBarTitle;
     
     ///////////////////////////////////////////////////////////////////
     //Create two buttons to filter the events list by date and by location
@@ -193,7 +188,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return [self.menuItemsArray count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -221,32 +216,44 @@
     }
     
     //Create the subviews that will contain the cell.
-    UIImageView *eventImage = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
-    eventImage.backgroundColor = [UIColor cyanColor];
-    [eventCell.contentView addSubview:eventImage];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
+    imageView.backgroundColor = [UIColor cyanColor];
     
-    UILabel *eventNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 20.0, 150, 20.0)];
-    eventNameLabel.text = self.eventsNamesTestArray[indexPath.row];
-    eventNameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
-    [eventCell.contentView addSubview:eventNameLabel];
+    dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
+    dispatch_async(imageLoader, ^(){
+        NSURL *imageURL = [NSURL URLWithString:self.menuItemsArray[indexPath.row][@"thumb_url"]];
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            imageView.image = image;
+        });
+    });
     
-    UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 50.0, 100.0, 20.0)];
-    eventLocationLabel.text = @"Plaza roja";
-    eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
-    [eventCell.contentView addSubview:eventLocationLabel];
+    [eventCell.contentView addSubview:imageView];
+    
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 20.0, 150, 20.0)];
+    nameLabel.text = self.menuItemsArray[indexPath.row][@"name"];
+    nameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
+    [eventCell.contentView addSubview:nameLabel];
+    
+    /*UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 50.0, 100.0, 20.0)];
+    descriptionLabel.text = @"Plaza roja";
+    descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    [eventCell.contentView addSubview:descriptionLabel];
     
     UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(210.0, 50.0, 100.0, 20.0)];
     eventTimeLabel.text = @"10:00AM";
     eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
-    [eventCell.contentView addSubview:eventTimeLabel];
+    [eventCell.contentView addSubview:eventTimeLabel];*/
     
     return eventCell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EventDetailsViewController *eventDetailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
-    [self.navigationController pushViewController:eventDetailsVC animated:YES];
+    DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+    detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
+    detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
+    [self.navigationController pushViewController:detailsVC animated:YES];
 }
 
 #pragma mark - SWTableViewDelegate
@@ -348,24 +355,12 @@
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if (pickerView.tag == 1)
-        return [self.eventDatesArray count];
-    
-    else if (pickerView.tag == 2)
-        return 5;
-    
-    else return 0;
+    return 1;
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if (pickerView.tag == 1)
-        return self.eventDatesArray[row];
-    
-    else if (pickerView.tag == 2)
-        return self.eventsLocationsTestArray[row];
-    else
-        return nil;
+    return @"hola";
 }
 
 #pragma mark - Actions

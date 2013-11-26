@@ -6,21 +6,22 @@
 //  Copyright (c) 2013 iAmStudio. All rights reserved.
 //
 
-#import "EventDetailsViewController.h"
+#import "DetailsViewController.h"
 #import <MessageUI/MessageUI.h>
+#import "PopUpView.h"
 #import <Social/Social.h>
 
-@interface EventDetailsViewController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
+@interface DetailsViewController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
 
 @end
 
-@implementation EventDetailsViewController
+@implementation DetailsViewController
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = @"Detalles Evento";
+    self.navigationItem.title = self.navigationBarTitle;
     
     //Create the UIBarButtonItem to share the event.
     UIBarButtonItem *shareBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
@@ -37,6 +38,18 @@
                                                         self.view.frame.size.width - 40.0,
                                                         (self.view.frame.size.height/2 - 20) -(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0))];
     mainImageView.backgroundColor = [UIColor cyanColor];
+    
+    
+    //Load the image asynchronously
+    dispatch_queue_t imageLoader  = dispatch_queue_create("ImageLoader", nil);
+    dispatch_async(imageLoader, ^(){
+        NSURL *imageURL = [NSURL URLWithString:self.objectInfo[@"image_url"][0]];
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            mainImageView.image = image;
+        });
+    });
+    
     [self.view addSubview:mainImageView];
     
     UIButton *favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0,
@@ -44,20 +57,21 @@
                                                                           40.0,
                                                                           40.0)];
     [favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
+    [favoriteButton addTarget:self action:@selector(showFavoriteAnimation) forControlEvents:UIControlEventTouchUpInside];
     [favoriteButton setBackgroundColor:[UIColor purpleColor]];
     [self.view addSubview:favoriteButton];
     
-    UILabel *eventName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
+    UILabel *objectName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
                                                                    self.view.frame.size.height/2,
                                                                    self.view.frame.size.width - (20.0 + favoriteButton.frame.size.width + 20) - 20,
                                                                    44.0)];
-    eventName.numberOfLines = 0;
-    eventName.text = @"Desfile de las flores";
-    eventName.font = [UIFont fontWithName:@"@Helvetica" size:15.0];
-    [self.view addSubview:eventName];
+    objectName.numberOfLines = 0;
+    objectName.text = self.objectInfo[@"name"];
+    objectName.font = [UIFont fontWithName:@"@Helvetica" size:15.0];
+    [self.view addSubview:objectName];
     
     UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
-                                                                            eventName.frame.origin.y + eventName.frame.size.height,
+                                                                            objectName.frame.origin.y + objectName.frame.size.height,
                                                                             self.view.frame.size.width - (20.0 + favoriteButton.frame.size.width + 20) - 20,
                                                                             20.0)];
     eventLocationLabel.text = @"Plaza Cervantes";
@@ -72,17 +86,23 @@
     eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     [self.view addSubview:eventTimeLabel];
     
-    UITextView *eventDescription = [[UITextView alloc]
+    UITextView *description = [[UITextView alloc]
                                     initWithFrame:CGRectMake(20.0,
                                                              eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 10,
                                                              self.view.frame.size.width - 40.0,
                                                              self.view.frame.size.height - (eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 10) - 20.0)];
-    
-    eventDescription.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";
-    eventDescription.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-    eventDescription.selectable = NO;
-    eventDescription.editable = NO;
-    [self.view addSubview:eventDescription];
+    description.text = self.objectInfo[@"detail"];
+    /*eventDescription.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";*/
+    description.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    description.selectable = NO;
+    description.editable = NO;
+    [self.view addSubview:description];
+}
+
+#pragma mark - Actions
+-(void)showFavoriteAnimation
+{
+    [PopUpView showPopUpViewOverView:self.view image:nil];
 }
 
 -(void)shareEvent

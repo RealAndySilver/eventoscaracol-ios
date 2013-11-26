@@ -24,13 +24,13 @@
 		75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5586183BC45300C52654 /* ServerCommunicator.m */; };
 		75EE558A183BC45300C52654 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5588183BC45300C52654 /* FileSaver.m */; };
 		8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */; };
-		8B2D0031183D1BBB0007D502 /* EventsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0030183D1BBB0007D502 /* EventsListViewController.m */; };
+		8B2D0031183D1BBB0007D502 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0030183D1BBB0007D502 /* ListViewController.m */; };
 		8B2D0034183D1D700007D502 /* SWTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0033183D1D700007D502 /* SWTableViewCell.m */; };
 		8B2D0037183D2A490007D502 /* Atom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0036183D2A490007D502 /* Atom.m */; };
 		8B2D003A183D2EF30007D502 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0039183D2EF30007D502 /* Location.m */; };
 		8B2D003F183D447C0007D502 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2D003E183D447C0007D502 /* Social.framework */; };
 		8B2D0041183D44A90007D502 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2D0040183D44A90007D502 /* MessageUI.framework */; };
-		8B2D0044183D64920007D502 /* EventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0043183D64920007D502 /* EventDetailsViewController.m */; };
+		8B2D0044183D64920007D502 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0043183D64920007D502 /* DetailsViewController.m */; };
 		8B8BFC8D183BFE5A003552EC /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */; };
 		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
@@ -77,8 +77,8 @@
 		75EE5588183BC45300C52654 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
 		8B1ED2511844E30E00312DCE /* MenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuTableViewCell.h; sourceTree = "<group>"; };
 		8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewCell.m; sourceTree = "<group>"; };
-		8B2D002F183D1BBB0007D502 /* EventsListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventsListViewController.h; sourceTree = "<group>"; };
-		8B2D0030183D1BBB0007D502 /* EventsListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventsListViewController.m; sourceTree = "<group>"; };
+		8B2D002F183D1BBB0007D502 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
+		8B2D0030183D1BBB0007D502 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		8B2D0032183D1D700007D502 /* SWTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWTableViewCell.h; sourceTree = "<group>"; };
 		8B2D0033183D1D700007D502 /* SWTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWTableViewCell.m; sourceTree = "<group>"; };
 		8B2D0035183D2A490007D502 /* Atom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Atom.h; sourceTree = "<group>"; };
@@ -87,8 +87,8 @@
 		8B2D0039183D2EF30007D502 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 		8B2D003E183D447C0007D502 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		8B2D0040183D44A90007D502 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		8B2D0042183D64920007D502 /* EventDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDetailsViewController.h; sourceTree = "<group>"; };
-		8B2D0043183D64920007D502 /* EventDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventDetailsViewController.m; sourceTree = "<group>"; };
+		8B2D0042183D64920007D502 /* DetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
+		8B2D0043183D64920007D502 /* DetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 		8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		8BA11EBD183BDAA0003616AB /* LoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
 		8BA11EBE183BDAA0003616AB /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
@@ -180,10 +180,10 @@
 				8BA11EC1183BDB5D003616AB /* LoginViewController.m */,
 				8BCD7D3E183FB8DC00849D8A /* DestacadosViewController.h */,
 				8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */,
-				8B2D002F183D1BBB0007D502 /* EventsListViewController.h */,
-				8B2D0030183D1BBB0007D502 /* EventsListViewController.m */,
-				8B2D0042183D64920007D502 /* EventDetailsViewController.h */,
-				8B2D0043183D64920007D502 /* EventDetailsViewController.m */,
+				8B2D002F183D1BBB0007D502 /* ListViewController.h */,
+				8B2D0030183D1BBB0007D502 /* ListViewController.m */,
+				8B2D0042183D64920007D502 /* DetailsViewController.h */,
+				8B2D0043183D64920007D502 /* DetailsViewController.m */,
 				8BA9C3B21843A20800876AA5 /* SlideMenu */,
 				8BEFF81F18400A1A004A5C6E /* Custom Cells */,
 				8BCD7D41183FB8ED00849D8A /* Views */,
@@ -396,11 +396,11 @@
 				8B2D0037183D2A490007D502 /* Atom.m in Sources */,
 				75EE555A183BBFE900C52654 /* main.m in Sources */,
 				8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */,
-				8B2D0031183D1BBB0007D502 /* EventsListViewController.m in Sources */,
+				8B2D0031183D1BBB0007D502 /* ListViewController.m in Sources */,
 				8B2D003A183D2EF30007D502 /* Location.m in Sources */,
 				8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */,
 				8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */,
-				8B2D0044183D64920007D502 /* EventDetailsViewController.m in Sources */,
+				8B2D0044183D64920007D502 /* DetailsViewController.m in Sources */,
 				75EE558A183BC45300C52654 /* FileSaver.m in Sources */,
 				75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */,
 				8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */,
