@@ -57,7 +57,7 @@
     //Google Maps configuration
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.locationsArray[0][@"lat"] doubleValue]
                                                             longitude:[self.locationsArray[0][@"lon"] doubleValue]
-                                                                 zoom:6.0];
+                                                                 zoom:12.0];
     
     self.mapView = [GMSMapView mapWithFrame:CGRectMake(0.0,
                                                        sortPlacesButton.frame.origin.y + sortPlacesButton.frame.size.height,

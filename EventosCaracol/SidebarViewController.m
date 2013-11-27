@@ -38,7 +38,7 @@
     
     ///////////////////////////////////////////////////////
     //Create the top bar of the view
-    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0.0,
+    /*UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0.0,
                                                                0.0,
                                                                self.view.frame.size.width,
                                                                64.0)];
@@ -50,14 +50,14 @@
                                                                       100.0,
                                                                       20.0)];
     topViewLabel.text = @"Menu";
-    [topView addSubview:topViewLabel];
+    [topView addSubview:topViewLabel];*/
     
     ///////////////////////////////////////////////////////
     //Create the image view
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0,
-                                                                           topView.frame.origin.y + topView.frame.size.height + 10.0,
-                                                                           238.0,
-                                                                           50.0)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                           0.0,
+                                                                           self.view.frame.size.width,
+                                                                           150.0)];
     imageView.backgroundColor = [UIColor grayColor];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -68,7 +68,7 @@
     /////////////////////////////////////////////////////
     //Create the search bar
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0.0,
-                                                                           imageView.frame.origin.y + imageView.frame.size.height + 10.0,
+                                                                           imageView.frame.origin.y + imageView.frame.size.height,
                                                                            260.0,
                                                                            50.0)];
     [self.view addSubview:searchBar];
@@ -111,6 +111,7 @@
     else
     {
         cell.menuItemLabel.text = self.aditionalMenuItemsArray[indexPath.row-6];
+        cell.menuItemImageView.image = nil;
     }
     
     return cell;

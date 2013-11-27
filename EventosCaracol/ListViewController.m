@@ -38,12 +38,16 @@
     
     //Create a button in the navigation bar to go back to the slide menu
     SWRevealViewController *revealViewController = [self revealViewController];
-    [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
-    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Menu"
-                                                                               style:UIBarButtonItemStylePlain
-                                                                              target:revealViewController
-                                                                              action:@selector(revealToggle:)];
-    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
+    
+    if (!self.locationList)
+    {
+        UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Menu"
+                                                                                   style:UIBarButtonItemStylePlain
+                                                                                  target:revealViewController
+                                                                                  action:@selector(revealToggle:)];
+        self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
+        [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
+    }
     
     //Configure the backBarButtonItem that will be displayed in the Navigation Bar when the user moves to EventDetailsViewController
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Volver"
@@ -224,6 +228,8 @@
     
     //Create the subviews that will contain the cell.
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
+    imageView.clipsToBounds = YES;
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
     imageView.backgroundColor = [UIColor cyanColor];
   
     [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"]];
@@ -252,6 +258,10 @@
 {
     DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
     detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
+    
+    if (self.locationList)
+        detailsVC.location = YES;
+    
     detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
     [self.navigationController pushViewController:detailsVC animated:YES];
 }

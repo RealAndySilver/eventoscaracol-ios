@@ -7,6 +7,7 @@
 //
 
 #import <GoogleMaps/GoogleMaps.h>
+#import "FileSaver.h"
 #import "AppDelegate.h"
 
 @implementation AppDelegate
@@ -15,6 +16,16 @@
 {
     // Override point for customization after application launch.
     [GMSServices provideAPIKey:@"AIzaSyC8pPYE33R1zoeR1GuOMrThOw3nwJrgXtE"];
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+    
+    NSString *deviceBrand = @"Apple";
+    NSString *deviceModel = [[UIDevice currentDevice] model];
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    
+    NSDictionary *dic = @{@"Model": deviceModel, @"SystemVersion" : systemVersion, @"Brand" : deviceBrand};
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    [fileSaver setDictionary:dic withKey:@"DeviceInfo"];
+    
     return YES;
 }
 							
@@ -44,6 +55,25 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    FileSaver *file = [[FileSaver alloc] init];
+    [file setToken:[[[[NSString stringWithFormat:@"%@", deviceToken] stringByReplacingOccurrencesOfString:@" " withString:@""] stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""]];
+    
+    NSString *result = [NSString stringWithFormat:@"El token que se guardó fue %@", [file getToken]];
+    NSLog(@"%@", result);
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSLog(@"Error obteniendo el token, error: %@", error);
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"notification" object:userInfo];
 }
 
 @end

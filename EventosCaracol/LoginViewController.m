@@ -49,8 +49,8 @@
     [loginButtonContainer addSubview:fbConnectImage];*/
     
     UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2, self.view.bounds.size.height/2, 50.0, 50.0)];
-    loginButton.backgroundColor = [UIColor redColor];
-    //loginButton.titleLabel.text = @"Login";
+    loginButton.backgroundColor = [UIColor blueColor];
+    [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
     [loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
@@ -70,6 +70,9 @@
     //[self.view addSubview:loginButtonContainer];
 }
 -(void)login{
+    
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    
     if (![self userExists]) {
         //[MBHUDView hudWithBody:@"Conectando" type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
         NSArray *permissions =
@@ -87,12 +90,18 @@
                                                        if (!error) {
                                                            
                                                            NSLog(@"Se pudo conectar");
-                                                           /*NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+                                                           NSLog(@"%@", user);
+                                                           NSMutableDictionary *dic=[[NSMutableDictionary alloc]init];
+                                                           [dic setObject:user[@"id"] forKey:@"id"];
+                                                           [dic setObject:user[@"email"] forKey:@"email"];
+                                                           [dic setObject:user[@"name"] forKey:@"name"];
+                                                           [fileSaver setDictionary:dic withKey:@"user"];
+                                                           [self sendInfo];
                                                            
-                                                           [dic setObject:[IAmCoder base64String:[user objectForKey:@"id"]] forKey:@"id"];
-                                                           [dic setObject:[IAmCoder base64String:[user objectForKey:@"email"]] forKey:@"email"];
-                                                           [dic setObject:[IAmCoder base64String:[user objectForKey:@"name"]] forKey:@"name"];
-                                                           [self setDictionary:dic withKey:@"user"];
+                                                           //[dic setObject:[IAmCoder base64String:[user objectForKey:@"id"]] forKey:@"id"];
+                                                           //[dic setObject:[IAmCoder base64String:[user objectForKey:@"email"]] forKey:@"email"];
+                                                           //[dic setObject:[IAmCoder base64String:[user objectForKey:@"name"]] forKey:@"name"];
+                                                           //[self setDictionary:dic withKey:@"user"];
                                                            //[self signUpWithUser:dic];*/
                                                        }
                                                        else{
@@ -131,6 +140,24 @@
 - (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
 }
+
+-(void)sendInfo
+{
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    NSString *parameters = [NSString stringWithFormat:@"email=%@&id=%@&name=%@&token=%@&brand=%@&os=%@&device=%@",
+                            [fileSaver getDictionary:@"user"][@"email"],
+                            [fileSaver getDictionary:@"user"][@"id"],
+                            [fileSaver getDictionary:@"user"][@"name"],
+                            [fileSaver getToken],
+                            [fileSaver getDictionary:@"DeviceInfo"][@"Brand"],
+                            [fileSaver getDictionary:@"DeviceInfo"][@"SystemVersion"],
+                            [fileSaver getDictionary:@"DeviceInfo"][@"Model"]];
+    
+    ServerCommunicator *server = [[ServerCommunicator alloc] init];
+    [server callServerWithPOSTMethod:@"SignUp" andParameter:parameters httpMethod:@"POST"];
+    NSLog(@"%@", parameters);
+}
+
 #pragma mark - server request
 /*-(void)signUpWithUser:(NSDictionary*)user{
     ServerCommunicator *server=[[ServerCommunicator alloc]init];
