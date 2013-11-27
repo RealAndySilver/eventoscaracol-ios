@@ -95,6 +95,24 @@
             </objects>
             <point key="canvasLocation" x="1837" y="460"/>
         </scene>
+        <!--Map View Controller-->
+        <scene sceneID="GKS-wg-z6m">
+            <objects>
+                <viewController storyboardIdentifier="Map" id="T5A-W7-4pI" customClass="MapViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Kwc-Zv-OTu"/>
+                        <viewControllerLayoutGuide type="bottom" id="pPK-Bs-mmN"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="B23-Gq-CXa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tPr-aW-mpF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2239" y="460"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="RRh-ix-rdw">
             <objects>

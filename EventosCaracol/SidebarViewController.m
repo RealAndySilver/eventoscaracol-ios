@@ -13,6 +13,7 @@
 #import "FileSaver.h"
 #import "ListViewController.h"
 #import "FAQViewController.h"
+#import "MapViewController.h"
 
 @interface SidebarViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (strong, nonatomic) NSArray *menuItems;
@@ -103,7 +104,8 @@
     if (indexPath.row < [self.menuArray count])
     {
         cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
-        cell.menuItemImageView.image = [UIImage imageNamed:@"IconoPrueba.png"];
+        [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]];
+        //cell.menuItemImageView.image = [UIImage imageNamed:@"IconoPrueba.png"];
     }
     
     else
@@ -127,8 +129,17 @@
         if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"artistas"])
         {
             ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-            listVC.listArray = [self.fileSaver getDictionary:@"master"][@"artistas"];
-            listVC.menuID = self.menuArray[indexPath.row][@"_id"];
+            
+            NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"artistas"];
+            NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
+            NSString *menuID = self.menuArray[indexPath.row][@"_id"];
+            for (int i = 0; i < [tempArray count]; i++)
+            {
+                //If yes, add the object to menuItemsArray
+                if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
+                    [tempMutableArray addObject:tempArray[i]];
+            }
+            listVC.menuItemsArray = tempMutableArray;
             listVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
             [revealViewController setFrontViewController:navigationController animated:YES];
@@ -137,8 +148,17 @@
         else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"eventos"])
         {
             ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-            listVC.listArray = [self.fileSaver getDictionary:@"master"][@"eventos"];
-            listVC.menuID = self.menuArray[indexPath.row][@"_id"];
+            
+            NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"eventos"];
+            NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
+            NSString *menuID = self.menuArray[indexPath.row][@"_id"];
+            for (int i = 0; i < [tempArray count]; i++)
+            {
+                //If yes, add the object to menuItemsArray
+                if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
+                    [tempMutableArray addObject:tempArray[i]];
+            }
+            listVC.menuItemsArray = tempMutableArray;
             listVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
             [revealViewController setFrontViewController:navigationController animated:YES];
@@ -147,10 +167,40 @@
         else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"noticias"])
         {
             ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-            listVC.listArray = [self.fileSaver getDictionary:@"master"][@"noticias"];
-            listVC.menuID = self.menuArray[indexPath.row][@"_id"];
+            
+            NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"noticias"];
+            NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
+            NSString *menuID = self.menuArray[indexPath.row][@"_id"];
+            for (int i = 0; i < [tempArray count]; i++)
+            {
+                //If yes, add the object to menuItemsArray
+                if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
+                    [tempMutableArray addObject:tempArray[i]];
+            }
+            listVC.menuItemsArray = tempMutableArray;
             listVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
+            [revealViewController setFrontViewController:navigationController animated:YES];
+        }
+        
+        else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"locaciones"])
+        {
+            MapViewController *mapVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Map"];
+            mapVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
+            //mapVC.menuID = self.menuArray[indexPath.row][@"_id"];
+            //mapVC.locationsArray = [self.fileSaver getDictionary:@"master"][@"locaciones"];
+            
+            NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"locaciones"];
+            NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
+            NSString *menuID = self.menuArray[indexPath.row][@"_id"];
+            for (int i = 0; i < [tempArray count]; i++)
+            {
+                //If yes, add the object to menuItemsArray
+                if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
+                    [tempMutableArray addObject:tempArray[i]];
+            }
+            mapVC.locationsArray = tempMutableArray;
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapVC];
             [revealViewController setFrontViewController:navigationController animated:YES];
         }
     }

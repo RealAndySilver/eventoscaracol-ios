@@ -39,18 +39,6 @@
                                                         self.view.frame.size.width - 40.0,
                                                         (self.view.frame.size.height/2 - 20) -(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0))];
     mainImageView.backgroundColor = [UIColor cyanColor];
-    
-    
-    //Load the image asynchronously
-    /*dispatch_queue_t imageLoader  = dispatch_queue_create("ImageLoader", nil);
-    dispatch_async(imageLoader, ^(){
-        NSURL *imageURL = [NSURL URLWithString:self.objectInfo[@"image_url"][0]];
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            mainImageView.image = image;
-        });
-    });*/
-    
     [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]];
     
     [self.view addSubview:mainImageView];

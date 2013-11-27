@@ -28,7 +28,8 @@
                                                                                     self.contentView.bounds.size.width,
                                                                                     self.contentView.bounds.size.height)];
         [self.featuredEventImageView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        [self.featuredEventImageView setContentMode:UIViewContentModeScaleAspectFit];
+        [self.featuredEventImageView setContentMode:UIViewContentModeScaleAspectFill];
+        self.featuredEventImageView.clipsToBounds = YES;
         
         self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width/2 - 25.0,
                                                                                  self.contentView.frame.size.height/2 - 25.0,

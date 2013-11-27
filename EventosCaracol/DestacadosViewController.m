@@ -51,16 +51,6 @@
     //define an array with only the featured events information
     self.featuredEventsArray = [self.fileSaver getDictionary:@"master"][@"destacados"];
     
-    ////////////////////////////////////////////////////////////////
-    //Access the web to download the thumbs images to display, and
-    //store those images into featuresEventImages array.
-    /*for (int i = 0; i < [self.featuredEventsArray count]; i++)
-    {
-        NSURL *url = [NSURL URLWithString:self.featuredEventsArray[i][@"thumb_url"]];
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-        self.featuredEventImages[i] = image;
-    }*/
-    
     /////////////////////////////////////////////////////////
     //Create UICollectionView
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -99,23 +89,7 @@
 {
     DestacadosCollectionViewCell *featuredEventCell = (DestacadosCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"featuredCell" forIndexPath:indexPath];
     
-    //featuredEventCell.featuredEventImageView.image = self.featuredEventImages[indexPath.item];
     featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"name"];
-    //[featuredEventCell.spinner startAnimating];
-    
-    /*dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
-    dispatch_async(imageLoader, ^(){
-        NSURL *url = [NSURL URLWithString:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            if (image)
-            {
-                featuredEventCell.featuredEventImageView.image = image;
-            }
-            [featuredEventCell.spinner stopAnimating];
-        });
-    });*/
-    
     [featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
     
     return featuredEventCell;

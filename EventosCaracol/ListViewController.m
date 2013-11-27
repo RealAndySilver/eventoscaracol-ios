@@ -18,7 +18,7 @@
 @interface ListViewController () <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>{
 }
 @property (strong, nonatomic)  UITableView *tableView;
-@property (strong, nonatomic) NSMutableArray *menuItemsArray; //Of NSDictionary
+//@property (strong, nonatomic) NSMutableArray *menuItemsArray; //Of NSDictionary
 @property (strong, nonatomic) UIPickerView *locationPickerView;
 @property (strong, nonatomic) UIPickerView *datePickerView;
 @property (strong, nonatomic) UIView *containerLocationPickerView;
@@ -35,19 +35,6 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    NSLog(@"%@", self.listArray);
-    NSLog(@"%@", self.menuID);
-    
-    /////////////////////////////////////////////////////////////////////
-    //We need to check if the menu item id of the object is equal to the id of the category.
-    self.menuItemsArray = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [self.listArray count]; i++)
-    {
-        //If yes, add the object to menuItemsArray
-        if ([self.listArray[i][@"menu_item_id"] isEqualToString:self.menuID])
-            [self.menuItemsArray addObject:self.listArray[i]];
-    }
     
     //Create a button in the navigation bar to go back to the slide menu
     SWRevealViewController *revealViewController = [self revealViewController];
@@ -68,40 +55,59 @@
     ///////////////////////////////////////////////////////////////////
     //Create two buttons to filter the events list by date and by location
     //Filter by date button
-    UIButton *filterByDayButton = [[UIButton alloc]
-                                   initWithFrame:CGRectMake(0,
-                                                            self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                            self.view.frame.size.width/2,
-                                                            44.0)];
     
-    //We need to set the button tag of filterByDayButton and filterByLocationButton to show the correct picker
-    //when the user touches one of these buttons.
-    filterByDayButton.tag = 1;
+    if (!self.locationList)
+    {
+        UIButton *filterByDayButton = [[UIButton alloc]
+                                       initWithFrame:CGRectMake(0,
+                                                                self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                self.view.frame.size.width/2,
+                                                                44.0)];
+        
+        //We need to set the button tag of filterByDayButton and filterByLocationButton to show the correct picker
+        //when the user touches one of these buttons.
+        
+        
+        
+        filterByDayButton.tag = 1;
+        
+        [filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+        [filterByDayButton setTitle:@"Todos los dias" forState:UIControlStateNormal];
+        filterByDayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+        filterByDayButton.backgroundColor = [UIColor cyanColor];
+        [self.view addSubview:filterByDayButton];
+        
+        //Filter by location button
+        UIButton *filterByLocationButton = [[UIButton alloc]
+                                            initWithFrame:CGRectMake(self.view.frame.size.width/2,
+                                                                     self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                     self.view.frame.size.width/2,
+                                                                     44.0)];
+        filterByLocationButton.tag = 2;
+        
+        [filterByLocationButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+        filterByLocationButton.backgroundColor = [UIColor cyanColor];
+        filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+        [filterByLocationButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
+        [self.view addSubview:filterByLocationButton];
+        
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, filterByLocationButton.frame.origin.y + filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
+        [self.view addSubview:_tableView];
+    }
     
-    [filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
-    [filterByDayButton setTitle:@"Todos los dias" forState:UIControlStateNormal];
-    filterByDayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-    filterByDayButton.backgroundColor = [UIColor cyanColor];
-    [self.view addSubview:filterByDayButton];
-    
-    //Filter by location button
-    UIButton *filterByLocationButton = [[UIButton alloc]
-                                        initWithFrame:CGRectMake(self.view.frame.size.width/2,
-                                                                 self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                                 self.view.frame.size.width/2,
-                                                                 44.0)];
-    filterByLocationButton.tag = 2;
-    
-    [filterByLocationButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
-    filterByLocationButton.backgroundColor = [UIColor cyanColor];
-    filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-    [filterByLocationButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
-    [self.view addSubview:filterByLocationButton];
+    else
+    {
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,
+                                                                       0.0,
+                                                                       self.view.frame.size.width,
+                                                                       self.view.frame.size.height)
+                                                      style:UITableViewStylePlain];
+        self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 0.0, 0.0);
+        [self.view addSubview:_tableView];
+    }
     
     ///////////////////////////////////////////////////////////////////
     //Table View initialization and configuration
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, filterByLocationButton.frame.origin.y + filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
-    [self.view addSubview:_tableView];
     
     
     self.tableView.delegate = self;
@@ -219,15 +225,7 @@
     //Create the subviews that will contain the cell.
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
     imageView.backgroundColor = [UIColor cyanColor];
-    
-    /*dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
-    dispatch_async(imageLoader, ^(){
-        NSURL *imageURL = [NSURL URLWithString:self.menuItemsArray[indexPath.row][@"thumb_url"]];
-        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            imageView.image = image;
-        });
-    });*/
+  
     [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"]];
     
     [eventCell.contentView addSubview:imageView];
