@@ -24,6 +24,10 @@
 		75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5586183BC45300C52654 /* ServerCommunicator.m */; };
 		75EE558A183BC45300C52654 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5588183BC45300C52654 /* FileSaver.m */; };
 		8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */; };
+		8B1ED256184544DB00312DCE /* FAQViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED255184544DB00312DCE /* FAQViewController.m */; };
+		8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1ED2571845482E00312DCE /* IconoPrueba.png */; };
+		8B1ED25A18454F4D00312DCE /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1ED25918454F4D00312DCE /* SDWebImage.framework */; };
+		8B1ED25C18454F7100312DCE /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1ED25B18454F7100312DCE /* ImageIO.framework */; };
 		8B2D0031183D1BBB0007D502 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0030183D1BBB0007D502 /* ListViewController.m */; };
 		8B2D0034183D1D700007D502 /* SWTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0033183D1D700007D502 /* SWTableViewCell.m */; };
 		8B2D0037183D2A490007D502 /* Atom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0036183D2A490007D502 /* Atom.m */; };
@@ -77,6 +81,11 @@
 		75EE5588183BC45300C52654 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
 		8B1ED2511844E30E00312DCE /* MenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuTableViewCell.h; sourceTree = "<group>"; };
 		8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewCell.m; sourceTree = "<group>"; };
+		8B1ED254184544DB00312DCE /* FAQViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FAQViewController.h; sourceTree = "<group>"; };
+		8B1ED255184544DB00312DCE /* FAQViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FAQViewController.m; sourceTree = "<group>"; };
+		8B1ED2571845482E00312DCE /* IconoPrueba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconoPrueba.png; path = Resources/Images/IconoPrueba.png; sourceTree = "<group>"; };
+		8B1ED25918454F4D00312DCE /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = "<group>"; };
+		8B1ED25B18454F7100312DCE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8B2D002F183D1BBB0007D502 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		8B2D0030183D1BBB0007D502 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		8B2D0032183D1D700007D502 /* SWTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWTableViewCell.h; sourceTree = "<group>"; };
@@ -112,10 +121,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B1ED25C18454F7100312DCE /* ImageIO.framework in Frameworks */,
 				8B2D0041183D44A90007D502 /* MessageUI.framework in Frameworks */,
 				8B2D003F183D447C0007D502 /* Social.framework in Frameworks */,
 				75EE5550183BBFE900C52654 /* CoreGraphics.framework in Frameworks */,
 				8B8BFC8D183BFE5A003552EC /* FacebookSDK.framework in Frameworks */,
+				8B1ED25A18454F4D00312DCE /* SDWebImage.framework in Frameworks */,
 				75EE5552183BBFE900C52654 /* UIKit.framework in Frameworks */,
 				75EE554E183BBFE900C52654 /* Foundation.framework in Frameworks */,
 			);
@@ -156,6 +167,8 @@
 		75EE554C183BBFE900C52654 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B1ED25B18454F7100312DCE /* ImageIO.framework */,
+				8B1ED25918454F4D00312DCE /* SDWebImage.framework */,
 				8B2D0040183D44A90007D502 /* MessageUI.framework */,
 				8B2D003E183D447C0007D502 /* Social.framework */,
 				8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */,
@@ -184,6 +197,8 @@
 				8B2D0030183D1BBB0007D502 /* ListViewController.m */,
 				8B2D0042183D64920007D502 /* DetailsViewController.h */,
 				8B2D0043183D64920007D502 /* DetailsViewController.m */,
+				8B1ED254184544DB00312DCE /* FAQViewController.h */,
+				8B1ED255184544DB00312DCE /* FAQViewController.m */,
 				8BA9C3B21843A20800876AA5 /* SlideMenu */,
 				8BEFF81F18400A1A004A5C6E /* Custom Cells */,
 				8BCD7D41183FB8ED00849D8A /* Views */,
@@ -261,6 +276,7 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8B1ED2571845482E00312DCE /* IconoPrueba.png */,
 				8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */,
 			);
 			name = Images;
@@ -365,6 +381,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				75EE5564183BBFE900C52654 /* Main_iPad.storyboard in Resources */,
+				8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */,
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
@@ -400,6 +417,7 @@
 				8B2D003A183D2EF30007D502 /* Location.m in Sources */,
 				8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */,
 				8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */,
+				8B1ED256184544DB00312DCE /* FAQViewController.m in Sources */,
 				8B2D0044183D64920007D502 /* DetailsViewController.m in Sources */,
 				75EE558A183BC45300C52654 /* FileSaver.m in Sources */,
 				75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */,
@@ -550,6 +568,7 @@
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
 				INFOPLIST_FILE = "EventosCaracol/EventosCaracol-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -569,6 +588,7 @@
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
 				INFOPLIST_FILE = "EventosCaracol/EventosCaracol-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;

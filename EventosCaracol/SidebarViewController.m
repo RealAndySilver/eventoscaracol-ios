@@ -6,11 +6,13 @@
 //  Copyright (c) 2013 iAmStudio. All rights reserved.
 //
 
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "SidebarViewController.h"
 #import "SWRevealViewController.h"
 #import "MenuTableViewCell.h"
 #import "FileSaver.h"
 #import "ListViewController.h"
+#import "FAQViewController.h"
 
 @interface SidebarViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (strong, nonatomic) NSArray *menuItems;
@@ -21,13 +23,16 @@
 
 @implementation SidebarViewController
 
+#pragma mark - View lifecycle
+
 -(void)viewDidLoad
 {
     self.fileSaver = [[FileSaver alloc] init];
     
+    //Store the info for the aditional buttons of the slide menu table view
     self.aditionalMenuItemsArray = @[@"Preguntas frecuentes", @"Reportar un problema", @"Términos y condiciones"];
     
-    //Array that holds all the menu objects (like artists, news, locations, etc)
+    //Array that holds all the menu objects to display in the table view(like artists, news, locations, etc)
     self.menuArray = [self.fileSaver getDictionary:@"master"][@"menu"];
     
     ///////////////////////////////////////////////////////
@@ -53,6 +58,10 @@
                                                                            238.0,
                                                                            50.0)];
     imageView.backgroundColor = [UIColor grayColor];
+    imageView.clipsToBounds = YES;
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    NSDictionary *appInfo = [self.fileSaver getDictionary:@"master"][@"app"];
+    [imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]];
     [self.view addSubview:imageView];
     
     /////////////////////////////////////////////////////
@@ -77,13 +86,14 @@
     [tableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     [self.view addSubview:tableView];
     
-    self.view.backgroundColor = [UIColor cyanColor];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
+
+#pragma mark - UITableViewDataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return ([self.menuArray count] + [self.aditionalMenuItemsArray count]);
-    //NSLog(@"%d", [self.menuArray count] + [self.aditionalMenuItemsArray count]);
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -93,7 +103,7 @@
     if (indexPath.row < [self.menuArray count])
     {
         cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
-        cell.menuItemImageView.image = [UIImage imageNamed:@"CorazonPrueba.png"];
+        cell.menuItemImageView.image = [UIImage imageNamed:@"IconoPrueba.png"];
     }
     
     else
@@ -103,6 +113,8 @@
     
     return cell;
 }
+
+#pragma mark - UITableViewDelegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -141,6 +153,13 @@
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
             [revealViewController setFrontViewController:navigationController animated:YES];
         }
+    }
+    
+    else
+    {
+        FAQViewController *faqViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FAQ"];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:faqViewController];
+        [revealViewController setFrontViewController:navigationController animated:YES];
     }
 }
 

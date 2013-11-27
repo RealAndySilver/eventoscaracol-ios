@@ -8,6 +8,7 @@
 
 #import <Social/Social.h>
 #import <MessageUI/MessageUI.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "ListViewController.h"
 #import "SWRevealViewController.h"
 #import "DetailsViewController.h"
@@ -219,14 +220,15 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
     imageView.backgroundColor = [UIColor cyanColor];
     
-    dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
+    /*dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
     dispatch_async(imageLoader, ^(){
         NSURL *imageURL = [NSURL URLWithString:self.menuItemsArray[indexPath.row][@"thumb_url"]];
         UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageURL]];
         dispatch_async(dispatch_get_main_queue(), ^(){
             imageView.image = image;
         });
-    });
+    });*/
+    [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"]];
     
     [eventCell.contentView addSubview:imageView];
     

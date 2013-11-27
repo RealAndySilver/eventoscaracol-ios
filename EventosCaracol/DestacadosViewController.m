@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 iAmStudio. All rights reserved.
 //
 
+#import <SDWebImage/UIImageView+WebCache.h>
 #import "DestacadosViewController.h"
 #import "DestacadosCollectionViewCell.h"
 #import "DetailsViewController.h"
@@ -100,9 +101,9 @@
     
     //featuredEventCell.featuredEventImageView.image = self.featuredEventImages[indexPath.item];
     featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"name"];
-    [featuredEventCell.spinner startAnimating];
+    //[featuredEventCell.spinner startAnimating];
     
-    dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
+    /*dispatch_queue_t imageLoader = dispatch_queue_create("ImageLoader", nil);
     dispatch_async(imageLoader, ^(){
         NSURL *url = [NSURL URLWithString:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
         UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
@@ -113,7 +114,9 @@
             }
             [featuredEventCell.spinner stopAnimating];
         });
-    });
+    });*/
+    
+    [featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
     
     return featuredEventCell;
 }
