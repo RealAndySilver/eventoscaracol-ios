@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="KbS-oW-MaA">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
@@ -33,9 +33,31 @@
                     <view key="view" contentMode="scaleToFill" id="TPW-Ni-0li">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5r9-MZ-tUl">
+                                <rect key="frame" x="0.0" y="150" width="259" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2y4-5U-ZUJ" id="BO8-Iy-hdq"/>
+                                </connections>
+                            </searchBar>
+                        </subviews>
                     </view>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="HvE-io-cck" id="LuD-yP-See"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ju2-Yq-w8X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="HvE-io-cck">
+                    <connections>
+                        <outlet property="delegate" destination="2y4-5U-ZUJ" id="9kg-C8-hhc"/>
+                        <outlet property="searchBar" destination="5r9-MZ-tUl" id="p2j-h4-w7y"/>
+                        <outlet property="searchContentsController" destination="2y4-5U-ZUJ" id="1fq-8N-4F4"/>
+                        <outlet property="searchResultsDataSource" destination="2y4-5U-ZUJ" id="ZMZ-ld-PBv"/>
+                        <outlet property="searchResultsDelegate" destination="2y4-5U-ZUJ" id="fk4-nO-lrc"/>
+                    </connections>
+                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1413" y="-241"/>
         </scene>

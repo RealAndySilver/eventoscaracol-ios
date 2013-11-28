@@ -285,6 +285,11 @@
     }
 }
 
+-(void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
+{
+    [PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:@"BorrarPrueba.png"]];
+}
+
 #pragma mark - UIActionSheetDelegate
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex

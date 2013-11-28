@@ -10,6 +10,7 @@
 #import "DestacadosViewController.h"
 #import "SWRevealViewController.h"
 #import "SidebarViewController.h"
+#import "LoginViewController.h"
 
 @interface LoadingViewController ()
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
@@ -73,11 +74,12 @@
     
     //Start animating the spinner.
     [self.spinner startAnimating];
+    FileSaver *file=[[FileSaver alloc]init];
     
     //Load the info from the server asynchronously
     dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
     dispatch_async(infoLoader, ^(){
-        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:@"528c1c396e9f990000000001"];
+        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[file getDictionary:@"app_id"] objectForKey:@"app_id"]];
     });
 }
 #pragma mark - server response
@@ -91,7 +93,7 @@
             //At this point, we have received the info from the server, so we need to stop the spinner.
             [self.spinner stopAnimating];
             
-            [self goToMainScreen];
+            [self goToLogin];
         }
         else
         {
@@ -100,7 +102,7 @@
     }
 }
 
--(void)goToMainScreen
+-(void)goToLogin
 {
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
@@ -109,6 +111,9 @@
     SWRevealViewController *revealViewController = [[SWRevealViewController alloc] initWithRearViewController:sidebarVC
                                                                                           frontViewController:navigationController];
     [self presentViewController:revealViewController animated:YES completion:nil];
+    
+    /*LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+    [self presentViewController:loginVC animated:YES completion:nil];*/
 }
 
 -(void)serverError:(NSError *)error{

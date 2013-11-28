@@ -16,13 +16,16 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "FileSaver.h"
 #import "ServerCommunicator.h"
+#import "DestacadosViewController.h"
+#import "SidebarViewController.h"
+#import "SWRevealViewController.h"
 
 //#define kRedColor [UIColor colorWithRed:250.0/255 green:88.0/255 blue:88.0/255 alpha:1]
 #define kGreenColor [UIColor colorWithRed:64.0/255 green:174.0/255 blue:126.0/255 alpha:1]
 #define kRedColor [UIColor colorWithRed:255.0/255 green:0.0/255 blue:0.0/255 alpha:1]
 #define kBlueColor [UIColor colorWithRed:59.0/255 green:89.0/255 blue:152.0/255 alpha:1]
 #define kColpatria [UIColor colorWithRed:189.0/255.0 green:13.0/255.0 blue:18.0/255.0 alpha:1]
-@interface LoginViewController (){
+@interface LoginViewController ()<ServerCommunicatorDelegate>{
 }
 
 @end
@@ -33,7 +36,7 @@
     [super viewDidLoad];
     //[self deleteUserDic];
     if ([self userExists]) {
-        //[self goToNextVC];
+        [self goToNextVC];
         return;
     }
     //[self callTutorialAnimated:NO];
@@ -48,7 +51,7 @@
     fbConnectImage.frame=CGRectMake(self.view.frame.size.width-110, 15, 100, 30);
     [loginButtonContainer addSubview:fbConnectImage];*/
     
-    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2, self.view.bounds.size.height/2, 50.0, 50.0)];
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2, self.view.bounds.size.height/2, 100.0, 50.0)];
     loginButton.backgroundColor = [UIColor blueColor];
     [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
@@ -144,16 +147,18 @@
 -(void)sendInfo
 {
     FileSaver *fileSaver = [[FileSaver alloc] init];
-    NSString *parameters = [NSString stringWithFormat:@"email=%@&id=%@&name=%@&token=%@&brand=%@&os=%@&device=%@",
+    NSString *parameters = [NSString stringWithFormat:@"email=%@&id=%@&name=%@&token=%@&brand=%@&os=%@&device=%@&app_id=%@",
                             [fileSaver getDictionary:@"user"][@"email"],
                             [fileSaver getDictionary:@"user"][@"id"],
                             [fileSaver getDictionary:@"user"][@"name"],
                             [fileSaver getToken],
                             [fileSaver getDictionary:@"DeviceInfo"][@"Brand"],
                             [fileSaver getDictionary:@"DeviceInfo"][@"SystemVersion"],
-                            [fileSaver getDictionary:@"DeviceInfo"][@"Model"]];
+                            [fileSaver getDictionary:@"DeviceInfo"][@"Model"],
+                            [[fileSaver getDictionary:@"app_id"] objectForKey:@"app_id"]];
     
     ServerCommunicator *server = [[ServerCommunicator alloc] init];
+    server.delegate=self;
     [server callServerWithPOSTMethod:@"SignUp" andParameter:parameters httpMethod:@"POST"];
     NSLog(@"%@", parameters);
 }
@@ -177,40 +182,29 @@
     server.caller=self;
     server.tag=2;
     [server callServerWithGETMethod:@"GetSafeSpots" andParameter:@"123"];
-}
+}*/
+
 #pragma mark - server response
--(void)receivedDataFromServer:(ServerCommunicator*)server{
-    NSLog(@"Respuesta del server %@",server.dictionary);
-    if (server.tag==1) {
-        if ([server.dictionary objectForKey:@"_id"]) {
+-(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName{
+    if ([methodName isEqualToString:@"SignUp"]) {
+        NSLog(@"Result: %@",dictionary);
+        if([[dictionary objectForKey:@"status"] boolValue]){
             [self goToNextVC];
         }
-        [MBHUDView dismissCurrentHUD];
-        [self downloadSafeSpots];
-    }
-    else if (server.tag==2){
-        FileSaver *file=[[FileSaver alloc]init];
-        NSArray *spots=(NSArray*)server.dictionary;
-        NSDictionary *spotsDic=[[NSDictionary alloc]initWithObjectsAndKeys:spots,@"spots", nil];
-        [file setDictionary:spotsDic withKey:@"safe_spots"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"safe_spots_ready" object:nil];
     }
 }
--(void)receivedDataFromServerWithError:(ServerCommunicator*)server{
-    NSLog(@"Respuesta error %@",server.dictionary);
-    if (server.tag==1) {
-        [MBHUDView dismissCurrentHUD];
-        [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
-    }
-    else if (server.tag==2){
-    }
-}*/
+
 #pragma mark - next vc
-/*-(void)goToNextVC{
-    MyLocationViewController *mVC=[[MyLocationViewController alloc]init];
-    mVC=[self.storyboard instantiateViewControllerWithIdentifier:@"MyLocation"];
-    [self.navigationController pushViewController:mVC animated:YES];
-}*/
+-(void)goToNextVC
+{
+    DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
+    SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
+     
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
+    SWRevealViewController *revealViewController = [[SWRevealViewController alloc] initWithRearViewController:sidebarVC
+    frontViewController:navigationController];
+    [self presentViewController:revealViewController animated:YES completion:nil];
+}
 #pragma mark - user exists
 -(BOOL)userExists{
     FileSaver *file=[[FileSaver alloc]init];
