@@ -54,8 +54,6 @@
     /////////////////////////////////////////////////////////
     //Create UICollectionView
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    /*self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(10.0, self.navigationController.navigationBar.frame.size.height + 30.0, self.view.frame.size.width - 20.0, self.view.frame.size.height - (self.navigationController.navigationBar.frame.size.height + 30.0))
-                                             collectionViewLayout:collectionViewLayout];*/
     self.collectionView = [[UICollectionView alloc] initWithFrame:self.view.frame collectionViewLayout:collectionViewLayout];
     
     self.collectionView.dataSource = self;
@@ -64,7 +62,6 @@
     self.collectionView.delegate = self;
     [self.collectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:@"featuredCell"];
     self.collectionView.backgroundColor = [UIColor clearColor];
-    
     [self.view addSubview:self.collectionView];
 }
 
@@ -72,8 +69,9 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"me seleccioné");
     DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+    
+    //We pass the object that was selected to the next view controller
     detailsVC.objectInfo = self.featuredEventsArray[indexPath.item];
     detailsVC.navigationBarTitle = self.featuredEventsArray[indexPath.item][@"name"];
     [self.navigationController pushViewController:detailsVC animated:YES];
@@ -81,7 +79,6 @@
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSLog(@"%lu", (unsigned long)[self.featuredEventsArray count]);
     return [self.featuredEventsArray count];
 }
 
@@ -90,7 +87,9 @@
     DestacadosCollectionViewCell *featuredEventCell = (DestacadosCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"featuredCell" forIndexPath:indexPath];
     
     featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"name"];
-    [featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
+    //[featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
+    [featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.row][@"thumb_url"]
+                                             placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
     
     return featuredEventCell;
 }

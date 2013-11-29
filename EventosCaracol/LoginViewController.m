@@ -36,6 +36,7 @@
     [super viewDidLoad];
     //[self deleteUserDic];
     if ([self userExists]) {
+        NSLog(@"Ya existía el usuario");
         [self goToNextVC];
         return;
     }
@@ -51,7 +52,10 @@
     fbConnectImage.frame=CGRectMake(self.view.frame.size.width-110, 15, 100, 30);
     [loginButtonContainer addSubview:fbConnectImage];*/
     
-    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2, self.view.bounds.size.height/2, 100.0, 50.0)];
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 50.0,
+                                                                       self.view.bounds.size.height/1.2,
+                                                                       100.0,
+                                                                       50.0)];
     loginButton.backgroundColor = [UIColor blueColor];
     [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
     [self.view addSubview:loginButton];

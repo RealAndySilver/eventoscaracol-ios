@@ -15,10 +15,8 @@
 #import "SWTableViewCell.h"
 #import "PopUpView.h"
 
-@interface ListViewController () <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>{
-}
+@interface ListViewController ()
 @property (strong, nonatomic)  UITableView *tableView;
-//@property (strong, nonatomic) NSMutableArray *menuItemsArray; //Of NSDictionary
 @property (strong, nonatomic) UIPickerView *locationPickerView;
 @property (strong, nonatomic) UIPickerView *datePickerView;
 @property (strong, nonatomic) UIView *containerLocationPickerView;
@@ -36,7 +34,6 @@
 {
     [super viewDidLoad];
     
-    //Create a button in the navigation bar to go back to the slide menu
     SWRevealViewController *revealViewController = [self revealViewController];
     
     if (!self.locationList)
@@ -70,9 +67,6 @@
         
         //We need to set the button tag of filterByDayButton and filterByLocationButton to show the correct picker
         //when the user touches one of these buttons.
-        
-        
-        
         filterByDayButton.tag = 1;
         
         [filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
@@ -112,7 +106,6 @@
     
     ///////////////////////////////////////////////////////////////////
     //Table View initialization and configuration
-    
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -204,6 +197,8 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    ///////////////////////////////////////////////////////////////////
+    //Dequeue our custom cell SWTableViewCell
     SWTableViewCell *eventCell = (SWTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"EventCell"];
     
     if (!eventCell)
@@ -226,13 +221,16 @@
         eventCell.delegate = self;
     }
     
+    /////////////////////////////////////////////////////////////////////
     //Create the subviews that will contain the cell.
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     imageView.backgroundColor = [UIColor cyanColor];
-  
-    [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"]];
+    
+    //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
+    [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    //[imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"]];
     
     [eventCell.contentView addSubview:imageView];
     
@@ -259,8 +257,10 @@
     DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
     detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
     
+    //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
+    //will display a map on screen.
     if (self.locationList)
-        detailsVC.location = YES;
+        detailsVC.presentLocationObject = YES;
     
     detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
     [self.navigationController pushViewController:detailsVC animated:YES];
@@ -270,12 +270,15 @@
 
 -(void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index
 {
+    //If the user touches the favorite button of the cell.
     if (index == 0)
     {
+        //Use our custom UIView to display a favorite image on screen
         [PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:nil]];
     }
     
-    if (index == 1)
+    //if the user touches the share button of the cell.
+    else if (index == 1)
     {
         [[[UIActionSheet alloc] initWithTitle:@""
                                     delegate:self
@@ -294,6 +297,7 @@
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    //SMS button
     if(buttonIndex == 0)
     {
         NSLog(@"SMS");
@@ -312,6 +316,7 @@
         }
     }
     
+    //Facebook button
     else if (buttonIndex == 1)
     {
         NSLog(@"Facebook");
@@ -321,6 +326,7 @@
         [self presentViewController:facebookViewController animated:YES completion:nil];
     }
     
+    //Twitter button
     else if (buttonIndex == 2)
     {
         NSLog(@"Twitter");
@@ -330,6 +336,7 @@
         [self presentViewController:twitterViewController animated:YES completion:nil];
     }
     
+    //Email button
     else if (buttonIndex == 3)
     {
         NSLog(@"Mail");

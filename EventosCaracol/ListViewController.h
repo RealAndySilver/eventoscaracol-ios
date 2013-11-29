@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SWTableViewCell.h"
+#import <MessageUI/MessageUI.h>
 
-@interface ListViewController : UIViewController
-//@property (strong, nonatomic) NSArray *listArray; //Of NSDictionary
-//@property (strong, nonatomic) NSString *menuID;
+@interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+
 @property (strong, nonatomic) NSString *navigationBarTitle;
-@property (strong, nonatomic) NSArray *menuItemsArray;
+@property (strong, nonatomic) NSArray *menuItemsArray; //Of NSDictionary
 @property (nonatomic) BOOL locationList;
 @end

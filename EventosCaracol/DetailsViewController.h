@@ -11,5 +11,6 @@
 @interface DetailsViewController : UIViewController
 @property (strong, nonatomic) NSDictionary *objectInfo;
 @property (strong, nonatomic) NSString *navigationBarTitle;
-@property (nonatomic) BOOL location;
+@property (nonatomic) BOOL presentLocationObject;
+@property (nonatomic) BOOL presentViewControllerFromSearchBar;
 @end

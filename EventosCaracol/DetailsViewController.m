@@ -31,9 +31,20 @@
     
     self.navigationItem.rightBarButtonItem = shareBarButtonItem;
     
+    //If this controller was presented from a search bar table view selection, create a UIBarButtomItem to dismiss it.
+    if (self.presentViewControllerFromSearchBar)
+    {
+        UIBarButtonItem *dismissBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss"
+                                                                                 style:UIBarButtonItemStylePlain
+                                                                                target:self
+                                                                                action:@selector(dismiss)];
+        self.navigationItem.leftBarButtonItem = dismissBarButtonItem;
+    }
+    
+    //UIImageVIew that will display the object's image.
     UIImageView *mainImageView;
     
-    //Create scroll view
+    //Create a UIScrollView to make all the view's content "scrollable".
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
                                                                 0.0,
                                                                 self.view.frame.size.width,
@@ -44,7 +55,7 @@
 
     
     //Create the view's content and add it as subview of self.view
-    if (self.location)
+    if (self.presentLocationObject)
     {
         GMSCameraPosition *cameraPosition = [GMSCameraPosition cameraWithLatitude:[self.objectInfo[@"lat"] doubleValue]
                                                                         longitude:[self.objectInfo[@"lon"] doubleValue]
@@ -86,7 +97,9 @@
     mainImageView.backgroundColor = [UIColor cyanColor];
     mainImageView.clipsToBounds = YES;
     mainImageView.contentMode = UIViewContentModeScaleAspectFill;
-    [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]];
+    [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
+                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    //[mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]];
     
     //[self.view addSubview:mainImageView];
     [scrollView addSubview:mainImageView];
@@ -145,6 +158,12 @@
 }
 
 #pragma mark - Actions
+
+-(void)dismiss
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 -(void)showFavoriteAnimation
 {
     [PopUpView showPopUpViewOverView:self.view image:nil];

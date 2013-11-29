@@ -25,6 +25,14 @@
     [super viewDidLoad];
     
     /////////////////////////////////////////////////////
+    UIImageView *logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                               0.0,
+                                                                               self.view.frame.size.width,
+                                                                               self.view.frame.size.width)];
+    logoImageView.image = [UIImage imageNamed:@"CaracolPrueba3.png"];
+    [self.view addSubview:logoImageView];
+    
+    /////////////////////////////////////////////////////
     //Add a 'Loading' label to our view
     UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50.0,
                                                                       self.view.frame.size.height/1.15,
@@ -45,6 +53,7 @@
     self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     [self.view addSubview:self.spinner];
     
+    //We access the info from the server as soon as the view loads.
     [self getAllInfoFromServer];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getAllInfoFromServer) name:@"foreground" object:nil];
 }
@@ -66,6 +75,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 #pragma mark - server request
 -(void)getAllInfoFromServer
 {
@@ -104,6 +114,7 @@
 
 -(void)goToLogin
 {
+    //Use SWRevealViewController to present the home screen of the app
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
     

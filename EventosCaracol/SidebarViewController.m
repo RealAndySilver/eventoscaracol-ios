@@ -15,6 +15,7 @@
 #import "FAQViewController.h"
 #import "MapViewController.h"
 #import "DetailsViewController.h"
+#import "DestacadosViewController.h"
 
 @interface SidebarViewController () 
 @property (strong, nonatomic) NSArray *menuItems;
@@ -50,13 +51,18 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
                                                                            self.view.frame.size.width,
-                                                                           150.0)];
+                                                                           100.0)];
+    imageView.userInteractionEnabled = YES;
     imageView.backgroundColor = [UIColor grayColor];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     NSDictionary *appInfo = [self.fileSaver getDictionary:@"master"][@"app"];
     [imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]];
     [self.view addSubview:imageView];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnLogoImageView)];
+    tap.numberOfTapsRequired = 1;
+    [imageView addGestureRecognizer:tap];
     
     ///////////////////////////////////////////////////////////////////////////////
     //Add a tableview to our view.
@@ -87,6 +93,17 @@
     self.searchDisplayController.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
+-(void)tapOnLogoImageView
+{
+    SWRevealViewController *revelViewController = [self revealViewController];
+    
+    DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
+    [revelViewController setFrontViewController:navigationController animated:YES];
+    
+    NSLog(@"me tapee");
+}
+
 #pragma mark - UITableViewDataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -113,7 +130,8 @@
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
         cell.menuItemLabel.text = self.searchResults[indexPath.row][@"name"];
-        [cell.menuItemImageView setImageWithURL:self.searchResults[indexPath.row][@"thumb_url"]];
+        [cell.menuItemImageView setImageWithURL:self.searchResults[indexPath.row][@"thumb_url"]
+                               placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
     }
     
     else
@@ -121,7 +139,8 @@
         if (indexPath.row < [self.menuArray count])
         {
             cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
-            [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]];
+            [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
+                                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
         }
         
         else
@@ -138,14 +157,31 @@
 {
     SWRevealViewController *revealViewController = self.revealViewController;
     
+    //If the selected table view was the search bar table view
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
-        if ([self.searchResults[indexPath.row][@"type"] isEqualToString:@"artistas"])
-            [self presentDetailsViewControllerOfType:self.searchResults[indexPath.row][@"type"] withSelectedRow:indexPath.row];
+        if ([self.searchResults[indexPath.row][@"type"] isEqualToString:@"locaciones"])
+        {
+            DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+            detailsVC.navigationBarTitle = self.searchResults[indexPath.row][@"name"];
+            detailsVC.objectInfo = self.searchResults[indexPath.row];
+            detailsVC.presentViewControllerFromSearchBar = YES;
+            detailsVC.presentLocationObject = YES;
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
+            navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:navigationController animated:YES completion:nil];
+        }
         
-        else if ([self.searchResults[indexPath.row][@"type"] isEqualToString:@"locaciones"])
-            [self presentDetailsViewControllerOfType:self.searchResults[indexPath.row][@"type"] withSelectedRow:indexPath.row];
-        
+        else
+        {
+            DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+            detailsVC.navigationBarTitle = self.searchResults[indexPath.row][@"name"];
+            detailsVC.objectInfo = self.searchResults[indexPath.row];
+            detailsVC.presentViewControllerFromSearchBar = YES;
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
+            navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            [self presentViewController:navigationController animated:YES completion:nil];
+        }
     }
     
     else
@@ -259,23 +295,6 @@
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
     [revealViewController setFrontViewController:navigationController animated:YES];
 }*/
-
--(void)presentDetailsViewControllerOfType:(NSString *)type withSelectedRow:(NSInteger)row
-{
-    SWRevealViewController *revealViewController = self.revealViewController;
-
-    DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
-    detailsVC.navigationBarTitle = self.searchResults[row][@"name"];
-    detailsVC.objectInfo = self.searchResults[row];
-    
-    if ([type isEqualToString:@"locaciones"])
-        detailsVC.location = YES;
-    
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
-    
-    [revealViewController setFrontViewController:navigationController animated:YES];
-
-}
 
 #pragma mark - SearchBar
 

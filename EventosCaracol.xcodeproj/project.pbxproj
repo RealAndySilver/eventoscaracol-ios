@@ -40,6 +40,11 @@
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
 		8BA9C3B11843A20100876AA5 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */; };
 		8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B41843A60700876AA5 /* SidebarViewController.m */; };
+		8BB37E071848FA6C00274848 /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB37E061848FA6C00274848 /* TutorialViewController.m */; };
+		8BB37E091848FA9700274848 /* CaracolPrueba.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E081848FA9700274848 /* CaracolPrueba.jpg */; };
+		8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E4E18492FBC00274848 /* CaracolPrueba2.jpg */; };
+		8BB37E511849332200274848 /* CaracolPrueba3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E501849332200274848 /* CaracolPrueba3.png */; };
+		8BB37E531849357900274848 /* CaracolPrueba4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E521849357900274848 /* CaracolPrueba4.png */; };
 		8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB464CF1847F5CB0000A7FE /* BorrarPrueba.png */; };
 		8BBDE6A21846412B00BEAD74 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBDE6A11846412B00BEAD74 /* GoogleMaps.framework */; };
 		8BBDE6A41846413F00BEAD74 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8BBDE6A31846413F00BEAD74 /* GoogleMaps.bundle */; };
@@ -122,6 +127,12 @@
 		8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BA9C3B31843A60700876AA5 /* SidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarViewController.h; sourceTree = "<group>"; };
 		8BA9C3B41843A60700876AA5 /* SidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarViewController.m; sourceTree = "<group>"; };
+		8BB37E051848FA6C00274848 /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialViewController.h; sourceTree = "<group>"; };
+		8BB37E061848FA6C00274848 /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialViewController.m; sourceTree = "<group>"; };
+		8BB37E081848FA9700274848 /* CaracolPrueba.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = CaracolPrueba.jpg; path = Resources/Images/CaracolPrueba.jpg; sourceTree = "<group>"; };
+		8BB37E4E18492FBC00274848 /* CaracolPrueba2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = CaracolPrueba2.jpg; path = Resources/Images/CaracolPrueba2.jpg; sourceTree = "<group>"; };
+		8BB37E501849332200274848 /* CaracolPrueba3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CaracolPrueba3.png; path = Resources/Images/CaracolPrueba3.png; sourceTree = "<group>"; };
+		8BB37E521849357900274848 /* CaracolPrueba4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CaracolPrueba4.png; path = Resources/Images/CaracolPrueba4.png; sourceTree = "<group>"; };
 		8BB464CF1847F5CB0000A7FE /* BorrarPrueba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BorrarPrueba.png; path = Resources/Images/BorrarPrueba.png; sourceTree = "<group>"; };
 		8BBDE6A11846412B00BEAD74 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		8BBDE6A31846413F00BEAD74 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../Desktop/Diego/GoogleMaps-iOS-1.6.0/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
@@ -247,6 +258,8 @@
 				8BA11EBE183BDAA0003616AB /* LoadingViewController.m */,
 				8BA11EC0183BDB5D003616AB /* LoginViewController.h */,
 				8BA11EC1183BDB5D003616AB /* LoginViewController.m */,
+				8BB37E051848FA6C00274848 /* TutorialViewController.h */,
+				8BB37E061848FA6C00274848 /* TutorialViewController.m */,
 				8BCD7D3E183FB8DC00849D8A /* DestacadosViewController.h */,
 				8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */,
 				8B2D002F183D1BBB0007D502 /* ListViewController.h */,
@@ -334,6 +347,10 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8BB37E521849357900274848 /* CaracolPrueba4.png */,
+				8BB37E501849332200274848 /* CaracolPrueba3.png */,
+				8BB37E4E18492FBC00274848 /* CaracolPrueba2.jpg */,
+				8BB37E081848FA9700274848 /* CaracolPrueba.jpg */,
 				8BB464CF1847F5CB0000A7FE /* BorrarPrueba.png */,
 				8B1ED2571845482E00312DCE /* IconoPrueba.png */,
 				8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */,
@@ -439,8 +456,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BB37E091848FA9700274848 /* CaracolPrueba.jpg in Resources */,
 				75EE5564183BBFE900C52654 /* Main_iPad.storyboard in Resources */,
 				8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */,
+				8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */,
+				8BB37E511849332200274848 /* CaracolPrueba3.png in Resources */,
+				8BB37E531849357900274848 /* CaracolPrueba4.png in Resources */,
 				8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */,
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
@@ -479,6 +500,7 @@
 				8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */,
 				8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */,
 				8B1ED256184544DB00312DCE /* FAQViewController.m in Sources */,
+				8BB37E071848FA6C00274848 /* TutorialViewController.m in Sources */,
 				8B2D0044183D64920007D502 /* DetailsViewController.m in Sources */,
 				75EE558A183BC45300C52654 /* FileSaver.m in Sources */,
 				8BBDE6BD1846422100BEAD74 /* MapViewController.m in Sources */,

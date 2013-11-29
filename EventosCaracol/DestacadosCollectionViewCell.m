@@ -22,7 +22,7 @@
                                                                            self.contentView.bounds.size.width,
                                                                            self.contentView.bounds.size.height - (self.contentView.bounds.size.height - 40.0))];
         self.featuredEventNameLabel.textAlignment = NSTextAlignmentCenter;
-        
+        self.featuredEventNameLabel.font = [UIFont fontWithName:@"Helvetica-bold" size:15.0];
         self.featuredEventImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,
                                                                                     0,
                                                                                     self.contentView.bounds.size.width,

@@ -35,7 +35,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5r9-MZ-tUl">
-                                <rect key="frame" x="0.0" y="150" width="259" height="44"/>
+                                <rect key="frame" x="0.0" y="100" width="259" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -134,6 +134,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tPr-aW-mpF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2239" y="460"/>
+        </scene>
+        <!--Tutorial View Controller-->
+        <scene sceneID="6br-IF-CT9">
+            <objects>
+                <viewController id="Imt-fx-DJK" customClass="TutorialViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Kdl-Dc-AR3"/>
+                        <viewControllerLayoutGuide type="bottom" id="Zwb-vv-mCZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="L9s-oK-Zdm">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Biy-VO-EB1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1397" y="1132"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="RRh-ix-rdw">
