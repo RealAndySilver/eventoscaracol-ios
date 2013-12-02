@@ -14,6 +14,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 
 @interface DetailsViewController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIScrollViewDelegate>
+@property (strong, nonatomic) UIScrollView *scrollView;
 @end
 
 @implementation DetailsViewController
@@ -41,20 +42,10 @@
         self.navigationItem.leftBarButtonItem = dismissBarButtonItem;
     }
     
-    //UIImageVIew that will display the object's image.
+    //UIImageVIew that will display the object's image (artist, news, event).
     UIImageView *mainImageView;
     
-    //Create a UIScrollView to make all the view's content "scrollable".
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
-                                                                0.0,
-                                                                self.view.frame.size.width,
-                                                                self.view.frame.size.height)];
-    scrollView.delegate = self;
-    scrollView.alwaysBounceVertical = YES;
-    [self.view addSubview:scrollView];
-
-    
-    //Create the view's content and add it as subview of self.view
+    //If we are in the detail view of a location object
     if (self.presentLocationObject)
     {
         GMSCameraPosition *cameraPosition = [GMSCameraPosition cameraWithLatitude:[self.objectInfo[@"lat"] doubleValue]
@@ -74,19 +65,33 @@
         GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(markerLatitude, markerLongitude)];
         marker.title = self.objectInfo[@"name"];
         marker.map = mapView;
+        [self.view addSubview:mapView];
         
-        [scrollView addSubview:mapView];
+        //////////////////////////////////////////////////////////////////////
+        //Create the scroll view to make all the content scrollable. The scroll view will be below the map view.
+        //The mapview is always static, it's not in the scroll view.
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
+                                                                                  mapView.frame.origin.y + mapView.frame.size.height,
+                                                                                  self.view.frame.size.width,
+                                                                                  self.view.frame.size.height - (mapView.frame.origin.y + mapView.frame.size.height))];
         
-        mainImageView = [[UIImageView alloc]
-                         initWithFrame:CGRectMake(20.0,
-                                                  mapView.frame.origin.y + mapView.frame.size.height + 20.0,
-                                                  self.view.frame.size.width - 40.0,
-                                                  (self.view.frame.size.height/2 - 20) -(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0))];
+        
+        
+        mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0,
+                                                                      20.0,
+                                                                      self.view.frame.size.width - 40.0,
+                                                                      self.view.frame.size.height/2 - 20.0)];
         
     }
-    
+
     else
     {
+        //Create the scroll view of the entire screen, because there is not map view.
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
+                                                                         0.0,
+                                                                         self.view.frame.size.width,
+                                                                         self.view.frame.size.height)];
+        
         mainImageView = [[UIImageView alloc]
                          initWithFrame:CGRectMake(20.0,
                                                   self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0,
@@ -99,10 +104,11 @@
     mainImageView.contentMode = UIViewContentModeScaleAspectFill;
     [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-    //[mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]];
     
-    //[self.view addSubview:mainImageView];
-    [scrollView addSubview:mainImageView];
+    self.scrollView.delegate = self;
+    self.scrollView.alwaysBounceVertical = YES;
+    [self.scrollView addSubview:mainImageView];
+    [self.view addSubview:self.scrollView];
     
     UIButton *favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0,
                                                                           mainImageView.frame.origin.y + mainImageView.frame.size.height + 20.0,
@@ -111,8 +117,7 @@
     [favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
     [favoriteButton addTarget:self action:@selector(showFavoriteAnimation) forControlEvents:UIControlEventTouchUpInside];
     [favoriteButton setBackgroundColor:[UIColor purpleColor]];
-    //[self.view addSubview:favoriteButton];
-    [scrollView addSubview:favoriteButton];
+    [self.scrollView addSubview:favoriteButton];
     
     UILabel *objectName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
                                                                    favoriteButton.frame.origin.y,
@@ -121,8 +126,7 @@
     objectName.numberOfLines = 0;
     objectName.text = self.objectInfo[@"name"];
     objectName.font = [UIFont fontWithName:@"@Helvetica" size:15.0];
-    //[self.view addSubview:objectName];
-    [scrollView addSubview:objectName];
+    [self.scrollView addSubview:objectName];
     
     UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
                                                                             objectName.frame.origin.y + objectName.frame.size.height,
@@ -130,8 +134,7 @@
                                                                             20.0)];
     eventLocationLabel.text = @"Plaza Cervantes";
     eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
-    //[self.view addSubview:eventLocationLabel];
-    [scrollView addSubview:eventLocationLabel];
+    [self.scrollView addSubview:eventLocationLabel];
     
     UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
                                                                         eventLocationLabel.frame.origin.y + eventLocationLabel.frame.size.height,
@@ -139,8 +142,7 @@
                                                                         20.0)];
     eventTimeLabel.text = @"11:30AM";
     eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
-    //[self.view addSubview:eventTimeLabel];
-    [scrollView addSubview:eventTimeLabel];
+    [self.scrollView addSubview:eventTimeLabel];
     
     UITextView *description = [[UITextView alloc]
                                     initWithFrame:CGRectMake(20.0,
@@ -152,9 +154,8 @@
     description.font = [UIFont fontWithName:@"Helvetica" size:14.0];
     description.selectable = NO;
     description.editable = NO;
-    [scrollView addSubview:description];
-    scrollView.contentSize = CGSizeMake(self.view.frame.size.width, description.frame.origin.y + description.frame.size.height + 20);
-    //[self.view addSubview:description];
+    [self.scrollView addSubview:description];
+    self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, description.frame.origin.y + description.frame.size.height + 20);
 }
 
 #pragma mark - Actions

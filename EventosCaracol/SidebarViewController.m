@@ -387,15 +387,13 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 #pragma mark - Pull Down To Refresh methods
 
-- (void) updateMethod {
-    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update!" message:@"Perform whatever action you want!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    //[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+- (void) updateMethod
+{
     [self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
 }
 
 - (void) startSpinner {
     self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    //spinner.color = [UIColor lightGrayColor];
     self.spinner.center = self.updateImageView.center;
     self.updateImageView.hidden = YES;
     [self.spinner startAnimating];
