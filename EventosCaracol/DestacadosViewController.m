@@ -17,7 +17,7 @@
 @property (strong, nonatomic) FileSaver *fileSaver;
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) NSArray *featuredEventsArray; //Of NSDictionary
-@property (strong, nonatomic) NSMutableArray *featuredEventImages; //Of UIImage;
+//@property (strong, nonatomic) NSMutableArray *featuredEventImages; //Of UIImage;
 @end
 
 @implementation DestacadosViewController
@@ -40,7 +40,7 @@
     
     
     //Create an array to store the thumbs images to display
-    self.featuredEventImages = [[NSMutableArray alloc] init];
+    //self.featuredEventImages = [[NSMutableArray alloc] init];
     
     //////////////////////////////////////////////////////////
     //Store the JSON info in a dictionary

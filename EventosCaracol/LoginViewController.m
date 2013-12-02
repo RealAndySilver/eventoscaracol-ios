@@ -19,6 +19,8 @@
 #import "DestacadosViewController.h"
 #import "SidebarViewController.h"
 #import "SWRevealViewController.h"
+#import "MBHUDView.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 //#define kRedColor [UIColor colorWithRed:250.0/255 green:88.0/255 blue:88.0/255 alpha:1]
 #define kGreenColor [UIColor colorWithRed:64.0/255 green:174.0/255 blue:126.0/255 alpha:1]
@@ -35,11 +37,11 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     //[self deleteUserDic];
-    if ([self userExists]) {
+    /*if ([self userExists]) {
         NSLog(@"Ya existía el usuario");
         [self goToNextVC];
         return;
-    }
+    }*/
     //[self callTutorialAnimated:NO];
     
     //[self.view setBackgroundColor:kColpatria];
@@ -52,14 +54,43 @@
     fbConnectImage.frame=CGRectMake(self.view.frame.size.width-110, 15, 100, 30);
     [loginButtonContainer addSubview:fbConnectImage];*/
     
-    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 50.0,
-                                                                       self.view.bounds.size.height/1.2,
-                                                                       100.0,
+    /////////////////////////////////////////////////////////////////////////////////////
+    //Create the logo image and add it to the view
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                           0.0,
+                                                                           self.view.frame.size.width,
+                                                                           self.view.frame.size.width)];
+    imageView.clipsToBounds = YES;
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    //We need to access the logo image URL
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    NSDictionary *appInfo = [fileSaver getDictionary:@"master"][@"app"];
+    [imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]
+              placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    [self.view addSubview:imageView];
+    
+    
+    //////////////////////////////////////////////////////////////////////////////////////
+    //Create the login button
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 125.0,
+                                                                       self.view.bounds.size.height/1.4,
+                                                                       250.0,
                                                                        50.0)];
-    loginButton.backgroundColor = [UIColor blueColor];
-    [loginButton setTitle:@"Log In" forState:UIControlStateNormal];
+    loginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
+    [loginButton setTitle:@"Iniciar sesión con Facebook" forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
     [loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    /////////////////////////////////////////////////////////////////////////////////////
+    //Creathe the 'continue without login' button
+    UIButton *continueWithoutLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 125.0,
+                                                                                      self.view.frame.size.height/1.2,
+                                                                                      250.0, 50.0)];
+    continueWithoutLoginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
+    [continueWithoutLoginButton setTitle:@"Continuar sin iniciar sesión" forState:UIControlStateNormal];
+    [continueWithoutLoginButton addTarget:self action:@selector(goToNextVC) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:continueWithoutLoginButton];
     
     /*PullActionButton *loginButton=[[PullActionButton alloc]initWithFrame:CGRectMake(-190,0, 390, 60)];
     loginButton.the_delegate=self;
@@ -81,7 +112,7 @@
     FileSaver *fileSaver = [[FileSaver alloc] init];
     
     if (![self userExists]) {
-        //[MBHUDView hudWithBody:@"Conectando" type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+        [MBHUDView hudWithBody:@"Conectando" type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
         NSArray *permissions =
         [NSArray arrayWithObjects:@"email", nil];
         [FBSession openActiveSessionWithReadPermissions:permissions
@@ -114,8 +145,8 @@
                                                        else{
                                                            if (error.code==5) {
                                                                NSLog(@"No hay conexión %ld",(long)error.code);
-                                                               //[MBHUDView dismissCurrentHUD];
-                                                               //[MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                               [MBHUDView dismissCurrentHUD];
+                                                               [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                                            }
                                                        }
                                                    }];
@@ -125,25 +156,26 @@
                                               NSLog(@"Hubo un error");
                                               if (error.code==5) {
                                                   NSLog(@"No hay conexión %ld",(long)error.code);
-                                                  //[MBHUDView dismissCurrentHUD];
-                                                  //[MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                  [MBHUDView dismissCurrentHUD];
+                                                  [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }
                                               else if (error.code==2){
                                                   NSLog(@"no autorizado error %ld",(long)error.code);
-                                                  //[MBHUDView dismissCurrentHUD];
-                                                  //[MBHUDView hudWithBody:@"Acceso denegado" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                  [MBHUDView dismissCurrentHUD];
+                                                  [MBHUDView hudWithBody:@"Acceso denegado" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }
                                           }
                                       }];
     }
     else{
-        if ([self userExists]) {
+        /*if ([self userExists]) {
             NSLog(@"El usuario existe");
             //[self signUpWithUser:[self getUserDictionary]];
-        }
-        //[self goToNextVC];
+        }*/
+        [self goToNextVC];
     }
 }
+
 - (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
 }
@@ -164,6 +196,8 @@
     ServerCommunicator *server = [[ServerCommunicator alloc] init];
     server.delegate=self;
     [server callServerWithPOSTMethod:@"SignUp" andParameter:parameters httpMethod:@"POST"];
+    [MBHUDView dismissCurrentHUD];
+    //[MBHUDView hudWithBody:@"Verificando" type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
     NSLog(@"%@", parameters);
 }
 
@@ -193,14 +227,35 @@
     if ([methodName isEqualToString:@"SignUp"]) {
         NSLog(@"Result: %@",dictionary);
         if([[dictionary objectForKey:@"status"] boolValue]){
+            [MBHUDView dismissCurrentHUD];
             [self goToNextVC];
         }
+        else
+        {
+            //Error creando el usuario
+            [MBHUDView dismissCurrentHUD];
+            [MBHUDView hudWithBody:@"Error registrando su usuario, por favor vuelva a intentarlo."
+                              type:MBAlertViewHUDTypeExclamationMark
+                        hidesAfter:2.0
+                              show:YES];
+        }
     }
+}
+
+-(void)serverError:(NSError *)error
+{
+    NSLog(@"Error oís!!!");
+    [MBHUDView dismissCurrentHUD];
+    [MBHUDView hudWithBody:@"No hay conexión. Vuelve a intentarlo."
+                      type:MBAlertViewHUDTypeExclamationMark
+                hidesAfter:2.0
+                      show:YES];
 }
 
 #pragma mark - next vc
 -(void)goToNextVC
 {
+    [MBHUDView dismissCurrentHUD];
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
      

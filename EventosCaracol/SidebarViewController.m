@@ -24,11 +24,33 @@
 @property (strong, nonatomic) NSArray *aditionalMenuItemsArray;
 @property (strong, nonatomic) NSArray *searchResults;
 @property (strong, nonatomic) NSMutableArray *allObjectsTypeArray;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UILabel *updateLabel;
+@property (strong, nonatomic) UIImageView *updateImageView;
+@property (strong, nonatomic) NSOperationQueue *queue;
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property (nonatomic) BOOL isUpdating;
+@property (nonatomic) BOOL shouldUpdate;
+@property (nonatomic) float offset;
 @end
 
 @implementation SidebarViewController
 
 #pragma mark - View lifecycle
+
+-(void)setupPullDownToRefreshView
+{
+    /*self.updateLabel = [[UILabel alloc] initWithFrame:CGRectMake(80.0, -40.0, self.view.frame.size.width - 80.0, 20.0)];
+    self.updateLabel.text = @"Hala para actualizar";
+    self.updateLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
+    self.updateLabel.textAlignment = NSTextAlignmentLeft;
+    self.updateLabel.textColor = [UIColor lightGrayColor];*/
+    
+    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 40.0, -50.0, 20.0, 40.0)];
+    self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
+    //[self.tableView addSubview:self.updateLabel];
+    [self.tableView addSubview:self.updateImageView];
+}
 
 -(void)viewDidLoad
 {
@@ -66,18 +88,22 @@
     
     ///////////////////////////////////////////////////////////////////////////////
     //Add a tableview to our view.
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,
                                                                            self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height,
                                                                            self.view.frame.size.width,
                                                                            self.view.frame.size.height - (self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height))];
     
-    tableView.rowHeight = 50.0;
-    tableView.delegate = self;
-    tableView.dataSource =self;
-    tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [tableView setAlwaysBounceVertical:YES];
-    [tableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
-    [self.view addSubview:tableView];
+    self.tableView.rowHeight = 50.0;
+    self.tableView.delegate = self;
+    self.tableView.dataSource =self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.tableView setAlwaysBounceVertical:YES];
+    [self.tableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
+    [self.view addSubview:self.tableView];
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //'Pull down to refresh' views
+    [self setupPullDownToRefreshView];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -314,6 +340,85 @@ shouldReloadTableForSearchString:(NSString *)searchString
                                                      selectedScopeButtonIndex]]];
     
     return YES;
+}
+
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)sender {
+    self.offset = self.tableView.contentOffset.y;
+    self.offset *= -1;
+    if (self.offset > 0 && self.offset < 60) {
+        /*if(!self.isUpdating)
+            self.updateLabel.text = @"Hala para actualizar...";*/
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDuration:0.2];
+        self.updateImageView.transform = CGAffineTransformMakeRotation(0);
+        [UIView commitAnimations];
+        self.shouldUpdate = NO;
+    }
+    if (self.offset >= 60) {
+        /*if(!self.isUpdating)
+            self.updateLabel.text = @"Suelta para actualizar...";*/
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDuration:0.2];
+        self.updateImageView.transform = CGAffineTransformMakeRotation(M_PI);
+        [UIView commitAnimations];
+        self.shouldUpdate = YES;
+    }
+    if (self.isUpdating) {
+        self.shouldUpdate = NO;
+    }
+}
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (self.shouldUpdate) {
+        self.queue = [NSOperationQueue new];
+        NSInvocationOperation *updateOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateMethod)  object:nil];
+        [self.queue addOperation:updateOperation];
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.2];
+        self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+        [UIView commitAnimations];
+    }
+}
+
+#pragma mark - Pull Down To Refresh methods
+
+- (void) updateMethod {
+    //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Update!" message:@"Perform whatever action you want!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    //[alert performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
+}
+
+- (void) startSpinner {
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    //spinner.color = [UIColor lightGrayColor];
+    self.spinner.center = self.updateImageView.center;
+    self.updateImageView.hidden = YES;
+    [self.spinner startAnimating];
+    [self.tableView addSubview:self.spinner];
+    //self.updateLabel.text = @"Actualizando...";
+    self.isUpdating = YES;
+    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(finishUpdateMethod) userInfo:nil repeats:NO];
+    //this is the place where you can perform your data updating procedure(data populating from web or your database), for this section i am simply reloading data after 3 seconds of pull down
+}
+
+-(void) finishUpdateMethod {
+    [self stopSpinner];
+    [self.spinner removeFromSuperview];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+}
+- (void) stopSpinner {
+    [self.spinner removeFromSuperview];
+    self.updateImageView.hidden = NO;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.2];
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    [UIView commitAnimations];
+    self.isUpdating = NO;
 }
 
 @end

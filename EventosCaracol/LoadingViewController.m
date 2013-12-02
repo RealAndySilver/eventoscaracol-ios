@@ -11,9 +11,11 @@
 #import "SWRevealViewController.h"
 #import "SidebarViewController.h"
 #import "LoginViewController.h"
+#import "MBHUDView.h"
 
 @interface LoadingViewController ()
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) UILabel *loadingLabel;
 @end
 
 @implementation LoadingViewController
@@ -24,25 +26,30 @@
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor colorWithRed:17.0/255.0
+                                                green:96.0/255.0
+                                                 blue:153.0/255.0
+                                                alpha:1.0];
+    
     /////////////////////////////////////////////////////
     UIImageView *logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                                0.0,
                                                                                self.view.frame.size.width,
                                                                                self.view.frame.size.width)];
-    logoImageView.image = [UIImage imageNamed:@"CaracolPrueba3.png"];
+    logoImageView.image = [UIImage imageNamed:@"CaracolPrueba4.png"];
     [self.view addSubview:logoImageView];
     
     /////////////////////////////////////////////////////
     //Add a 'Loading' label to our view
-    UILabel *loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50.0,
+    self.loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 150.0,
                                                                       self.view.frame.size.height/1.15,
-                                                                      100.0,
+                                                                      300.0,
                                                                       44.0)];
-    loadingLabel.text = @"Cargando...";
-    loadingLabel.textAlignment = NSTextAlignmentCenter;
-    loadingLabel.textColor = [UIColor whiteColor];
-    loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:17.0];
-    [self.view addSubview:loadingLabel];
+    self.loadingLabel.text = @"Cargando...";
+    self.loadingLabel.textAlignment = NSTextAlignmentCenter;
+    self.loadingLabel.textColor = [UIColor whiteColor];
+    self.loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:17.0];
+    [self.view addSubview:self.loadingLabel];
     
     ////////////////////////////////////////////////////
     //Add the spinner to our view
@@ -111,33 +118,57 @@
         }
     }
 }
-
--(void)goToLogin
-{
-    //Use SWRevealViewController to present the home screen of the app
-    DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
-    SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
-    
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
-    SWRevealViewController *revealViewController = [[SWRevealViewController alloc] initWithRearViewController:sidebarVC
-                                                                                          frontViewController:navigationController];
-    [self presentViewController:revealViewController animated:YES completion:nil];
-    
-    /*LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
-    [self presentViewController:loginVC animated:YES completion:nil];*/
-}
-
 -(void)serverError:(NSError *)error{
     if([self getDictionaryWithName:@"master"])
     {
         NSLog(@"ya está guardada la info");
+        [self goToLogin];
         //ir al siguiente porque ya existe info guardada
     }
     else
     {
         //No se puede pasar
+        [[[UIAlertView alloc] initWithTitle:nil
+                                   message:@"Hubo un error en la conexión. intenta de nuevo en unos minutos."
+                                  delegate:self
+                         cancelButtonTitle:@"Ok"
+                         otherButtonTitles:nil] show];
+        
+        self.loadingLabel.text = @"Error de conexión.";
+        
+        /*[MBHUDView hudWithBody:@"Hubo un error en la conexión. Por favor vuelve a intentar en unos minutos."
+                          type:MBAlertViewHUDTypeExclamationMark
+                    hidesAfter:5.0
+                          show:YES];*/
+    }
+    [self.spinner stopAnimating];
+
+}
+-(void)goToLogin
+{
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    
+    //If the user has already login with facebook, go to the home screen
+    if ([fileSaver getDictionary:@"user"])
+    {
+        DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
+        SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
+        
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
+        SWRevealViewController *revealViewController = [[SWRevealViewController alloc] initWithRearViewController:sidebarVC
+                                                                                              frontViewController:navigationController];
+        [self presentViewController:revealViewController animated:YES completion:nil];
+    }
+    
+    //...if not, present the login screen
+    else
+    {
+        LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+        [self presentViewController:loginVC animated:YES completion:nil];
     }
 }
+
+
 -(NSDictionary*)getDictionaryWithName:(NSString*)name{
     FileSaver *file=[[FileSaver alloc]init];
     return [file getDictionary:name];
