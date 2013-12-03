@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ServerCommunicator.h"
 
-@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate>
 
 @end

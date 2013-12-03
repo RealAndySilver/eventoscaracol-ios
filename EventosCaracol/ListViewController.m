@@ -22,18 +22,26 @@
 @property (strong, nonatomic) UIView *containerLocationPickerView;
 @property (strong, nonatomic) UIView *containerDatesPickerView;
 @property (nonatomic) BOOL isPickerActivated;
+@property (strong, nonatomic) UIImageView *updateImageView;
 @end
 
 #define ROW_HEIGHT 90.0
 
 @implementation ListViewController
 
+-(void)setupPullDownToRefreshView
+{
+    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 40.0, -50.0, 20.0, 40.0)];
+    self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
+    [self.tableView addSubview:self.updateImageView];
+}
+
 #pragma mark - View LifeCycle
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    NSLog(@"ListViewDidLoad");
     SWRevealViewController *revealViewController = [self revealViewController];
     
     if (!self.locationList)
@@ -230,7 +238,6 @@
     
     //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
     [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-    //[imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"]];
     
     [eventCell.contentView addSubview:imageView];
     

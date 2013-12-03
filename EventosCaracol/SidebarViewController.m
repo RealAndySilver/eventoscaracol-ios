@@ -19,7 +19,6 @@
 
 @interface SidebarViewController () 
 @property (strong, nonatomic) NSArray *menuItems;
-@property (strong, nonatomic) FileSaver *fileSaver;
 @property (strong, nonatomic) NSArray *menuArray; //Of NSDictionary
 @property (strong, nonatomic) NSArray *aditionalMenuItemsArray;
 @property (strong, nonatomic) NSArray *searchResults;
@@ -27,7 +26,6 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UILabel *updateLabel;
 @property (strong, nonatomic) UIImageView *updateImageView;
-@property (strong, nonatomic) NSOperationQueue *queue;
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (nonatomic) BOOL isUpdating;
 @property (nonatomic) BOOL shouldUpdate;
@@ -54,20 +52,11 @@
 
 -(void)viewDidLoad
 {
-    self.fileSaver = [[FileSaver alloc] init];
-    
+    [self updateDataFromServer];
+
     //Store the info for the aditional buttons of the slide menu table view
     self.aditionalMenuItemsArray = @[@"Preguntas frecuentes", @"Reportar un problema", @"Términos y condiciones"];
     
-    //Array that holds all the menu objects to display in the table view(like artists, news, locations, etc)
-    self.menuArray = [self.fileSaver getDictionary:@"master"][@"menu"];
-    
-    //Array that holds of the objects of type artist, events, news and locations. we will use this array later when the
-    //user make a search in the search bar. the results of that search will be filtered from this array.
-    self.allObjectsTypeArray = [self.fileSaver getDictionary:@"master"][@"artistas"];
-    [self.allObjectsTypeArray addObjectsFromArray:[self.fileSaver getDictionary:@"master"][@"noticias"]];
-    [self.allObjectsTypeArray addObjectsFromArray:[self.fileSaver getDictionary:@"master"][@"eventos"]];
-    [self.allObjectsTypeArray addObjectsFromArray:[self.fileSaver getDictionary:@"master"][@"locaciones"]];
     ///////////////////////////////////////////////////////////////
     //Create the image view
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
@@ -78,7 +67,7 @@
     imageView.backgroundColor = [UIColor grayColor];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    NSDictionary *appInfo = [self.fileSaver getDictionary:@"master"][@"app"];
+    NSDictionary *appInfo = [self getDictionaryWithName:@"master"][@"app"];
     [imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]];
     [self.view addSubview:imageView];
     
@@ -134,8 +123,6 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //return ([self.menuArray count] + [self.aditionalMenuItemsArray count]);
-    
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
         return [self.searchResults count];
@@ -181,7 +168,6 @@
 #pragma mark - UITableViewDelegate
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SWRevealViewController *revealViewController = self.revealViewController;
     
     //If the selected table view was the search bar table view
     if (tableView == self.searchDisplayController.searchResultsTableView)
@@ -210,78 +196,38 @@
         }
     }
     
+    //....If the selected table view was the menu table view
     else
     {
+        SWRevealViewController *revealViewController = self.revealViewController;
+        
         if (indexPath.row < [self.menuArray count])
         {
             if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"artistas"])
-            {
-                ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-                
-                NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"artistas"];
-                NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
-                NSString *menuID = self.menuArray[indexPath.row][@"_id"];
-                for (int i = 0; i < [tempArray count]; i++)
-                {
-                    //If yes, add the object to menuItemsArray
-                    if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
-                        [tempMutableArray addObject:tempArray[i]];
-                }
-                listVC.menuItemsArray = tempMutableArray;
-                listVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
-                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
-                [revealViewController setFrontViewController:navigationController animated:YES];
-            }
+                //Present the list view passing the type of object that was selected and the row
+                //that was selected
+                [self presentListViewControllerWithObjectsOfType:@"artistas" selectedRow:indexPath.row];
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"eventos"])
-            {
-                ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-                
-                NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"eventos"];
-                NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
-                NSString *menuID = self.menuArray[indexPath.row][@"_id"];
-                for (int i = 0; i < [tempArray count]; i++)
-                {
-                    //If yes, add the object to menuItemsArray
-                    if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
-                        [tempMutableArray addObject:tempArray[i]];
-                }
-                listVC.menuItemsArray = tempMutableArray;
-                listVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
-                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
-                [revealViewController setFrontViewController:navigationController animated:YES];
-            }
+                [self presentListViewControllerWithObjectsOfType:@"eventos" selectedRow:indexPath.row];
+            
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"noticias"])
-            {
-                ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-                
-                NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"noticias"];
-                NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
-                NSString *menuID = self.menuArray[indexPath.row][@"_id"];
-                for (int i = 0; i < [tempArray count]; i++)
-                {
-                    //If yes, add the object to menuItemsArray
-                    if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
-                        [tempMutableArray addObject:tempArray[i]];
-                }
-                listVC.menuItemsArray = tempMutableArray;
-                listVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
-                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
-                [revealViewController setFrontViewController:navigationController animated:YES];
-            }
+                [self presentListViewControllerWithObjectsOfType:@"noticias" selectedRow:indexPath.row];
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"locaciones"])
             {
                 MapViewController *mapVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Map"];
                 mapVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
                 
-                NSArray *tempArray = [self.fileSaver getDictionary:@"master"][@"locaciones"];
+                NSArray *tempArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+                NSLog(@"Numero de locaciones: %d", [tempArray count]);
                 NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
                 NSString *menuID = self.menuArray[indexPath.row][@"_id"];
                 for (int i = 0; i < [tempArray count]; i++)
                 {
                     //If yes, add the object to menuItemsArray
+                    NSLog(@"%@", tempArray[i][@"name"]);
                     if ([tempArray[i][@"menu_item_id"] isEqualToString:menuID])
                         [tempMutableArray addObject:tempArray[i]];
                 }
@@ -302,12 +248,13 @@
 
 #pragma mark - Custom Methods
 
-/*-(void)presentListViewControllerWithObjectsOfType:(NSString *)objectType selectedRow:(NSInteger)row
+-(void)presentListViewControllerWithObjectsOfType:(NSString *)objectType selectedRow:(NSInteger)row
 {
     SWRevealViewController *revealViewController = [self revealViewController];
     
     ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-    NSArray *tempArray = [[self.fileSaver getDictionary:@"master"] objectForKey:objectType];
+    NSArray *tempArray = [self getDictionaryWithName:@"master"][objectType];
+    NSLog(@"numero de %@: %d", objectType, [tempArray count]);
     NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
     NSString *menuID = self.menuArray[row][@"_id"];
     for (int i = 0; i < [tempArray count]; i++)
@@ -320,7 +267,7 @@
     listVC.navigationBarTitle = self.menuArray[row][@"name"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
     [revealViewController setFrontViewController:navigationController animated:YES];
-}*/
+}
 
 #pragma mark - SearchBar
 
@@ -373,11 +320,13 @@ shouldReloadTableForSearchString:(NSString *)searchString
         self.shouldUpdate = NO;
     }
 }
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     if (self.shouldUpdate) {
-        self.queue = [NSOperationQueue new];
-        NSInvocationOperation *updateOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateMethod)  object:nil];
-        [self.queue addOperation:updateOperation];
+        //self.queue = [NSOperationQueue new];
+        //NSInvocationOperation *updateOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(updateMethod)  object:nil];
+        //[self.queue addOperation:updateOperation];
+        [self updateMethod];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.2];
         self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
@@ -389,10 +338,23 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 - (void) updateMethod
 {
-    [self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
+    //[self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.spinner.center = self.updateImageView.center;
+    self.updateImageView.hidden = YES;
+    [self.spinner startAnimating];
+    [self.tableView addSubview:self.spinner];
+    //self.updateLabel.text = @"Actualizando...";
+    self.isUpdating = YES;
+    
+    [self getAllInfoFromServer];
+    
+    //[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(finishUpdateMethod) userInfo:nil repeats:NO];
+    //this is the place where you can perform your data updating procedure(data populating from web or your database), for this section i am simply reloading data after 3 seconds of pull down
+
 }
 
-- (void) startSpinner {
+/*- (void) startSpinner {
     self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.spinner.center = self.updateImageView.center;
     self.updateImageView.hidden = YES;
@@ -402,14 +364,16 @@ shouldReloadTableForSearchString:(NSString *)searchString
     self.isUpdating = YES;
     [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(finishUpdateMethod) userInfo:nil repeats:NO];
     //this is the place where you can perform your data updating procedure(data populating from web or your database), for this section i am simply reloading data after 3 seconds of pull down
-}
+}*/
 
--(void) finishUpdateMethod {
+-(void) finishUpdateMethod
+{
     [self stopSpinner];
-    [self.spinner removeFromSuperview];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
-- (void) stopSpinner {
+
+- (void) stopSpinner
+{
     [self.spinner removeFromSuperview];
     self.updateImageView.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
@@ -417,6 +381,65 @@ shouldReloadTableForSearchString:(NSString *)searchString
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     [UIView commitAnimations];
     self.isUpdating = NO;
+}
+
+#pragma mark - Server
+
+-(void)updateDataFromServer
+{
+    //Array that holds all the menu objects to display in the table view(like artists, news, locations, etc)
+    //self.menuArray = [self.fileSaver getDictionary:@"master"][@"menu"];
+    self.menuArray = [self getDictionaryWithName:@"master"][@"menu"];
+    
+    //Array that holds of the objects of type artist, events, news and locations. we will use this array later when the
+    //user make a search in the search bar. the results of that search will be filtered from this array.
+    self.allObjectsTypeArray = [self getDictionaryWithName:@"master"][@"artistas"];
+    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"noticias"]];
+    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"eventos"]];
+    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"locaciones"]];
+}
+
+-(void)getAllInfoFromServer
+{
+    ServerCommunicator *server = [[ServerCommunicator alloc]init];
+    server.delegate = self;
+    
+    //Start animating the spinner.
+    //[self.spinner startAnimating];
+    //FileSaver *file=[[FileSaver alloc]init];
+    
+    //Load the info from the server asynchronously
+    dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
+    dispatch_async(infoLoader, ^(){
+        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
+    });
+}
+
+-(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
+{
+    if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
+        if ([dictionary objectForKey:@"app"])
+        {
+            [self setDictionary:dictionary withName:@"master"];
+            [self updateDataFromServer];
+            [self finishUpdateMethod];
+            NSLog(@"Me actualizé");
+        }
+        
+        else
+        {
+            //no puede pasar
+        }
+    }
+}
+
+-(NSDictionary*)getDictionaryWithName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    return [file getDictionary:name];
+}
+-(void)setDictionary:(NSDictionary*)dictionary withName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    [file setDictionary:dictionary withKey:name];
 }
 
 @end

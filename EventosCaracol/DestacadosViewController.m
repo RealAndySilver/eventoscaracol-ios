@@ -25,7 +25,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    NSLog(@"ViewDidLoad");
     [self.navigationItem setHidesBackButton:YES];
     
     //////////////////////////////////////////////////////
@@ -37,10 +37,6 @@
     self.navigationItem.leftBarButtonItem = sideBarButton;
     
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    
-    
-    //Create an array to store the thumbs images to display
-    //self.featuredEventImages = [[NSMutableArray alloc] init];
     
     //////////////////////////////////////////////////////////
     //Store the JSON info in a dictionary
