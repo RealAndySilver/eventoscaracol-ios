@@ -7,8 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ServerCommunicator.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <MessageUI/MessageUI.h>
+#import "PopUpView.h"
+#import <Social/Social.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import "FileSaver.h"
 
-@interface DetailsViewController : UIViewController
+@interface DetailsViewController : UIViewController <ServerCommunicatorDelegate>
 @property (strong, nonatomic) NSDictionary *objectInfo;
 @property (strong, nonatomic) NSString *navigationBarTitle;
 @property (nonatomic) BOOL presentLocationObject;

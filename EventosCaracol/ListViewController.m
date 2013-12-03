@@ -14,6 +14,7 @@
 #import "DetailsViewController.h"
 #import "SWTableViewCell.h"
 #import "PopUpView.h"
+#import "FileSaver.h"
 
 @interface ListViewController ()
 @property (strong, nonatomic)  UITableView *tableView;
@@ -21,8 +22,12 @@
 @property (strong, nonatomic) UIPickerView *datePickerView;
 @property (strong, nonatomic) UIView *containerLocationPickerView;
 @property (strong, nonatomic) UIView *containerDatesPickerView;
-@property (nonatomic) BOOL isPickerActivated;
 @property (strong, nonatomic) UIImageView *updateImageView;
+@property (nonatomic) BOOL isPickerActivated;
+@property (nonatomic) float offset;
+@property (nonatomic) BOOL isUpdating;
+@property (nonatomic) BOOL shouldUpdate;
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @end
 
 #define ROW_HEIGHT 90.0
@@ -31,7 +36,7 @@
 
 -(void)setupPullDownToRefreshView
 {
-    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 40.0, -50.0, 20.0, 40.0)];
+    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 10, -50.0, 20.0, 40.0)];
     self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
     [self.tableView addSubview:self.updateImageView];
 }
@@ -42,6 +47,7 @@
 {
     [super viewDidLoad];
     NSLog(@"ListViewDidLoad");
+    
     SWRevealViewController *revealViewController = [self revealViewController];
     
     if (!self.locationList)
@@ -97,19 +103,19 @@
         [filterByLocationButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
         [self.view addSubview:filterByLocationButton];
         
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, filterByLocationButton.frame.origin.y + filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStylePlain];
-        [self.view addSubview:_tableView];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, filterByLocationButton.frame.origin.y + filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (filterByLocationButton.frame.origin.y + filterByLocationButton.frame.size.height)) style:UITableViewStylePlain];
+        [self.view addSubview:self.tableView];
     }
     
     else
     {
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,
-                                                                       0.0,
+                                                                       self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
                                                                        self.view.frame.size.width,
-                                                                       self.view.frame.size.height)
+                                                                       self.view.frame.size.height - ( self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))
                                                       style:UITableViewStylePlain];
-        self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 0.0, 0.0);
-        [self.view addSubview:_tableView];
+        //self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 0.0, 0.0);
+        [self.view addSubview:self.tableView];
     }
     
     ///////////////////////////////////////////////////////////////////
@@ -119,7 +125,9 @@
     self.tableView.dataSource = self;
     self.tableView.rowHeight = ROW_HEIGHT;
     self.tableView.allowsSelection = YES;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    //self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+    
+    [self setupPullDownToRefreshView];
     
     ///////////////////////////////////////////////////////////////////
     //Configure locationPickerView
@@ -207,27 +215,25 @@
 {
     ///////////////////////////////////////////////////////////////////
     //Dequeue our custom cell SWTableViewCell
-    SWTableViewCell *eventCell = (SWTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"EventCell"];
+    static NSString *cellIdentifier=@"EventCell";
+    SWTableViewCell *eventCell = (SWTableViewCell *)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    if (!eventCell)
-    {
-        //Array for storing our left and right buttons, which become visible when the user swipes in the cell.
-        NSMutableArray *leftButtons = [[NSMutableArray alloc] init];
-        NSMutableArray *rightButtons = [[NSMutableArray alloc] init];
+    //Array for storing our left and right buttons, which become visible when the user swipes in the cell.
+    NSMutableArray *leftButtons = [[NSMutableArray alloc] init];
+    NSMutableArray *rightButtons = [[NSMutableArray alloc] init];
         
-        [leftButtons sw_addUtilityButtonWithColor:[UIColor orangeColor] title:@"Fav"];
-        [leftButtons sw_addUtilityButtonWithColor:[UIColor cyanColor] title:@"Share"];
+    [leftButtons sw_addUtilityButtonWithColor:[UIColor orangeColor] title:@"Fav"];
+    [leftButtons sw_addUtilityButtonWithColor:[UIColor cyanColor] title:@"Share"];
+    
+    [rightButtons sw_addUtilityButtonWithColor:[UIColor redColor] title:@"Borrar"];
         
-        [rightButtons sw_addUtilityButtonWithColor:[UIColor redColor] title:@"Borrar"];
+    eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                        reuseIdentifier:cellIdentifier
+                                    containingTableView:tableView
+                                    leftUtilityButtons:leftButtons
+                                    rightUtilityButtons:rightButtons];
         
-        eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                           reuseIdentifier:@"EventCell"
-                                       containingTableView:tableView
-                                        leftUtilityButtons:leftButtons
-                                       rightUtilityButtons:rightButtons];
-        
-        eventCell.delegate = self;
-    }
+    eventCell.delegate = self;
     
     /////////////////////////////////////////////////////////////////////
     //Create the subviews that will contain the cell.
@@ -450,6 +456,158 @@
     }
 }
 
+#pragma mark - UIScrollViewDelegate
 
+-(void)scrollViewDidScroll:(UIScrollView *)sender {
+    
+    self.offset = self.tableView.contentOffset.y;
+    self.offset *= -1;
+    if (self.offset > 0 && self.offset < 60) {
+        /*if(!self.isUpdating)
+         self.updateLabel.text = @"Hala para actualizar...";*/
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDuration:0.2];
+        self.updateImageView.transform = CGAffineTransformMakeRotation(0);
+        [UIView commitAnimations];
+        self.shouldUpdate = NO;
+    }
+    if (self.offset >= 60) {
+        /*if(!self.isUpdating)
+         self.updateLabel.text = @"Suelta para actualizar...";*/
+        
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationBeginsFromCurrentState:YES];
+        [UIView setAnimationDuration:0.2];
+        self.updateImageView.transform = CGAffineTransformMakeRotation(M_PI);
+        [UIView commitAnimations];
+        self.shouldUpdate = YES;
+    }
+    if (self.isUpdating)
+    {
+        self.shouldUpdate = NO;
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (self.shouldUpdate)
+    {
+        [self updateMethod];
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.2];
+        self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+        [UIView commitAnimations];
+    }
+}
+
+#pragma mark - Pull Down To Refresh methods
+
+- (void) updateMethod
+{
+    //[self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.spinner.center = self.updateImageView.center;
+    self.updateImageView.hidden = YES;
+    [self.spinner startAnimating];
+    [self.tableView addSubview:self.spinner];
+    //self.updateLabel.text = @"Actualizando...";
+    self.isUpdating = YES;
+    
+    [self getAllInfoFromServer];
+    
+    //[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(finishUpdateMethod) userInfo:nil repeats:NO];
+    //this is the place where you can perform your data updating procedure(data populating from web or your database), for this section i am simply reloading data after 3 seconds of pull down
+}
+
+-(void) finishUpdateMethod
+{
+    //[self stopSpinner];
+    [self.tableView reloadData];
+    //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
+}
+
+- (void) stopSpinner
+{
+    [self.spinner stopAnimating];
+    [self.spinner removeFromSuperview];
+    self.updateImageView.hidden = NO;
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.2];
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    [UIView commitAnimations];
+    self.isUpdating = NO;
+}
+
+-(void)updateDataFromServer
+{
+    NSArray *tempArray = [self getDictionaryWithName:@"master"][self.objectType];
+    NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < [tempArray count]; i++)
+    {
+        if ([tempArray[i][@"menu_item_id"] isEqualToString:self.menuID])
+            [tempMutableArray addObject:tempArray[i]];
+    }
+    
+    self.menuItemsArray = tempMutableArray;
+}
+
+#pragma mark - Server
+
+-(void)getAllInfoFromServer
+{
+    ServerCommunicator *server = [[ServerCommunicator alloc]init];
+    server.delegate = self;
+    
+    //Start animating the spinner.
+    //[self.spinner startAnimating];
+    //FileSaver *file=[[FileSaver alloc]init];
+    
+    //Load the info from the server asynchronously
+    dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
+    dispatch_async(infoLoader, ^(){
+        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
+    });
+}
+
+-(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
+{
+    if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
+        if ([dictionary objectForKey:@"app"])
+        {
+            [self setDictionary:dictionary withName:@"master"];
+            [self updateDataFromServer];
+            [self finishUpdateMethod];
+            NSLog(@"Me actualizé");
+        }
+        
+        else
+        {
+            //no puede pasar
+        }
+    }
+}
+
+-(void)serverError:(NSError *)error
+{
+    [self stopSpinner];
+    
+    [[[UIAlertView alloc] initWithTitle:nil
+                               message:@"No hay conexión a internet."
+                              delegate:self
+                     cancelButtonTitle:@"Ok"
+                     otherButtonTitles:nil] show];
+}
+
+-(NSDictionary*)getDictionaryWithName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    return [file getDictionary:name];
+}
+-(void)setDictionary:(NSDictionary*)dictionary withName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    [file setDictionary:dictionary withKey:name];
+}
 
 @end

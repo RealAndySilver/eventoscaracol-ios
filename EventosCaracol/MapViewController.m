@@ -83,10 +83,10 @@
 {
     ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
     listVC.menuItemsArray = self.locationsArray;
-    NSLog(@"%@", listVC.menuItemsArray);
+    listVC.menuID = self.menuID;
+    listVC.objectType = self.objectType;
     listVC.navigationBarTitle = self.navigationBarTitle;
     listVC.locationList = YES;
-    //[self presentViewController:listVC animated:YES completion:nil];
     [self.navigationController pushViewController:listVC animated:YES];
 }
 

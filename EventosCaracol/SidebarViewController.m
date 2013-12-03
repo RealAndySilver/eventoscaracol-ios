@@ -52,6 +52,7 @@
 
 -(void)viewDidLoad
 {
+    NSLog(@"me cargué");
     [self updateDataFromServer];
 
     //Store the info for the aditional buttons of the slide menu table view
@@ -232,6 +233,8 @@
                         [tempMutableArray addObject:tempArray[i]];
                 }
                 mapVC.locationsArray = tempMutableArray;
+                mapVC.menuID = menuID;
+                mapVC.objectType = @"locaciones";
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapVC];
                 [revealViewController setFrontViewController:navigationController animated:YES];
             }
@@ -264,6 +267,12 @@
             [tempMutableArray addObject:tempArray[i]];
     }
     listVC.menuItemsArray = tempMutableArray;
+    
+    //It's neccesary to pass the menuID string and the objectType (artist, event, news...) to ListViewController
+    //Because when the user 'pull down to refresh' the list of objects we need to know what kind of objects
+    //are we handling.
+    listVC.menuID = menuID;
+    listVC.objectType = objectType;
     listVC.navigationBarTitle = self.menuArray[row][@"name"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
     [revealViewController setFrontViewController:navigationController animated:YES];
@@ -374,6 +383,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 - (void) stopSpinner
 {
+    [self.spinner stopAnimating];
     [self.spinner removeFromSuperview];
     self.updateImageView.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
@@ -431,6 +441,17 @@ shouldReloadTableForSearchString:(NSString *)searchString
             //no puede pasar
         }
     }
+}
+
+-(void)serverError:(NSError *)error
+{
+    NSLog(@"error");
+    [self stopSpinner];
+    
+    [[[UIAlertView alloc] initWithTitle:nil message:@"No hay conexión a internet."
+                              delegate:self
+                     cancelButtonTitle:@"Ok"
+                     otherButtonTitles:nil] show];
 }
 
 -(NSDictionary*)getDictionaryWithName:(NSString*)name{

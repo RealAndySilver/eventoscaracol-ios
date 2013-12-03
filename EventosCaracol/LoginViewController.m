@@ -133,7 +133,7 @@
                                                            [dic setObject:user[@"id"] forKey:@"id"];
                                                            [dic setObject:user[@"email"] forKey:@"email"];
                                                            [dic setObject:user[@"name"] forKey:@"name"];
-                                                           [fileSaver setDictionary:dic withKey:@"user"];
+                                                           [fileSaver setDictionary:dic withKey:@"facebookUser"];
                                                            [self sendInfo];
                                                            
                                                            //[dic setObject:[IAmCoder base64String:[user objectForKey:@"id"]] forKey:@"id"];
@@ -183,10 +183,10 @@
 -(void)sendInfo
 {
     FileSaver *fileSaver = [[FileSaver alloc] init];
-    NSString *parameters = [NSString stringWithFormat:@"email=%@&id=%@&name=%@&token=%@&brand=%@&os=%@&device=%@&app_id=%@",
-                            [fileSaver getDictionary:@"user"][@"email"],
-                            [fileSaver getDictionary:@"user"][@"id"],
-                            [fileSaver getDictionary:@"user"][@"name"],
+    NSString *parameters = [NSString stringWithFormat:@"email=%@&facebook_id=%@&name=%@&token=%@&brand=%@&os=%@&device=%@&app_id=%@",
+                            [fileSaver getDictionary:@"facebookUser"][@"email"],
+                            [fileSaver getDictionary:@"facebookUser"][@"id"],
+                            [fileSaver getDictionary:@"facebookUser"][@"name"],
                             [fileSaver getToken],
                             [fileSaver getDictionary:@"DeviceInfo"][@"Brand"],
                             [fileSaver getDictionary:@"DeviceInfo"][@"SystemVersion"],
@@ -227,6 +227,7 @@
     if ([methodName isEqualToString:@"SignUp"]) {
         NSLog(@"Result: %@",dictionary);
         if([[dictionary objectForKey:@"status"] boolValue]){
+            [self setDictionary:dictionary[@"user"] withKey:@"user"];
             [MBHUDView dismissCurrentHUD];
             [self goToNextVC];
         }

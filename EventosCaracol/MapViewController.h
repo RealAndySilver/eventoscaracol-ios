@@ -11,5 +11,6 @@
 @interface MapViewController : UIViewController
 @property (strong, nonatomic) NSString *navigationBarTitle;
 @property (strong, nonatomic) NSString *menuID;
+@property (strong, nonatomic) NSString *objectType;
 @property (strong, nonatomic) NSArray *locationsArray;
 @end

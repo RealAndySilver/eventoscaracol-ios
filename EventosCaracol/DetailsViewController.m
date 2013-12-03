@@ -7,11 +7,6 @@
 //
 
 #import "DetailsViewController.h"
-#import <SDWebImage/UIImageView+WebCache.h>
-#import <MessageUI/MessageUI.h>
-#import "PopUpView.h"
-#import <Social/Social.h>
-#import <GoogleMaps/GoogleMaps.h>
 
 @interface DetailsViewController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIScrollViewDelegate>
 @property (strong, nonatomic) UIScrollView *scrollView;
@@ -115,7 +110,7 @@
                                                                           40.0,
                                                                           40.0)];
     [favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
-    [favoriteButton addTarget:self action:@selector(showFavoriteAnimation) forControlEvents:UIControlEventTouchUpInside];
+    [favoriteButton addTarget:self action:@selector(makeFavorite) forControlEvents:UIControlEventTouchUpInside];
     [favoriteButton setBackgroundColor:[UIColor purpleColor]];
     [self.scrollView addSubview:favoriteButton];
     
@@ -165,6 +160,33 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+-(void)makeFavorite
+{
+    if (![self getDictionaryWithName:@"user"])
+    {
+        [[[UIAlertView alloc] initWithTitle:nil
+                                   message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
+                                  delegate:self
+                         cancelButtonTitle:@"Ok"
+                         otherButtonTitles:nil] show];
+        return;
+    }
+        
+    
+    [self showFavoriteAnimation];
+    NSString *params = [NSString stringWithFormat:@"item_id=%@&_id=%@&type=%@", self.objectInfo[@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.objectInfo[@"type"]];
+    ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
+    serverCommunicator.delegate = self;
+    //favItem - unfavItem
+    //dos parmetros atom_id  _id
+    
+    dispatch_queue_t server = dispatch_queue_create("server", nil);
+    dispatch_async(server, ^(){
+        [serverCommunicator callServerWithPOSTMethod:@"UnFavItem" andParameter:params httpMethod:@"POST"];
+    });
+    NSLog(@"%@", params);
+}
+
 -(void)showFavoriteAnimation
 {
     [PopUpView showPopUpViewOverView:self.view image:nil];
@@ -177,6 +199,19 @@
                        cancelButtonTitle:@"Volver"
                   destructiveButtonTitle:nil
                        otherButtonTitles:@"SMS", @"Facebook", @"Twitter", @"Correo", nil] showInView:self.view];
+}
+
+#pragma mark - ServerComunnicatorDelegate
+
+-(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
+{
+    NSLog(@"%@", dictionary);
+    [self setDictionary:dictionary[@"user"] withName:@"user"];
+}
+
+-(void)serverError:(NSError *)error
+{
+    NSLog(@"error con el servidor");
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -247,6 +282,16 @@
 -(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+-(NSDictionary*)getDictionaryWithName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    return [file getDictionary:name];
+}
+-(void)setDictionary:(NSDictionary*)dictionary withName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    [file setDictionary:dictionary withKey:name];
 }
 
 @end
