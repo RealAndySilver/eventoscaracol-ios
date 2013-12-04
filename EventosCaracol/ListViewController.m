@@ -6,15 +6,7 @@
 //  Copyright (c) 2013 iAmStudio. All rights reserved.
 //
 
-#import <Social/Social.h>
-#import <MessageUI/MessageUI.h>
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "ListViewController.h"
-#import "SWRevealViewController.h"
-#import "DetailsViewController.h"
-#import "SWTableViewCell.h"
-#import "PopUpView.h"
-#import "FileSaver.h"
 
 @interface ListViewController ()
 @property (strong, nonatomic)  UITableView *tableView;
@@ -23,11 +15,14 @@
 @property (strong, nonatomic) UIView *containerLocationPickerView;
 @property (strong, nonatomic) UIView *containerDatesPickerView;
 @property (strong, nonatomic) UIImageView *updateImageView;
+@property (nonatomic) NSUInteger rowIndex; //Used for detecting which row we have to update
+                                            //when the user favorites an item.
 @property (nonatomic) BOOL isPickerActivated;
 @property (nonatomic) float offset;
 @property (nonatomic) BOOL isUpdating;
 @property (nonatomic) BOOL shouldUpdate;
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) NSMutableArray *isFavoritedArray;
 @end
 
 #define ROW_HEIGHT 90.0
@@ -47,6 +42,7 @@
 {
     [super viewDidLoad];
     NSLog(@"ListViewDidLoad");
+    self.isFavoritedArray = [[NSMutableArray alloc] initWithCapacity:[self.menuItemsArray count]];
     
     SWRevealViewController *revealViewController = [self revealViewController];
     
@@ -221,17 +217,37 @@
     //Array for storing our left and right buttons, which become visible when the user swipes in the cell.
     NSMutableArray *leftButtons = [[NSMutableArray alloc] init];
     NSMutableArray *rightButtons = [[NSMutableArray alloc] init];
-        
-    [leftButtons sw_addUtilityButtonWithColor:[UIColor orangeColor] title:@"Fav"];
+    
+    //////////////////////////////////////////////////////////////////////////
+    //Check if the cell's item is favorite or not.
+    NSArray *favoriteItemsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
+    UIColor *favoriteButtonColor;
+    if ([favoriteItemsArray containsObject:self.menuItemsArray[indexPath.row][@"_id"]])
+    {
+        [self.isFavoritedArray addObject:@1];
+        favoriteButtonColor = [UIColor purpleColor];
+        //NSLog(@"el objeto %d está favoriteado mirá", indexPath.row);
+    }
+    
+    else
+    {
+        [self.isFavoritedArray addObject:@0];
+        favoriteButtonColor = [UIColor grayColor];
+        //NSLog(@"El objeto %d no está favoriteado mirá", indexPath.row);
+    }
+    
+    NSLog(@"%@", self.isFavoritedArray[indexPath.row]);
+    
+    [leftButtons sw_addUtilityButtonWithColor:favoriteButtonColor title:@"Fav"];
     [leftButtons sw_addUtilityButtonWithColor:[UIColor cyanColor] title:@"Share"];
     
-    [rightButtons sw_addUtilityButtonWithColor:[UIColor redColor] title:@"Borrar"];
+    //[rightButtons sw_addUtilityButtonWithColor:[UIColor redColor] title:@"Borrar"];
         
     eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                         reuseIdentifier:cellIdentifier
                                     containingTableView:tableView
                                     leftUtilityButtons:leftButtons
-                                    rightUtilityButtons:rightButtons];
+                                    rightUtilityButtons:nil];
         
     eventCell.delegate = self;
     
@@ -267,6 +283,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"me tocaron");
     DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
     detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
     
@@ -279,6 +296,59 @@
     [self.navigationController pushViewController:detailsVC animated:YES];
 }
 
+#pragma mark - Custom methods
+
+-(void)makeFavoriteWithIndex:(NSUInteger)index
+{
+    //If the dictionary 'user' doesn't exist, we don't allow the user to favorite the items.
+    //it's neccesary to log in facebook to fav items.
+    if (![self getDictionaryWithName:@"user"])
+    {
+        [[[UIAlertView alloc] initWithTitle:nil
+                                    message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
+                                   delegate:self
+                          cancelButtonTitle:@"Ok"
+                          otherButtonTitles:@"Iniciar Sesión", nil] show];
+        return;
+    }
+    self.rowIndex = index;
+    
+    //Create a string that contains the parameters to send to the server.
+    NSString *params = [NSString stringWithFormat:@"item_id=%@&_id=%@&type=%@", self.menuItemsArray[index][@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.menuItemsArray[index][@"type"]];
+    ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
+    serverCommunicator.delegate = self;
+    
+    //Communicate asynchronously with the server
+    dispatch_queue_t server = dispatch_queue_create("server", nil);
+    dispatch_async(server, ^(){
+        if ([self.isFavoritedArray[index] intValue] == 1)
+        {
+            [serverCommunicator callServerWithPOSTMethod:@"UnFavItem" andParameter:params httpMethod:@"POST"];
+            self.isFavoritedArray[index] = @0;
+            NSLog(@"me tengo que desfavoritear");
+        }
+        else
+        {
+            [serverCommunicator callServerWithPOSTMethod:@"FavItem" andParameter:params httpMethod:@"POST"];
+            self.isFavoritedArray[index] = @1;
+            NSLog(@"me tengo que favoritear");
+        }
+        
+        //Get the main queue to make user interface updates.
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            //[self updateFavoritedButton];
+            //[self updateFavoriteLabel];
+            [self.isFavoritedArray[index] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarGris.png"]];
+        });
+    });
+    NSLog(@"%@", params);
+}
+
+-(void)showFavoriteAnimationWithImage:(UIImage *)image
+{
+    [PopUpView showPopUpViewOverView:self.view image:image];
+}
+
 #pragma mark - SWTableViewDelegate
 
 -(void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index
@@ -286,8 +356,12 @@
     //If the user touches the favorite button of the cell.
     if (index == 0)
     {
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        NSUInteger index = indexPath.row;
+        NSLog(@"%lu", (unsigned long)index);
+        [self makeFavoriteWithIndex:index];
         //Use our custom UIView to display a favorite image on screen
-        [PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:nil]];
+        //[PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:nil]];
     }
     
     //if the user touches the share button of the cell.
@@ -502,11 +576,22 @@
     }
 }
 
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1)
+    {
+        LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+        loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
+        [self presentViewController:loginVC animated:YES completion:nil];
+    }
+}
+
 #pragma mark - Pull Down To Refresh methods
 
 - (void) updateMethod
 {
-    //[self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
     self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.spinner.center = self.updateImageView.center;
     self.updateImageView.hidden = YES;
@@ -516,14 +601,11 @@
     self.isUpdating = YES;
     
     [self getAllInfoFromServer];
-    
-    //[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(finishUpdateMethod) userInfo:nil repeats:NO];
-    //this is the place where you can perform your data updating procedure(data populating from web or your database), for this section i am simply reloading data after 3 seconds of pull down
 }
 
 -(void) finishUpdateMethod
 {
-    //[self stopSpinner];
+    [self stopSpinner];
     [self.tableView reloadData];
     //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationBottom];
 }
@@ -574,18 +656,34 @@
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
-    if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
-        if ([dictionary objectForKey:@"app"])
-        {
-            [self setDictionary:dictionary withName:@"master"];
-            [self updateDataFromServer];
-            [self finishUpdateMethod];
-            NSLog(@"Me actualizé");
-        }
+    if ([methodName isEqualToString:@"FavItem"] || [methodName isEqualToString:@"UnFavItem"])
+    {
+        NSLog(@"%@", dictionary);
+        NSLog(@"Llego la informacion de los favoritos");
+        [self setDictionary:dictionary[@"user"] withName:@"user"];
         
-        else
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.rowIndex inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[self.tableView reloadData];
+    }
+    
+    else
+    {
+        NSLog(@"llego información del servidor");
+        if ([methodName isEqualToString:@"GetAllInfoWithAppID"])
         {
-            //no puede pasar
+            if ([dictionary objectForKey:@"app"])
+            {
+                [self setDictionary:dictionary withName:@"master"];
+                [self updateDataFromServer];
+                [self finishUpdateMethod];
+                NSLog(@"Me actualizé");
+            }
+            
+            else
+            {
+                //no puede pasar
+            }
         }
     }
 }
@@ -595,7 +693,7 @@
     [self stopSpinner];
     
     [[[UIAlertView alloc] initWithTitle:nil
-                               message:@"No hay conexión a internet."
+                               message:@"No hay conexión a internet"
                               delegate:self
                      cancelButtonTitle:@"Ok"
                      otherButtonTitles:nil] show];

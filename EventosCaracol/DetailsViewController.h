@@ -14,8 +14,9 @@
 #import <Social/Social.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import "FileSaver.h"
+#import "LoginViewController.h"
 
-@interface DetailsViewController : UIViewController <ServerCommunicatorDelegate>
+@interface DetailsViewController : UIViewController <ServerCommunicatorDelegate, UIAlertViewDelegate>
 @property (strong, nonatomic) NSDictionary *objectInfo;
 @property (strong, nonatomic) NSString *navigationBarTitle;
 @property (nonatomic) BOOL presentLocationObject;

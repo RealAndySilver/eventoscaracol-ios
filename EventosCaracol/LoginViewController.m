@@ -162,7 +162,7 @@
                                               else if (error.code==2){
                                                   NSLog(@"no autorizado error %ld",(long)error.code);
                                                   [MBHUDView dismissCurrentHUD];
-                                                  [MBHUDView hudWithBody:@"Acceso denegado" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                  [MBHUDView hudWithBody:@"No se inició sesión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }
                                           }
                                       }];
@@ -257,6 +257,13 @@
 -(void)goToNextVC
 {
     [MBHUDView dismissCurrentHUD];
+    
+    if (self.loginWasPresentedFromFavoriteButtonAlert)
+    {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
+    
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
      

@@ -79,6 +79,8 @@
 		8BBE1296184D309900D90BE5 /* updateArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BBE1295184D309900D90BE5 /* updateArrow.png */; };
 		8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */; };
 		8BCD7D40183FB8DC00849D8A /* DestacadosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */; };
+		8BD09F59184F81E900BA45FC /* CorazonGris.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BD09F58184F81E900BA45FC /* CorazonGris.png */; };
+		8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BD09F5A184F846300BA45FC /* BorrarGris.png */; };
 		8BEFF81E183FEEE1004A5C6E /* DestacadosCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BEFF81D183FEEE1004A5C6E /* DestacadosCollectionViewCell.m */; };
 		8BFFF27D183FA82000009526 /* PopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFFF27C183FA82000009526 /* PopUpView.m */; };
 /* End PBXBuildFile section */
@@ -202,6 +204,8 @@
 		8BCD7D3B183FB20500849D8A /* CorazonPrueba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonPrueba.png; path = Resources/Images/CorazonPrueba.png; sourceTree = "<group>"; };
 		8BCD7D3E183FB8DC00849D8A /* DestacadosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DestacadosViewController.h; sourceTree = "<group>"; };
 		8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DestacadosViewController.m; sourceTree = "<group>"; };
+		8BD09F58184F81E900BA45FC /* CorazonGris.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonGris.png; path = Resources/Images/CorazonGris.png; sourceTree = "<group>"; };
+		8BD09F5A184F846300BA45FC /* BorrarGris.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BorrarGris.png; path = Resources/Images/BorrarGris.png; sourceTree = "<group>"; };
 		8BEFF81C183FEEE1004A5C6E /* DestacadosCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DestacadosCollectionViewCell.h; sourceTree = "<group>"; };
 		8BEFF81D183FEEE1004A5C6E /* DestacadosCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DestacadosCollectionViewCell.m; sourceTree = "<group>"; };
 		8BFFF27B183FA82000009526 /* PopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopUpView.h; sourceTree = "<group>"; };
@@ -484,6 +488,8 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8BD09F5A184F846300BA45FC /* BorrarGris.png */,
+				8BD09F58184F81E900BA45FC /* CorazonGris.png */,
 				8BBE1295184D309900D90BE5 /* updateArrow.png */,
 				8BBE1250184CE97A00D90BE5 /* CarnavalPrueba.jpg */,
 				8BB37E521849357900274848 /* CaracolPrueba4.png */,
@@ -602,12 +608,14 @@
 				8BBE1251184CE97A00D90BE5 /* CarnavalPrueba.jpg in Resources */,
 				8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */,
 				8BB37E511849332200274848 /* CaracolPrueba3.png in Resources */,
+				8BD09F59184F81E900BA45FC /* CorazonGris.png in Resources */,
 				8BB37E531849357900274848 /* CaracolPrueba4.png in Resources */,
 				8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */,
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
 				8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */,
+				8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */,
 				8BBDE6A41846413F00BEAD74 /* GoogleMaps.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

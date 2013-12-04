@@ -20,7 +20,7 @@
     
     heartView.alpha = 0.0;
     if (!image)
-        heartView.image = [UIImage imageNamed:@"CorazonPrueba.png"];
+        heartView.image = [UIImage imageNamed:@"CorazonGris.png"];
     else
         heartView.image = image;
     

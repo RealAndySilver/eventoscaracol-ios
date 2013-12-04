@@ -10,6 +10,9 @@
 
 @interface DetailsViewController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIScrollViewDelegate>
 @property (strong, nonatomic) UIScrollView *scrollView;
+@property (nonatomic) BOOL isFavorited;
+@property (strong, nonatomic) UIButton *favoriteButton;
+@property (strong, nonatomic) UILabel *favoriteCountLabel;
 @end
 
 @implementation DetailsViewController
@@ -105,40 +108,75 @@
     [self.scrollView addSubview:mainImageView];
     [self.view addSubview:self.scrollView];
     
-    UIButton *favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0,
+    //////////////////////////////////////////////////////////////////////////////////////////
+    self.favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0,
                                                                           mainImageView.frame.origin.y + mainImageView.frame.size.height + 20.0,
                                                                           40.0,
                                                                           40.0)];
-    [favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
-    [favoriteButton addTarget:self action:@selector(makeFavorite) forControlEvents:UIControlEventTouchUpInside];
-    [favoriteButton setBackgroundColor:[UIColor purpleColor]];
-    [self.scrollView addSubview:favoriteButton];
+    [self.favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
+    [self.favoriteButton addTarget:self action:@selector(makeFavorite) forControlEvents:UIControlEventTouchUpInside];
     
-    UILabel *objectName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
-                                                                   favoriteButton.frame.origin.y,
-                                                                   self.view.frame.size.width - (20.0 + favoriteButton.frame.size.width + 20) - 20,
+    //Store the favorited atoms of the user (array of NSString)
+    NSArray *favoritedObjectsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
+    
+    //If the current object is favorite, show the favorite button with purple color.
+    if ([favoritedObjectsArray containsObject:self.objectInfo[@"_id"]])
+    {
+        NSLog(@"el objeto está favoriteado oís");
+        self.favoriteButton.backgroundColor = [UIColor purpleColor];
+        self.isFavorited = YES;
+    }
+    
+    //...if not, show it with gray color.
+    else
+    {
+        NSLog(@"el objeto no está favoriteado oís");
+        self.isFavorited = NO;
+        self.favoriteButton.backgroundColor = [UIColor grayColor];
+    }
+    
+    [self.scrollView addSubview:self.favoriteButton];
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
+    /*self.favoriteCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.favoriteButton.frame.origin.x,
+                                                                        self.favoriteButton.frame.origin.y + self.favoriteButton.frame.size.height, self.favoriteButton.frame.size.width,
+                                                                        20.0)];
+    
+    int favoriteCount = self.objectInfo[@"favorited"] ? [self.objectInfo[@"favorited"] intValue] : 0;
+    self.favoriteCountLabel.text = [NSString stringWithFormat:@"%d", favoriteCount];
+    self.favoriteCountLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    self.favoriteCountLabel.textAlignment = NSTextAlignmentCenter;
+    [self.scrollView addSubview:self.favoriteCountLabel];*/
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    UILabel *objectName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width + 20,
+                                                                   self.favoriteButton.frame.origin.y,
+                                                                   self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                    44.0)];
     objectName.numberOfLines = 0;
     objectName.text = self.objectInfo[@"name"];
     objectName.font = [UIFont fontWithName:@"@Helvetica" size:15.0];
     [self.scrollView addSubview:objectName];
     
-    UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width + 20,
                                                                             objectName.frame.origin.y + objectName.frame.size.height,
-                                                                            self.view.frame.size.width - (20.0 + favoriteButton.frame.size.width + 20) - 20,
+                                                                            self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                             20.0)];
     eventLocationLabel.text = @"Plaza Cervantes";
     eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     [self.scrollView addSubview:eventLocationLabel];
     
-    UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + favoriteButton.frame.size.width + 20,
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width + 20,
                                                                         eventLocationLabel.frame.origin.y + eventLocationLabel.frame.size.height,
-                                                                        self.view.frame.size.width - (20.0 + favoriteButton.frame.size.width + 20) - 20,
+                                                                        self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                         20.0)];
     eventTimeLabel.text = @"11:30AM";
     eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
     [self.scrollView addSubview:eventTimeLabel];
     
+    ///////////////////////////////////////////////////////////////////////////////////////////
     UITextView *description = [[UITextView alloc]
                                     initWithFrame:CGRectMake(20.0,
                                                              eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 10,
@@ -162,34 +200,57 @@
 
 -(void)makeFavorite
 {
+    //If the dictionary 'user' doesn't exist, we don't allow the user to favorite the items.
+    //it's neccesary to log in facebook to fav items.
     if (![self getDictionaryWithName:@"user"])
     {
         [[[UIAlertView alloc] initWithTitle:nil
                                    message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
                                   delegate:self
                          cancelButtonTitle:@"Ok"
-                         otherButtonTitles:nil] show];
+                         otherButtonTitles:@"Iniciar Sesión", nil] show];
         return;
     }
-        
     
-    [self showFavoriteAnimation];
+    //Create a string that contains the parameters to send to the server.
     NSString *params = [NSString stringWithFormat:@"item_id=%@&_id=%@&type=%@", self.objectInfo[@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.objectInfo[@"type"]];
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
-    //favItem - unfavItem
-    //dos parmetros atom_id  _id
     
+    //Communicate asynchronously with the server
     dispatch_queue_t server = dispatch_queue_create("server", nil);
     dispatch_async(server, ^(){
-        [serverCommunicator callServerWithPOSTMethod:@"UnFavItem" andParameter:params httpMethod:@"POST"];
+        if (self.isFavorited)
+            [serverCommunicator callServerWithPOSTMethod:@"UnFavItem" andParameter:params httpMethod:@"POST"];
+        else
+            [serverCommunicator callServerWithPOSTMethod:@"FavItem" andParameter:params httpMethod:@"POST"];
+        
+        /*//Get the main queue to make user interface updates.
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self updateFavoritedButton];
+            //[self updateFavoriteLabel];
+            self.isFavorited ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarGris.png"]];
+        });*/
     });
     NSLog(@"%@", params);
 }
 
--(void)showFavoriteAnimation
+/*-(void)updateFavoriteLabel
 {
-    [PopUpView showPopUpViewOverView:self.view image:nil];
+    self.favoriteCountLabel.text = [NSString stringWithFormat:@"%d", [self.objectInfo[@"favorited"] intValue]];
+}*/
+
+-(void)updateFavoritedButton
+{
+    if (self.isFavorited)
+        self.favoriteButton.backgroundColor = [UIColor purpleColor];
+    else
+        self.favoriteButton.backgroundColor = [UIColor grayColor];
+}
+
+-(void)showFavoriteAnimationWithImage:(UIImage *)image
+{
+    [PopUpView showPopUpViewOverView:self.view image:image];
 }
 
 -(void)shareEvent
@@ -207,11 +268,23 @@
 {
     NSLog(@"%@", dictionary);
     [self setDictionary:dictionary[@"user"] withName:@"user"];
+    self.isFavorited = !self.isFavorited;
+    [self updateFavoritedButton];
+    self.isFavorited ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarGris.png"]];
+
+    //self.objectInfo = dictionary[@"atom"];
+    
+    //[self updateFavoriteLabel];
 }
 
 -(void)serverError:(NSError *)error
 {
     NSLog(@"error con el servidor");
+    [[[UIAlertView alloc] initWithTitle:nil
+                               message:@"No hay conexión."
+                              delegate:self
+                     cancelButtonTitle:@"Ok"
+                     otherButtonTitles:nil] show];
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -292,6 +365,17 @@
 -(void)setDictionary:(NSDictionary*)dictionary withName:(NSString*)name{
     FileSaver *file=[[FileSaver alloc]init];
     [file setDictionary:dictionary withKey:name];
+}
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1)
+    {
+        LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+        loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
+        [self presentViewController:loginVC animated:YES completion:nil];
+    }
 }
 
 @end
