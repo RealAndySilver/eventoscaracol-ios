@@ -20,6 +20,23 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"%@", self.objectInfo[@"event_time"]);
+    
+    NSString *eventTime = self.objectInfo[@"event_time"];
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"%@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    if (![dateFormatter dateFromString:@"1991-01-10 05:30:00"])
+        NSLog(@"no lo formatée");
+    else
+    {
+        NSDate *date = [dateFormatter dateFromString:formattedEventTimeString];
+        NSLog(@"%@", [date descriptionWithLocale:[NSLocale currentLocale]]);
+    }
     
     self.navigationItem.title = self.navigationBarTitle;
     
