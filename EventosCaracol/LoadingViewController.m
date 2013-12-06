@@ -26,17 +26,19 @@
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor colorWithRed:17.0/255.0
+    /*self.view.backgroundColor = [UIColor colorWithRed:17.0/255.0
                                                 green:96.0/255.0
                                                  blue:153.0/255.0
-                                                alpha:1.0];
+                                                alpha:1.0];*/
     
     /////////////////////////////////////////////////////
     UIImageView *logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                                0.0,
                                                                                self.view.frame.size.width,
-                                                                               self.view.frame.size.width)];
-    logoImageView.image = [UIImage imageNamed:@"CaracolPrueba4.png"];
+                                                                               self.view.frame.size.height)];
+    logoImageView.clipsToBounds = YES;
+    logoImageView.contentMode = UIViewContentModeScaleAspectFill;
+    logoImageView.image = [UIImage imageNamed:@"Loading.png"];
     [self.view addSubview:logoImageView];
     
     /////////////////////////////////////////////////////
@@ -164,6 +166,7 @@
     else
     {
         LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+        loginVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self presentViewController:loginVC animated:YES completion:nil];
     }
 }

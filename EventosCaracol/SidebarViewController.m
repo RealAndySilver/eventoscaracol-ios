@@ -53,6 +53,7 @@
 -(void)viewDidLoad
 {
     NSLog(@"me cargué");
+    
     [self updateDataFromServer];
 
     //Store the info for the aditional buttons of the slide menu table view
@@ -63,14 +64,16 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
                                                                            self.view.frame.size.width,
-                                                                           100.0)];
+                                                                           self.view.frame.size.height)];
     imageView.userInteractionEnabled = YES;
     imageView.backgroundColor = [UIColor grayColor];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    NSDictionary *appInfo = [self getDictionaryWithName:@"master"][@"app"];
-    [imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]];
+    imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
+    //NSDictionary *appInfo = [self getDictionaryWithName:@"master"][@"app"];
+    //[imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]];
     [self.view addSubview:imageView];
+    [self.view bringSubviewToFront:self.searchDisplayController.searchBar];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnLogoImageView)];
     tap.numberOfTapsRequired = 1;
@@ -83,6 +86,7 @@
                                                                            self.view.frame.size.width,
                                                                            self.view.frame.size.height - (self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height))];
     
+    self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.rowHeight = 50.0;
     self.tableView.delegate = self;
     self.tableView.dataSource =self;
@@ -159,7 +163,7 @@
         
         else
         {
-            cell.menuItemLabel.text = self.aditionalMenuItemsArray[indexPath.row-6];
+            cell.menuItemLabel.text = self.aditionalMenuItemsArray[indexPath.row-[self.menuArray count]];
             cell.menuItemImageView.image = nil;
         }
     }

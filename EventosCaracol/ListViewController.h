@@ -19,6 +19,7 @@
 #import <MessageUI/MessageUI.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LoginViewController.h"
+#import "WebViewController.h"
 
 @interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate>
 

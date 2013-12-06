@@ -25,7 +25,7 @@
 @property (strong, nonatomic) NSMutableArray *isFavoritedArray;
 @end
 
-#define ROW_HEIGHT 90.0
+#define ROW_HEIGHT 70.0
 
 @implementation ListViewController
 
@@ -238,8 +238,10 @@
     
     NSLog(@"%@", self.isFavoritedArray[indexPath.row]);
     
-    [leftButtons sw_addUtilityButtonWithColor:favoriteButtonColor title:@"Fav"];
-    [leftButtons sw_addUtilityButtonWithColor:[UIColor cyanColor] title:@"Share"];
+    //[leftButtons sw_addUtilityButtonWithColor:favoriteButtonColor title:@"Fav"];
+    //[leftButtons sw_addUtilityButtonWithColor:[UIColor cyanColor] title:@"Share"];
+    [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellFavorite.png"]];
+    [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellShare.png"]];
     
     //[rightButtons sw_addUtilityButtonWithColor:[UIColor redColor] title:@"Borrar"];
         
@@ -253,7 +255,7 @@
     
     /////////////////////////////////////////////////////////////////////
     //Create the subviews that will contain the cell.
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 50.0, 50.0)];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     imageView.backgroundColor = [UIColor cyanColor];
@@ -284,16 +286,59 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"me tocaron");
-    DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
-    detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
     
-    //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
-    //will display a map on screen.
-    if (self.locationList)
-        detailsVC.presentLocationObject = YES;
+    //If the item has an external url, we have to check if the url is going to open inside or
+    //outside the application.
+    if (self.menuItemsArray[indexPath.row][@"external_url"])
+    {
+        if ([self.menuItemsArray[indexPath.row][@"open_inside"] isEqualToString:@"no"])
+        {
+            DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+            detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
+            
+            //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
+            //will display a map on screen.
+            if (self.locationList)
+                detailsVC.presentLocationObject = YES;
+            
+            detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
+            [self.navigationController pushViewController:detailsVC animated:YES];
+        }
+        
+        else if ([self.menuItemsArray[indexPath.row][@"open_inside"] isEqualToString:@"outside"])
+        {
+            NSURL *url = [NSURL URLWithString:self.menuItemsArray[indexPath.row][@"external_url"]];
+            if (![[UIApplication sharedApplication] openURL:url])
+            {
+                [[[UIAlertView alloc] initWithTitle:nil
+                                           message:@"Oops!, no se pudo abrir la URL en este momento."
+                                          delegate:self
+                                 cancelButtonTitle:@"" otherButtonTitles:nil] show];
+            }
+        }
+        
+        else //Else if open_inside = inside
+        {
+            WebViewController *webViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Web"];
+            webViewController.urlString = self.menuItemsArray[indexPath.row][@"external_url"];
+            [self.navigationController pushViewController:webViewController animated:YES];
+        }
+    }
     
-    detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
-    [self.navigationController pushViewController:detailsVC animated:YES];
+    //if the item doesn't have an external url, open the detail view.
+    else
+    {
+        DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+        detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
+        
+        //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
+        //will display a map on screen.
+        if (self.locationList)
+            detailsVC.presentLocationObject = YES;
+        
+        detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
+        [self.navigationController pushViewController:detailsVC animated:YES];
+    }
 }
 
 #pragma mark - Custom methods
@@ -338,7 +383,7 @@
         dispatch_async(dispatch_get_main_queue(), ^(){
             //[self updateFavoritedButton];
             //[self updateFavoriteLabel];
-            [self.isFavoritedArray[index] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarGris.png"]];
+            [self.isFavoritedArray[index] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
         });
     });
     NSLog(@"%@", params);
@@ -377,7 +422,7 @@
 
 -(void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index
 {
-    [PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:@"BorrarPrueba.png"]];
+    [PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:@"BorrarRojo.png"]];
 }
 
 #pragma mark - UIActionSheetDelegate

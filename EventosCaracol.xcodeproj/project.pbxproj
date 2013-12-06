@@ -35,9 +35,16 @@
 		8B2D003F183D447C0007D502 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2D003E183D447C0007D502 /* Social.framework */; };
 		8B2D0041183D44A90007D502 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2D0040183D44A90007D502 /* MessageUI.framework */; };
 		8B2D0044183D64920007D502 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0043183D64920007D502 /* DetailsViewController.m */; };
+		8B3BC98618526D9300CAD92E /* Loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98518526D9300CAD92E /* Loading.png */; };
+		8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC987185278D300CAD92E /* SidebarIcon.png */; };
+		8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98918527AEF00CAD92E /* ShareIcon.png */; };
+		8B3BC98C185282E100CAD92E /* FondoMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98B185282E100CAD92E /* FondoMenu.png */; };
+		8B3BC98F18528A0000CAD92E /* CorazonApagado.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98D18528A0000CAD92E /* CorazonApagado.png */; };
+		8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98E18528A0000CAD92E /* CorazonPrendido.png */; };
 		8B8BFC8D183BFE5A003552EC /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */; };
 		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
+		8BA59699185128C400B6E7D0 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA59698185128C400B6E7D0 /* WebViewController.m */; };
 		8BA9C3B11843A20100876AA5 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */; };
 		8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B41843A60700876AA5 /* SidebarViewController.m */; };
 		8BB37E071848FA6C00274848 /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB37E061848FA6C00274848 /* TutorialViewController.m */; };
@@ -82,6 +89,10 @@
 		8BD09F59184F81E900BA45FC /* CorazonGris.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BD09F58184F81E900BA45FC /* CorazonGris.png */; };
 		8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BD09F5A184F846300BA45FC /* BorrarGris.png */; };
 		8BEFF81E183FEEE1004A5C6E /* DestacadosCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BEFF81D183FEEE1004A5C6E /* DestacadosCollectionViewCell.m */; };
+		8BF0E327185242580048D32D /* CorazonRojo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF0E326185242580048D32D /* CorazonRojo.png */; };
+		8BF0E329185244360048D32D /* BorrarRojo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF0E328185244360048D32D /* BorrarRojo.png */; };
+		8BF0E32B185246BD0048D32D /* SwipCellFavorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF0E32A185246BD0048D32D /* SwipCellFavorite.png */; };
+		8BF0E32D1852471A0048D32D /* SwipCellShare.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF0E32C1852471A0048D32D /* SwipCellShare.png */; };
 		8BFFF27D183FA82000009526 /* PopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFFF27C183FA82000009526 /* PopUpView.m */; };
 /* End PBXBuildFile section */
 
@@ -137,11 +148,19 @@
 		8B2D0040183D44A90007D502 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8B2D0042183D64920007D502 /* DetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
 		8B2D0043183D64920007D502 /* DetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
+		8B3BC98518526D9300CAD92E /* Loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Loading.png; path = Resources/Images/Loading.png; sourceTree = "<group>"; };
+		8B3BC987185278D300CAD92E /* SidebarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SidebarIcon.png; path = Resources/Images/SidebarIcon.png; sourceTree = "<group>"; };
+		8B3BC98918527AEF00CAD92E /* ShareIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ShareIcon.png; path = Resources/Images/ShareIcon.png; sourceTree = "<group>"; };
+		8B3BC98B185282E100CAD92E /* FondoMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FondoMenu.png; path = Resources/Images/FondoMenu.png; sourceTree = "<group>"; };
+		8B3BC98D18528A0000CAD92E /* CorazonApagado.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonApagado.png; path = Resources/Images/CorazonApagado.png; sourceTree = "<group>"; };
+		8B3BC98E18528A0000CAD92E /* CorazonPrendido.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonPrendido.png; path = Resources/Images/CorazonPrendido.png; sourceTree = "<group>"; };
 		8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		8BA11EBD183BDAA0003616AB /* LoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
 		8BA11EBE183BDAA0003616AB /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
 		8BA11EC0183BDB5D003616AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		8BA11EC1183BDB5D003616AB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		8BA59697185128C400B6E7D0 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		8BA59698185128C400B6E7D0 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		8BA9C3AF1843A20100876AA5 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BA9C3B31843A60700876AA5 /* SidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarViewController.h; sourceTree = "<group>"; };
@@ -208,6 +227,10 @@
 		8BD09F5A184F846300BA45FC /* BorrarGris.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BorrarGris.png; path = Resources/Images/BorrarGris.png; sourceTree = "<group>"; };
 		8BEFF81C183FEEE1004A5C6E /* DestacadosCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DestacadosCollectionViewCell.h; sourceTree = "<group>"; };
 		8BEFF81D183FEEE1004A5C6E /* DestacadosCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DestacadosCollectionViewCell.m; sourceTree = "<group>"; };
+		8BF0E326185242580048D32D /* CorazonRojo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonRojo.png; path = Resources/Images/CorazonRojo.png; sourceTree = "<group>"; };
+		8BF0E328185244360048D32D /* BorrarRojo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BorrarRojo.png; path = Resources/Images/BorrarRojo.png; sourceTree = "<group>"; };
+		8BF0E32A185246BD0048D32D /* SwipCellFavorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipCellFavorite.png; path = Resources/Images/SwipCellFavorite.png; sourceTree = "<group>"; };
+		8BF0E32C1852471A0048D32D /* SwipCellShare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipCellShare.png; path = Resources/Images/SwipCellShare.png; sourceTree = "<group>"; };
 		8BFFF27B183FA82000009526 /* PopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopUpView.h; sourceTree = "<group>"; };
 		8BFFF27C183FA82000009526 /* PopUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopUpView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -321,6 +344,8 @@
 				8B2D0030183D1BBB0007D502 /* ListViewController.m */,
 				8B2D0042183D64920007D502 /* DetailsViewController.h */,
 				8B2D0043183D64920007D502 /* DetailsViewController.m */,
+				8BA59697185128C400B6E7D0 /* WebViewController.h */,
+				8BA59698185128C400B6E7D0 /* WebViewController.m */,
 				8B1ED254184544DB00312DCE /* FAQViewController.h */,
 				8B1ED255184544DB00312DCE /* FAQViewController.m */,
 				8BBDE6BB1846422100BEAD74 /* MapViewController.h */,
@@ -488,6 +513,16 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8B3BC98D18528A0000CAD92E /* CorazonApagado.png */,
+				8B3BC98E18528A0000CAD92E /* CorazonPrendido.png */,
+				8B3BC98B185282E100CAD92E /* FondoMenu.png */,
+				8B3BC98918527AEF00CAD92E /* ShareIcon.png */,
+				8B3BC987185278D300CAD92E /* SidebarIcon.png */,
+				8B3BC98518526D9300CAD92E /* Loading.png */,
+				8BF0E32C1852471A0048D32D /* SwipCellShare.png */,
+				8BF0E32A185246BD0048D32D /* SwipCellFavorite.png */,
+				8BF0E328185244360048D32D /* BorrarRojo.png */,
+				8BF0E326185242580048D32D /* CorazonRojo.png */,
 				8BD09F5A184F846300BA45FC /* BorrarGris.png */,
 				8BD09F58184F81E900BA45FC /* CorazonGris.png */,
 				8BBE1295184D309900D90BE5 /* updateArrow.png */,
@@ -605,18 +640,28 @@
 				75EE5564183BBFE900C52654 /* Main_iPad.storyboard in Resources */,
 				8BBE1296184D309900D90BE5 /* updateArrow.png in Resources */,
 				8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */,
+				8BF0E327185242580048D32D /* CorazonRojo.png in Resources */,
 				8BBE1251184CE97A00D90BE5 /* CarnavalPrueba.jpg in Resources */,
 				8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */,
 				8BB37E511849332200274848 /* CaracolPrueba3.png in Resources */,
+				8B3BC98618526D9300CAD92E /* Loading.png in Resources */,
+				8BF0E32B185246BD0048D32D /* SwipCellFavorite.png in Resources */,
 				8BD09F59184F81E900BA45FC /* CorazonGris.png in Resources */,
+				8B3BC98F18528A0000CAD92E /* CorazonApagado.png in Resources */,
+				8B3BC98C185282E100CAD92E /* FondoMenu.png in Resources */,
+				8BF0E32D1852471A0048D32D /* SwipCellShare.png in Resources */,
+				8BF0E329185244360048D32D /* BorrarRojo.png in Resources */,
 				8BB37E531849357900274848 /* CaracolPrueba4.png in Resources */,
 				8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */,
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
+				8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
 				8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */,
 				8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */,
+				8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */,
 				8BBDE6A41846413F00BEAD74 /* GoogleMaps.bundle in Resources */,
+				8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,6 +711,7 @@
 				8B2D0044183D64920007D502 /* DetailsViewController.m in Sources */,
 				75EE558A183BC45300C52654 /* FileSaver.m in Sources */,
 				8BBDE6BD1846422100BEAD74 /* MapViewController.m in Sources */,
+				8BA59699185128C400B6E7D0 /* WebViewController.m in Sources */,
 				75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */,
 				8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */,
 				8BBE1247184CDFAA00D90BE5 /* AutoLayoutHelpers.m in Sources */,

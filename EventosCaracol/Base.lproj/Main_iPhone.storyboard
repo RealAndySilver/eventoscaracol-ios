@@ -35,7 +35,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5r9-MZ-tUl">
-                                <rect key="frame" x="0.0" y="100" width="259" height="44"/>
+                                <rect key="frame" x="0.0" y="144" width="259" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -215,6 +215,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dEs-gz-BBk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2234" y="-241"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="cya-aZ-ZiW">
+            <objects>
+                <viewController storyboardIdentifier="Web" id="7tw-1R-7dt" customClass="WebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TfZ-cE-57R"/>
+                        <viewControllerLayoutGuide type="bottom" id="52G-SF-rMI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="l5v-mL-54B">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gxi-6g-BrA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2635" y="-241"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

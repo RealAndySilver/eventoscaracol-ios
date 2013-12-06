@@ -20,6 +20,9 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    //Time formatting
     NSLog(@"%@", self.objectInfo[@"event_time"]);
     
     NSString *eventTime = self.objectInfo[@"event_time"];
@@ -37,13 +40,18 @@
         NSDate *date = [dateFormatter dateFromString:formattedEventTimeString];
         NSLog(@"%@", [date descriptionWithLocale:[NSLocale currentLocale]]);
     }
+    ///////////////////////////////////////////////////////////////////////////////
     
     self.navigationItem.title = self.navigationBarTitle;
-    
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0]};
+
     //Create the UIBarButtonItem to share the event.
-    UIBarButtonItem *shareBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-                                                                                        target:self
-                                                                                        action:@selector(shareEvent)];
+    UIBarButtonItem *shareBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ShareIcon.png"]
+                                                                           style:UIBarButtonItemStylePlain
+                                                                          target:self
+                                                                          action:@selector(shareEvent)];
     
     self.navigationItem.rightBarButtonItem = shareBarButtonItem;
     
@@ -92,26 +100,49 @@
         
         
         
-        mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0,
-                                                                      20.0,
-                                                                      self.view.frame.size.width - 40.0,
-                                                                      self.view.frame.size.height/2 - 20.0)];
+        mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0,
+                                                                      10.0,
+                                                                      self.view.frame.size.width - 20.0,
+                                                                      self.view.frame.size.height/3)];
         
     }
-
+    
+    //...if we are not in the detail view of a location object.
     else
     {
-        //Create the scroll view of the entire screen, because there is not map view.
-        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
-                                                                         0.0,
-                                                                         self.view.frame.size.width,
-                                                                         self.view.frame.size.height)];
+        //If the object doen's have a youtube url, create a scroll view to contain all the subviews.
+        if ([self.objectInfo[@"youtube_url"] isEqualToString:@""])
+        {
+            //Create the scroll view of the entire screen, because there is not map view.
+            NSLog(@"no hay youtube");
+            self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
+                                                                             self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                             self.view.frame.size.width,
+                                                                             self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
+        }
+        //If the object has an URL to a youutube video, we have to create a webview to display it, and below it we create the scroll view.
+        else
+        {
+            NSLog(@"si hay youtube");
+            UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
+                                                                             self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                             self.view.frame.size.width - 10,
+                                                                             self.view.frame.size.height/3.0)];
+            [webView.scrollView setScrollEnabled:NO];
+            NSString *embebedHTML = self.objectInfo[@"youtube_url"];
+            NSString *formattedHTML = [NSString stringWithFormat:@"<meta name=\"viewport\", content=\"width=device-width\", user-scalable=no>%@",[embebedHTML stringByReplacingOccurrencesOfString:@"//" withString:@"http://"]];
+            [webView loadHTMLString:formattedHTML baseURL:nil];
+            [self.view addSubview:webView];
+            
+            self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,webView.frame.origin.y + webView.frame.size.height,
+                                                                             self.view.frame.size.width,
+                                                                             self.view.frame.size.height - (                                                                           webView.frame.origin.y + webView.frame.size.height))];
+        }
         
-        mainImageView = [[UIImageView alloc]
-                         initWithFrame:CGRectMake(20.0,
-                                                  self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0,
-                                                  self.view.frame.size.width - 40.0,
-                                                  (self.view.frame.size.height/2 - 20) -(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0))];
+        mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                      0.0,
+                                                                      self.view.frame.size.width,
+                                                                      self.view.frame.size.height/2.5)];
     }
     
     mainImageView.backgroundColor = [UIColor cyanColor];
@@ -126,11 +157,11 @@
     [self.view addSubview:self.scrollView];
     
     //////////////////////////////////////////////////////////////////////////////////////////
-    self.favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0,
-                                                                          mainImageView.frame.origin.y + mainImageView.frame.size.height + 20.0,
-                                                                          40.0,
-                                                                          40.0)];
-    [self.favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
+    self.favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0,
+                                                                          mainImageView.frame.origin.y + mainImageView.frame.size.height + 10.0,
+                                                                          60.0,
+                                                                          60.0)];
+    //[self.favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
     [self.favoriteButton addTarget:self action:@selector(makeFavorite) forControlEvents:UIControlEventTouchUpInside];
     
     //Store the favorited atoms of the user (array of NSString)
@@ -140,7 +171,8 @@
     if ([favoritedObjectsArray containsObject:self.objectInfo[@"_id"]])
     {
         NSLog(@"el objeto está favoriteado oís");
-        self.favoriteButton.backgroundColor = [UIColor purpleColor];
+        //self.favoriteButton.backgroundColor = [UIColor purpleColor];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
         self.isFavorited = YES;
     }
     
@@ -149,7 +181,8 @@
     {
         NSLog(@"el objeto no está favoriteado oís");
         self.isFavorited = NO;
-        self.favoriteButton.backgroundColor = [UIColor grayColor];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
+        //self.favoriteButton.backgroundColor = [UIColor grayColor];
     }
     
     [self.scrollView addSubview:self.favoriteButton];
@@ -260,9 +293,9 @@
 -(void)updateFavoritedButton
 {
     if (self.isFavorited)
-        self.favoriteButton.backgroundColor = [UIColor purpleColor];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
     else
-        self.favoriteButton.backgroundColor = [UIColor grayColor];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
 }
 
 -(void)showFavoriteAnimationWithImage:(UIImage *)image
@@ -287,7 +320,7 @@
     [self setDictionary:dictionary[@"user"] withName:@"user"];
     self.isFavorited = !self.isFavorited;
     [self updateFavoritedButton];
-    self.isFavorited ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarGris.png"]];
+    self.isFavorited ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
 
     //self.objectInfo = dictionary[@"atom"];
     

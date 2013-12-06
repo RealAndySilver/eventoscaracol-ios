@@ -59,15 +59,16 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
                                                                            self.view.frame.size.width,
-                                                                           self.view.frame.size.width)];
+                                                                           self.view.frame.size.height)];
+    imageView.image = [UIImage imageNamed:@"Loading.png"];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     
     //We need to access the logo image URL
-    FileSaver *fileSaver = [[FileSaver alloc] init];
+    /*FileSaver *fileSaver = [[FileSaver alloc] init];
     NSDictionary *appInfo = [fileSaver getDictionary:@"master"][@"app"];
     [imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]
-              placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+              placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];*/
     [self.view addSubview:imageView];
     
     

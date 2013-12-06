@@ -15,10 +15,13 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        self.backgroundColor = [UIColor clearColor];
+        
         self.menuItemLabel = [[UILabel alloc] initWithFrame:CGRectMake(70.0,
                                                                        self.contentView.frame.size.height/2 - 10.0,
                                                                        self.contentView.frame.size.width,
                                                                        20.0)];
+        self.menuItemLabel.textColor = [UIColor whiteColor];
         [self.contentView addSubview:self.menuItemLabel];
         
         self.menuItemImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0,
