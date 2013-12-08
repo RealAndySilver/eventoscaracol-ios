@@ -60,7 +60,11 @@
                                                                            0.0,
                                                                            self.view.frame.size.width,
                                                                            self.view.frame.size.height)];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        imageView.image = [UIImage imageNamed:@"LoadingiPad.png"];
+    else
     imageView.image = [UIImage imageNamed:@"Loading.png"];
+    
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     
@@ -86,8 +90,10 @@
     /////////////////////////////////////////////////////////////////////////////////////
     //Creathe the 'continue without login' button
     UIButton *continueWithoutLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 125.0,
-                                                                                      self.view.frame.size.height/1.2,
-                                                                                      250.0, 50.0)];
+                                                                                      loginButton.frame.origin.y + loginButton.frame.size.height + 20,
+                                                                                      250.0,
+                                                                                      50.0)];
+    
     continueWithoutLoginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
     [continueWithoutLoginButton setTitle:@"Continuar sin iniciar sesión" forState:UIControlStateNormal];
     [continueWithoutLoginButton addTarget:self action:@selector(goToNextVC) forControlEvents:UIControlEventTouchUpInside];

@@ -34,7 +34,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5r9-MZ-tUl">
+                            <searchBar contentMode="redraw" fixedFrame="YES" placeholder="Buscar" translucent="NO" backgroundImage="FondoBarraBusqueda.png" translatesAutoresizingMaskIntoConstraints="NO" id="5r9-MZ-tUl">
                                 <rect key="frame" x="0.0" y="144" width="259" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -235,6 +235,9 @@
             <point key="canvasLocation" x="2635" y="-241"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="FondoBarraBusqueda.png" width="259" height="44"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

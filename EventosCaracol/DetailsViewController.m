@@ -58,7 +58,7 @@
     //If this controller was presented from a search bar table view selection, create a UIBarButtomItem to dismiss it.
     if (self.presentViewControllerFromSearchBar)
     {
-        UIBarButtonItem *dismissBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Dismiss"
+        UIBarButtonItem *dismissBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Atrás"
                                                                                  style:UIBarButtonItemStylePlain
                                                                                 target:self
                                                                                 action:@selector(dismiss)];
@@ -94,16 +94,16 @@
         //Create the scroll view to make all the content scrollable. The scroll view will be below the map view.
         //The mapview is always static, it's not in the scroll view.
         self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
-                                                                                  mapView.frame.origin.y + mapView.frame.size.height,
+                                                                                  mapView.frame.origin.y + mapView.frame.size.height + 10,
                                                                                   self.view.frame.size.width,
-                                                                                  self.view.frame.size.height - (mapView.frame.origin.y + mapView.frame.size.height))];
+                                                                                  self.view.frame.size.height - (mapView.frame.origin.y + mapView.frame.size.height + 10))];
         
         
         
-        mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0,
-                                                                      10.0,
-                                                                      self.view.frame.size.width - 20.0,
-                                                                      self.view.frame.size.height/3)];
+        mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                      0.0,
+                                                                      self.view.frame.size.width,
+                                                                      self.view.frame.size.height/2.5)];
         
     }
     
@@ -159,8 +159,8 @@
     //////////////////////////////////////////////////////////////////////////////////////////
     self.favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0,
                                                                           mainImageView.frame.origin.y + mainImageView.frame.size.height + 10.0,
-                                                                          60.0,
-                                                                          60.0)];
+                                                                          self.view.frame.size.width/5.33,
+                                                                          self.view.frame.size.height/9.46)];
     //[self.favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
     [self.favoriteButton addTarget:self action:@selector(makeFavorite) forControlEvents:UIControlEventTouchUpInside];
     
@@ -172,7 +172,7 @@
     {
         NSLog(@"el objeto está favoriteado oís");
         //self.favoriteButton.backgroundColor = [UIColor purpleColor];
-        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
         self.isFavorited = YES;
     }
     
@@ -181,60 +181,69 @@
     {
         NSLog(@"el objeto no está favoriteado oís");
         self.isFavorited = NO;
-        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
         //self.favoriteButton.backgroundColor = [UIColor grayColor];
     }
     
     [self.scrollView addSubview:self.favoriteButton];
     
-    //////////////////////////////////////////////////////////////////////////////////////////
-    /*self.favoriteCountLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.favoriteButton.frame.origin.x,
-                                                                        self.favoriteButton.frame.origin.y + self.favoriteButton.frame.size.height, self.favoriteButton.frame.size.width,
-                                                                        20.0)];
-    
-    int favoriteCount = self.objectInfo[@"favorited"] ? [self.objectInfo[@"favorited"] intValue] : 0;
-    self.favoriteCountLabel.text = [NSString stringWithFormat:@"%d", favoriteCount];
-    self.favoriteCountLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
-    self.favoriteCountLabel.textAlignment = NSTextAlignmentCenter;
-    [self.scrollView addSubview:self.favoriteCountLabel];*/
-    
     ///////////////////////////////////////////////////////////////////////////////////////////
-    UILabel *objectName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width + 20,
+    UILabel *objectName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
                                                                    self.favoriteButton.frame.origin.y,
                                                                    self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
-                                                                   44.0)];
-    objectName.numberOfLines = 0;
+                                                                    self.view.frame.size.height/18.93)];
+    objectName.numberOfLines = 2;
+    objectName.textAlignment = NSTextAlignmentLeft;
     objectName.text = self.objectInfo[@"name"];
-    objectName.font = [UIFont fontWithName:@"@Helvetica" size:15.0];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        objectName.font = [UIFont fontWithName:@"Helvetica" size:40.0];
+    else
+        objectName.font = [UIFont fontWithName:@"Helvetica" size:20.0];
+    
     [self.scrollView addSubview:objectName];
     
     ///////////////////////////////////////////////////////////////////////////////////////////
-    UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width + 20,
+    UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
                                                                             objectName.frame.origin.y + objectName.frame.size.height,
                                                                             self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
-                                                                            20.0)];
+                                                                            self.view.frame.size.height/28.4)];
     eventLocationLabel.text = @"Plaza Cervantes";
-    eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:24.0];
+    else
+        eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    
     [self.scrollView addSubview:eventLocationLabel];
     
     ///////////////////////////////////////////////////////////////////////////////////////////
-    UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width + 20,
+    UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
                                                                         eventLocationLabel.frame.origin.y + eventLocationLabel.frame.size.height,
                                                                         self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
-                                                                        20.0)];
+                                                                        self.view.frame.size.height/28.4)];
     eventTimeLabel.text = @"11:30AM";
-    eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:24.0];
+    else
+        eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    
     [self.scrollView addSubview:eventTimeLabel];
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     UITextView *description = [[UITextView alloc]
                                     initWithFrame:CGRectMake(20.0,
-                                                             eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 10,
+                                                             eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20,
                                                              self.view.frame.size.width - 40.0,
-                                                             150.0)];
+                                                             self.view.frame.size.height - (eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20) - 80)];
     description.text = self.objectInfo[@"detail"];
     /*description.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";*/
-    description.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        description.font = [UIFont fontWithName:@"Helvetica" size:28.0];
+    else
+        description.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    
     description.selectable = YES;
     description.editable = NO;
     [self.scrollView addSubview:description];
@@ -293,9 +302,9 @@
 -(void)updateFavoritedButton
 {
     if (self.isFavorited)
-        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
     else
-        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
 }
 
 -(void)showFavoriteAnimationWithImage:(UIImage *)image
@@ -389,6 +398,10 @@
         [mailComposeViewController setMessageBody:@"¡Hola!, me acabo de inscribir en la presentación del evento al que todos vamos a ir. " isHTML:NO];
         
         mailComposeViewController.mailComposeDelegate = self;
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+        
         [self presentViewController:mailComposeViewController animated:YES completion:nil];
     }
 }

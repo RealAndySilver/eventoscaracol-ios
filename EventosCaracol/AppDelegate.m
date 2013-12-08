@@ -10,6 +10,10 @@
 #import "FileSaver.h"
 #import "AppDelegate.h"
 
+@interface AppDelegate()
+@property (nonatomic, readwrite) int networkActivityCounter;
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -76,6 +80,29 @@
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"notification" object:userInfo];
+}
+
+#pragma mark - NetworkActivityIndicator
+
+-(void)incrementNetworkActivity
+{
+    self.networkActivityCounter ++;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+-(void)decrementNetworkActivity
+{
+    if (self.networkActivityCounter > 0)
+        self.networkActivityCounter --;
+    
+    if (self.networkActivityCounter == 0)
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+-(void)resetNetworkActivity
+{
+    self.networkActivityCounter = 0;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 @end

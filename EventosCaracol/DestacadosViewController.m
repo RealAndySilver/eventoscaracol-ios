@@ -35,6 +35,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     currentPage = 1;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
                                                   target:self
@@ -49,6 +50,7 @@
 
 -(void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
     NSLog(@"Desaparecí");
     
     [self.timer invalidate];
@@ -247,7 +249,9 @@
         return CGSizeMake(self.view.frame.size.width, self.view.frame.size.height/4.3);
     
     else if (collectionView.tag == 1)
-        return indexPath.item % 3 ? CGSizeMake(144, 114):CGSizeMake(collectionView.frame.size.width - 20, 114);
+        return indexPath.item % 3 ? CGSizeMake(self.view.frame.size.width/2.22, self.view.frame.size.height/4.98) :
+                CGSizeMake(collectionView.frame.size.width - 20, self.view.frame.size.height/4.98);
+        //return indexPath.item % 3 ? CGSizeMake(144, 114):CGSizeMake(collectionView.frame.size.width - 20, 114);
     
     else
         return CGSizeZero;

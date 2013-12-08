@@ -21,22 +21,32 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    
     /////////////////////////////////////////////////////////////////////////
     //Create two buttons, one for sorting the places, and other to see the places in a list.
     UIButton *sortPlacesButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0,
                                                                             self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
                                                                             self.view.frame.size.width/2,
                                                                             44.0)];
+    
+    [sortPlacesButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
+    [sortPlacesButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+    sortPlacesButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
     [sortPlacesButton setTitle:@"Todos los sitios" forState:UIControlStateNormal];
-    sortPlacesButton.backgroundColor = [UIColor cyanColor];
     [self.view addSubview:sortPlacesButton];
     
     UIButton *viewPlacesInListButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2,
                                                                                   self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
                                                                                   self.view.frame.size.width/2,
                                                                                   44.0)];
+    [viewPlacesInListButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
+    viewPlacesInListButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    [viewPlacesInListButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     [viewPlacesInListButton setTitle:@"Ver Listado" forState:UIControlStateNormal];
-    viewPlacesInListButton.backgroundColor = [UIColor cyanColor];
     [viewPlacesInListButton addTarget:self action:@selector(goToListViewController) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:viewPlacesInListButton];
 
@@ -45,7 +55,7 @@
     //Slide Menu configuration
     SWRevealViewController *revealViewController = [self revealViewController];
     
-    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Menu"
+    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                                style:UIBarButtonItemStylePlain
                                                                               target:revealViewController
                                                                               action:@selector(revealToggle:)];

@@ -12,6 +12,7 @@
 #import "SidebarViewController.h"
 #import "LoginViewController.h"
 #import "MBHUDView.h"
+#import "AppDelegate.h"
 
 @interface LoadingViewController ()
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
@@ -38,25 +39,31 @@
                                                                                self.view.frame.size.height)];
     logoImageView.clipsToBounds = YES;
     logoImageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        logoImageView.image = [UIImage imageNamed:@"LoadingiPad.png"];
+    else
     logoImageView.image = [UIImage imageNamed:@"Loading.png"];
     [self.view addSubview:logoImageView];
     
     /////////////////////////////////////////////////////
     //Add a 'Loading' label to our view
-    self.loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 150.0,
+    self.loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - (self.view.frame.size.width/3)/2,
                                                                       self.view.frame.size.height/1.15,
-                                                                      300.0,
-                                                                      44.0)];
+                                                                      self.view.frame.size.width/3,
+                                                                      50.0)];
     self.loadingLabel.text = @"Cargando...";
+    self.loadingLabel.numberOfLines = 1;
     self.loadingLabel.textAlignment = NSTextAlignmentCenter;
     self.loadingLabel.textColor = [UIColor whiteColor];
-    self.loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:17.0];
+    self.loadingLabel.adjustsFontSizeToFitWidth = YES;
+    self.loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:30.0];
     [self.view addSubview:self.loadingLabel];
     
     ////////////////////////////////////////////////////
     //Add the spinner to our view
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 25.0,
-                                                                             self.view.frame.size.height/1.3,
+                                                                             self.loadingLabel.frame.origin.y - 50,
                                                                              50.0,
                                                                              50.0)];
     self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
@@ -93,12 +100,11 @@
     
     //Start animating the spinner.
     [self.spinner startAnimating];
-    FileSaver *file=[[FileSaver alloc]init];
     
     //Load the info from the server asynchronously
     dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
     dispatch_async(infoLoader, ^(){
-        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[file getDictionary:@"app_id"] objectForKey:@"app_id"]];
+        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
     });
 }
 #pragma mark - server response

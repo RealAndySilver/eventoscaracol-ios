@@ -53,8 +53,6 @@
 		8BB37E511849332200274848 /* CaracolPrueba3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E501849332200274848 /* CaracolPrueba3.png */; };
 		8BB37E531849357900274848 /* CaracolPrueba4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E521849357900274848 /* CaracolPrueba4.png */; };
 		8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB464CF1847F5CB0000A7FE /* BorrarPrueba.png */; };
-		8BBDE6A21846412B00BEAD74 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBDE6A11846412B00BEAD74 /* GoogleMaps.framework */; };
-		8BBDE6A41846413F00BEAD74 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8BBDE6A31846413F00BEAD74 /* GoogleMaps.bundle */; };
 		8BBDE6A61846415F00BEAD74 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBDE6A51846415F00BEAD74 /* AVFoundation.framework */; };
 		8BBDE6A81846416300BEAD74 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBDE6A71846416300BEAD74 /* CoreData.framework */; };
 		8BBDE6AA1846416800BEAD74 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBDE6A91846416800BEAD74 /* CoreLocation.framework */; };
@@ -94,6 +92,11 @@
 		8BF0E32B185246BD0048D32D /* SwipCellFavorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF0E32A185246BD0048D32D /* SwipCellFavorite.png */; };
 		8BF0E32D1852471A0048D32D /* SwipCellShare.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BF0E32C1852471A0048D32D /* SwipCellShare.png */; };
 		8BFFF27D183FA82000009526 /* PopUpView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BFFF27C183FA82000009526 /* PopUpView.m */; };
+		A08A39261853DC3600E2A6C8 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BBDE6A11846412B00BEAD74 /* GoogleMaps.framework */; };
+		A08A39281853DC9200E2A6C8 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A08A39271853DC9200E2A6C8 /* GoogleMaps.bundle */; };
+		A08A392A1853F3ED00E2A6C8 /* BotonTodosLosSitios.png in Resources */ = {isa = PBXBuildFile; fileRef = A08A39291853F3ED00E2A6C8 /* BotonTodosLosSitios.png */; };
+		A08A392C1853FBAC00E2A6C8 /* FondoBarraBusqueda.png in Resources */ = {isa = PBXBuildFile; fileRef = A08A392B1853FBAC00E2A6C8 /* FondoBarraBusqueda.png */; };
+		A08E87791855106B00C5E960 /* LoadingiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = A08E87781855106B00C5E960 /* LoadingiPad.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,7 +176,6 @@
 		8BB37E521849357900274848 /* CaracolPrueba4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CaracolPrueba4.png; path = Resources/Images/CaracolPrueba4.png; sourceTree = "<group>"; };
 		8BB464CF1847F5CB0000A7FE /* BorrarPrueba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BorrarPrueba.png; path = Resources/Images/BorrarPrueba.png; sourceTree = "<group>"; };
 		8BBDE6A11846412B00BEAD74 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
-		8BBDE6A31846413F00BEAD74 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = "../Desktop/Diego/GoogleMaps-iOS-1.6.0/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"; sourceTree = "<group>"; };
 		8BBDE6A51846415F00BEAD74 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8BBDE6A71846416300BEAD74 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		8BBDE6A91846416800BEAD74 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -233,6 +235,10 @@
 		8BF0E32C1852471A0048D32D /* SwipCellShare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipCellShare.png; path = Resources/Images/SwipCellShare.png; sourceTree = "<group>"; };
 		8BFFF27B183FA82000009526 /* PopUpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopUpView.h; sourceTree = "<group>"; };
 		8BFFF27C183FA82000009526 /* PopUpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopUpView.m; sourceTree = "<group>"; };
+		A08A39271853DC9200E2A6C8 /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		A08A39291853F3ED00E2A6C8 /* BotonTodosLosSitios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BotonTodosLosSitios.png; path = Resources/Images/BotonTodosLosSitios.png; sourceTree = "<group>"; };
+		A08A392B1853FBAC00E2A6C8 /* FondoBarraBusqueda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FondoBarraBusqueda.png; path = Resources/Images/FondoBarraBusqueda.png; sourceTree = "<group>"; };
+		A08E87781855106B00C5E960 /* LoadingiPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LoadingiPad.png; path = Resources/Images/LoadingiPad.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +246,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A08A39261853DC3600E2A6C8 /* GoogleMaps.framework in Frameworks */,
 				8BBDE6BA184641B100BEAD74 /* SystemConfiguration.framework in Frameworks */,
 				8BBDE6B8184641AB00BEAD74 /* QuartzCore.framework in Frameworks */,
 				8BBDE6B6184641A700BEAD74 /* OpenGLES.framework in Frameworks */,
@@ -257,7 +264,6 @@
 				75EE5550183BBFE900C52654 /* CoreGraphics.framework in Frameworks */,
 				8B8BFC8D183BFE5A003552EC /* FacebookSDK.framework in Frameworks */,
 				8B1ED25A18454F4D00312DCE /* SDWebImage.framework in Frameworks */,
-				8BBDE6A21846412B00BEAD74 /* GoogleMaps.framework in Frameworks */,
 				75EE5552183BBFE900C52654 /* UIKit.framework in Frameworks */,
 				75EE554E183BBFE900C52654 /* Foundation.framework in Frameworks */,
 			);
@@ -303,13 +309,13 @@
 				8BBDE6B5184641A700BEAD74 /* OpenGLES.framework */,
 				8BBDE6B3184641A200BEAD74 /* libz.dylib */,
 				8BBDE6B11846419700BEAD74 /* libicucore.dylib */,
+				A08A39271853DC9200E2A6C8 /* GoogleMaps.bundle */,
 				8BBDE6AF1846419000BEAD74 /* libc++.dylib */,
 				8BBDE6AD1846417900BEAD74 /* GLKit.framework */,
 				8BBDE6AB1846417500BEAD74 /* CoreText.framework */,
 				8BBDE6A91846416800BEAD74 /* CoreLocation.framework */,
 				8BBDE6A71846416300BEAD74 /* CoreData.framework */,
 				8BBDE6A51846415F00BEAD74 /* AVFoundation.framework */,
-				8BBDE6A31846413F00BEAD74 /* GoogleMaps.bundle */,
 				8BBDE6A11846412B00BEAD74 /* GoogleMaps.framework */,
 				8B1ED25B18454F7100312DCE /* ImageIO.framework */,
 				8B1ED25918454F4D00312DCE /* SDWebImage.framework */,
@@ -513,6 +519,9 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				A08E87781855106B00C5E960 /* LoadingiPad.png */,
+				A08A392B1853FBAC00E2A6C8 /* FondoBarraBusqueda.png */,
+				A08A39291853F3ED00E2A6C8 /* BotonTodosLosSitios.png */,
 				8B3BC98D18528A0000CAD92E /* CorazonApagado.png */,
 				8B3BC98E18528A0000CAD92E /* CorazonPrendido.png */,
 				8B3BC98B185282E100CAD92E /* FondoMenu.png */,
@@ -641,9 +650,11 @@
 				8BBE1296184D309900D90BE5 /* updateArrow.png in Resources */,
 				8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */,
 				8BF0E327185242580048D32D /* CorazonRojo.png in Resources */,
+				A08A392A1853F3ED00E2A6C8 /* BotonTodosLosSitios.png in Resources */,
 				8BBE1251184CE97A00D90BE5 /* CarnavalPrueba.jpg in Resources */,
 				8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */,
 				8BB37E511849332200274848 /* CaracolPrueba3.png in Resources */,
+				A08E87791855106B00C5E960 /* LoadingiPad.png in Resources */,
 				8B3BC98618526D9300CAD92E /* Loading.png in Resources */,
 				8BF0E32B185246BD0048D32D /* SwipCellFavorite.png in Resources */,
 				8BD09F59184F81E900BA45FC /* CorazonGris.png in Resources */,
@@ -655,12 +666,13 @@
 				8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */,
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */,
+				A08A39281853DC9200E2A6C8 /* GoogleMaps.bundle in Resources */,
+				A08A392C1853FBAC00E2A6C8 /* FondoBarraBusqueda.png in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
 				8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */,
 				8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */,
 				8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */,
-				8BBDE6A41846413F00BEAD74 /* GoogleMaps.bundle in Resources */,
 				8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -857,6 +869,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/developer/eventoscaracol,
+					/Users/diegovidal/Documents/Diego/WorkProjects/Caracol/Aplicacion,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
@@ -877,6 +890,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/developer/eventoscaracol,
+					/Users/diegovidal/Documents/Diego/WorkProjects/Caracol/Aplicacion,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";

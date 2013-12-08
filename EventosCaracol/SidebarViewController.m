@@ -70,8 +70,7 @@
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
-    //NSDictionary *appInfo = [self getDictionaryWithName:@"master"][@"app"];
-    //[imageView setImageWithURL:[NSURL URLWithString:appInfo[@"logo_square_url"]]];
+  
     [self.view addSubview:imageView];
     [self.view bringSubviewToFront:self.searchDisplayController.searchBar];
     
@@ -103,6 +102,7 @@
     
     ////////////////////////////////////////////////////////////////////////////////
     //searchDisplayController configuration.
+    self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:116.0/255.0 green:155.0/255.0 blue:49.0/255.0 alpha:1.0];
     [self.searchDisplayController.searchResultsTableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     self.searchDisplayController.searchResultsTableView.rowHeight = 50.0;
     self.searchDisplayController.searchResultsTableView.frame = CGRectMake(0.0,
@@ -158,7 +158,10 @@
         {
             cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
             [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
-                                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
+                                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]
+                                          completed:^(UIImage *image, NSError *error, SDImageCacheType type){
+                                              NSLog(@"me completé");
+                                          }];
         }
         
         else

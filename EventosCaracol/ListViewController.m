@@ -38,6 +38,14 @@
 
 #pragma mark - View LifeCycle
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:YES];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+}
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -48,7 +56,7 @@
     
     if (!self.locationList)
     {
-        UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Menu"
+        UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                                    style:UIBarButtonItemStylePlain
                                                                                   target:revealViewController
                                                                                   action:@selector(revealToggle:)];
@@ -57,7 +65,7 @@
     }
     
     //Configure the backBarButtonItem that will be displayed in the Navigation Bar when the user moves to EventDetailsViewController
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Volver"
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Atrás"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
                                                                             action:nil];
@@ -80,9 +88,10 @@
         filterByDayButton.tag = 1;
         
         [filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+        [filterByDayButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
         [filterByDayButton setTitle:@"Todos los dias" forState:UIControlStateNormal];
         filterByDayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-        filterByDayButton.backgroundColor = [UIColor cyanColor];
+        [filterByDayButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         [self.view addSubview:filterByDayButton];
         
         //Filter by location button
@@ -94,8 +103,9 @@
         filterByLocationButton.tag = 2;
         
         [filterByLocationButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
-        filterByLocationButton.backgroundColor = [UIColor cyanColor];
+        [filterByLocationButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
         filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+        [filterByLocationButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
         [filterByLocationButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
         [self.view addSubview:filterByLocationButton];
         
@@ -395,6 +405,21 @@
 }
 
 #pragma mark - SWTableViewDelegate
+
+-(void)swippableTableViewCell:(SWTableViewCell *)cell scrollingToState:(SWCellState)state
+{
+    static int activeCell = 0;
+    if (state == kCellStateRight || state == kCellStateLeft)
+    {
+        if ([self.tableView indexPathForCell:cell].row != activeCell)
+        {
+            SWTableViewCell *cell = (SWTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:activeCell
+                                                                                             inSection:0]];
+            [cell hideUtilityButtonsAnimated:YES];
+        }
+    }
+    activeCell = [self.tableView indexPathForCell:cell].row;
+}
 
 -(void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index
 {
