@@ -7,6 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DestacadosCollectionViewCell.h"
+#import "DetailsViewController.h"
+#import "SWRevealViewController.h"
+#import "WebViewController.h"
+#import "FileSaver.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "AppDelegate.h"
 
 @interface DestacadosViewController : UIViewController
 

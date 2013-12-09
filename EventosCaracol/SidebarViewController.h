@@ -8,7 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "ServerCommunicator.h"
+#import "SWRevealViewController.h"
+#import "MenuTableViewCell.h"
+#import "FileSaver.h"
+#import "ListViewController.h"
+#import "FavoriteListViewController.h"
+#import "MapViewController.h"
+#import "DetailsViewController.h"
+#import "DestacadosViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "AppDelegate.h"
 
-@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate>
+@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate>
 
 @end

@@ -28,6 +28,8 @@
 		8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1ED2571845482E00312DCE /* IconoPrueba.png */; };
 		8B1ED25A18454F4D00312DCE /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1ED25918454F4D00312DCE /* SDWebImage.framework */; };
 		8B1ED25C18454F7100312DCE /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1ED25B18454F7100312DCE /* ImageIO.framework */; };
+		8B2C518918561AD200A373A8 /* FavoriteListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C518818561AD200A373A8 /* FavoriteListViewController.m */; };
+		8B2C518B185632BC00A373A8 /* SwipeCellErase.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B2C518A185632BC00A373A8 /* SwipeCellErase.png */; };
 		8B2D0031183D1BBB0007D502 /* ListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0030183D1BBB0007D502 /* ListViewController.m */; };
 		8B2D0034183D1D700007D502 /* SWTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0033183D1D700007D502 /* SWTableViewCell.m */; };
 		8B2D0037183D2A490007D502 /* Atom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0036183D2A490007D502 /* Atom.m */; };
@@ -139,6 +141,9 @@
 		8B1ED2571845482E00312DCE /* IconoPrueba.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IconoPrueba.png; path = Resources/Images/IconoPrueba.png; sourceTree = "<group>"; };
 		8B1ED25918454F4D00312DCE /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = "<group>"; };
 		8B1ED25B18454F7100312DCE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		8B2C518718561AD200A373A8 /* FavoriteListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteListViewController.h; sourceTree = "<group>"; };
+		8B2C518818561AD200A373A8 /* FavoriteListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteListViewController.m; sourceTree = "<group>"; };
+		8B2C518A185632BC00A373A8 /* SwipeCellErase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipeCellErase.png; path = Resources/Images/SwipeCellErase.png; sourceTree = "<group>"; };
 		8B2D002F183D1BBB0007D502 /* ListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListViewController.h; sourceTree = "<group>"; };
 		8B2D0030183D1BBB0007D502 /* ListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListViewController.m; sourceTree = "<group>"; };
 		8B2D0032183D1D700007D502 /* SWTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWTableViewCell.h; sourceTree = "<group>"; };
@@ -348,6 +353,8 @@
 				8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */,
 				8B2D002F183D1BBB0007D502 /* ListViewController.h */,
 				8B2D0030183D1BBB0007D502 /* ListViewController.m */,
+				8B2C518718561AD200A373A8 /* FavoriteListViewController.h */,
+				8B2C518818561AD200A373A8 /* FavoriteListViewController.m */,
 				8B2D0042183D64920007D502 /* DetailsViewController.h */,
 				8B2D0043183D64920007D502 /* DetailsViewController.m */,
 				8BA59697185128C400B6E7D0 /* WebViewController.h */,
@@ -519,6 +526,7 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8B2C518A185632BC00A373A8 /* SwipeCellErase.png */,
 				A08E87781855106B00C5E960 /* LoadingiPad.png */,
 				A08A392B1853FBAC00E2A6C8 /* FondoBarraBusqueda.png */,
 				A08A39291853F3ED00E2A6C8 /* BotonTodosLosSitios.png */,
@@ -666,6 +674,7 @@
 				8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */,
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */,
+				8B2C518B185632BC00A373A8 /* SwipeCellErase.png in Resources */,
 				A08A39281853DC9200E2A6C8 /* GoogleMaps.bundle in Resources */,
 				A08A392C1853FBAC00E2A6C8 /* FondoBarraBusqueda.png in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
@@ -703,6 +712,7 @@
 				8BFFF27D183FA82000009526 /* PopUpView.m in Sources */,
 				8B2D0034183D1D700007D502 /* SWTableViewCell.m in Sources */,
 				8B2D0037183D2A490007D502 /* Atom.m in Sources */,
+				8B2C518918561AD200A373A8 /* FavoriteListViewController.m in Sources */,
 				75EE555A183BBFE900C52654 /* main.m in Sources */,
 				8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */,
 				8BBE1243184CDFAA00D90BE5 /* UIView+Alert.m in Sources */,

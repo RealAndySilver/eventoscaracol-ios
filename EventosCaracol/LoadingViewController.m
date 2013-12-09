@@ -27,12 +27,8 @@
 {
     [super viewDidLoad];
     
-    /*self.view.backgroundColor = [UIColor colorWithRed:17.0/255.0
-                                                green:96.0/255.0
-                                                 blue:153.0/255.0
-                                                alpha:1.0];*/
-    
-    /////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////
+    //Create the UIImageView for the background
     UIImageView *logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                                0.0,
                                                                                self.view.frame.size.width,
@@ -40,13 +36,17 @@
     logoImageView.clipsToBounds = YES;
     logoImageView.contentMode = UIViewContentModeScaleAspectFill;
     
+    //We have to check if the user is on iPad or iPhone; depending on this,
+    //we assign the correct image for the image view.
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         logoImageView.image = [UIImage imageNamed:@"LoadingiPad.png"];
     else
-    logoImageView.image = [UIImage imageNamed:@"Loading.png"];
+        logoImageView.image = [UIImage imageNamed:@"Loading.png"];
+    
+    //Finally, add the image view to the view.
     [self.view addSubview:logoImageView];
     
-    /////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////
     //Add a 'Loading' label to our view
     self.loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - (self.view.frame.size.width/3)/2,
                                                                       self.view.frame.size.height/1.15,
@@ -60,8 +60,9 @@
     self.loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:30.0];
     [self.view addSubview:self.loadingLabel];
     
-    ////////////////////////////////////////////////////
-    //Add the spinner to our view
+    ///////////////////////////////////////////////////////////////////////
+    //Create an activity indicator to our view. this is important because
+    //we have to let the user know that the info is downloading
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 25.0,
                                                                              self.loadingLabel.frame.origin.y - 50,
                                                                              50.0,
@@ -69,21 +70,23 @@
     self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhiteLarge;
     [self.view addSubview:self.spinner];
     
-    //We access the info from the server as soon as the view loads.
+    //Start animating the spinner and the network activity indicator.
+    [self.spinner startAnimating];
+    
+    //Because we are accesing the network, we have to display a network activity
+    //indicator in the status bar. we done this using the methods created in the
+    //app delegate -incrementNetworkActivy and -decrementNetworkActivity
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate incrementNetworkActivity];
+    
+    //Access the server to obtain the info of the application
     [self getAllInfoFromServer];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getAllInfoFromServer) name:@"foreground" object:nil];
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES];
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    //[self.navigationController setNavigationBarHidden:NO];
+    
+    //Register as an observer of the notification center.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(getAllInfoFromServer)
+                                                 name:@"foreground"
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -95,29 +98,39 @@
 #pragma mark - server request
 -(void)getAllInfoFromServer
 {
+    //We are going to use ServerCommunicator to access the server, so we have to
+    //intanciate it.
     ServerCommunicator *server=[[ServerCommunicator alloc]init];
     server.delegate=self;
     
-    //Start animating the spinner.
-    [self.spinner startAnimating];
-    
-    //Load the info from the server asynchronously
+    //Load the info from the server asynchronously. this is very important because
+    //if we don't do it, the application will freeze until the info gets downloaded.
     dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
     dispatch_async(infoLoader, ^(){
         [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
     });
 }
-#pragma mark - server response
+
+#pragma mark - Server Response
+
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
+    //Decrement the network activity indicator count, because we a re no longer
+    //accesing the network. Also, stop the spinner.
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate decrementNetworkActivity];
+    [self.spinner stopAnimating];
+    
+    //Check if the method returned from the server is the correct one
     if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
         if ([dictionary objectForKey:@"app"])
         {
+            //Save the dictionary downloaded from the server locally in our app.
             [self setDictionary:dictionary withName:@"master"];
             NSLog(@"%@", dictionary);
-            //At this point, we have received the info from the server, so we need to stop the spinner.
-            [self.spinner stopAnimating];
             
+            //At this point we have all the neccessary info, so we can go to the
+            //next view controller.
             [self goToLogin];
         }
         else
@@ -126,38 +139,47 @@
         }
     }
 }
--(void)serverError:(NSError *)error{
+
+-(void)serverError:(NSError *)error
+{
+    //This delegate method gets called when there was an error connecting with
+    //the server.
+    
+    //Decrement the network activity indicator count, because we a re no longer
+    //accesing the network. Also, stop the spinner.
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [appDelegate decrementNetworkActivity];
+    [self.spinner stopAnimating];
+    
+    //If there was already information stored in the app, the user can go to
+    //the next view controller.
     if([self getDictionaryWithName:@"master"])
     {
         NSLog(@"ya está guardada la info");
         [self goToLogin];
-        //ir al siguiente porque ya existe info guardada
     }
+    
+    //if there wasn't information stored in the app, the user can't pass because
+    //there is no information to be displayed. In this case, we display an alert
+    //to inform the user about the problem.
     else
     {
-        //No se puede pasar
         [[[UIAlertView alloc] initWithTitle:nil
-                                   message:@"Hubo un error en la conexión. intenta de nuevo en unos minutos."
+                                   message:@"Hubo un error en la conexión. Revisa que estés conectad@ a internet."
                                   delegate:self
                          cancelButtonTitle:@"Ok"
                          otherButtonTitles:nil] show];
         
         self.loadingLabel.text = @"Error de conexión.";
-        
-        /*[MBHUDView hudWithBody:@"Hubo un error en la conexión. Por favor vuelve a intentar en unos minutos."
-                          type:MBAlertViewHUDTypeExclamationMark
-                    hidesAfter:5.0
-                          show:YES];*/
     }
-    [self.spinner stopAnimating];
-
 }
+
+#pragma mark - Facebook Login
+
 -(void)goToLogin
 {
-    FileSaver *fileSaver = [[FileSaver alloc] init];
-    
-    //If the user has already login with facebook, go to the home screen
-    if ([fileSaver getDictionary:@"user"])
+    //Check if the user has alredy login with Facebook; if so, go to the main page.
+    if ([self getDictionaryWithName:@"user"])
     {
         DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
         SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];
@@ -177,6 +199,7 @@
     }
 }
 
+#pragma mark - File Saver Stuff
 
 -(NSDictionary*)getDictionaryWithName:(NSString*)name{
     FileSaver *file=[[FileSaver alloc]init];

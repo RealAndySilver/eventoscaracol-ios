@@ -12,7 +12,6 @@
 #import "ServerCommunicator.h"
 #import "SWRevealViewController.h"
 #import "DetailsViewController.h"
-#import "SWTableViewCell.h"
 #import "PopUpView.h"
 #import "FileSaver.h"
 #import <Social/Social.h>
@@ -20,6 +19,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "LoginViewController.h"
 #import "WebViewController.h"
+#import "AppDelegate.h"
 
 @interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate>
 

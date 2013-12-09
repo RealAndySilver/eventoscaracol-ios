@@ -179,6 +179,24 @@
             </objects>
             <point key="canvasLocation" x="1837" y="1168"/>
         </scene>
+        <!--Favorite List View Controller-->
+        <scene sceneID="sg9-hT-jpI">
+            <objects>
+                <viewController storyboardIdentifier="FavoriteList" id="Cv7-vj-hIY" customClass="FavoriteListViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1wk-nF-z02"/>
+                        <viewControllerLayoutGuide type="bottom" id="hXO-qg-s13"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KjR-zC-6MF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Lg-hF-hAv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1837" y="-936"/>
+        </scene>
         <!--List View Controller-->
         <scene sceneID="o0Y-7y-JeI">
             <objects>

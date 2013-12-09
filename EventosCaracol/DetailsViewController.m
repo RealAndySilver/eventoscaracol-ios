@@ -272,7 +272,7 @@
     }
     
     //Create a string that contains the parameters to send to the server.
-    NSString *params = [NSString stringWithFormat:@"item_id=%@&_id=%@&type=%@", self.objectInfo[@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.objectInfo[@"type"]];
+    NSString *params = [NSString stringWithFormat:@"item_id=%@&user_id=%@&type=%@&app_id=%@", self.objectInfo[@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.objectInfo[@"type"], [self getDictionaryWithName:@"master"][@"app"][@"_id"]];
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
     

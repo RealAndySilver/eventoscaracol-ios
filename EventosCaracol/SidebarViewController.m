@@ -6,16 +6,7 @@
 //  Copyright (c) 2013 iAmStudio. All rights reserved.
 //
 
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "SidebarViewController.h"
-#import "SWRevealViewController.h"
-#import "MenuTableViewCell.h"
-#import "FileSaver.h"
-#import "ListViewController.h"
-#import "FAQViewController.h"
-#import "MapViewController.h"
-#import "DetailsViewController.h"
-#import "DestacadosViewController.h"
 
 @interface SidebarViewController () 
 @property (strong, nonatomic) NSArray *menuItems;
@@ -57,7 +48,7 @@
     [self updateDataFromServer];
 
     //Store the info for the aditional buttons of the slide menu table view
-    self.aditionalMenuItemsArray = @[@"Preguntas frecuentes", @"Reportar un problema", @"Términos y condiciones"];
+    self.aditionalMenuItemsArray = @[@"Favoritos"];
     
     ///////////////////////////////////////////////////////////////
     //Create the image view
@@ -156,10 +147,14 @@
     {
         if (indexPath.row < [self.menuArray count])
         {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            [appDelegate incrementNetworkActivity];
+            
             cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
             [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
                                    placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]
                                           completed:^(UIImage *image, NSError *error, SDImageCacheType type){
+                                              [appDelegate decrementNetworkActivity];
                                               NSLog(@"me completé");
                                           }];
         }
@@ -249,8 +244,18 @@
         
         else
         {
-            FAQViewController *faqViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FAQ"];
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:faqViewController];
+            if (![self getDictionaryWithName:@"user"])
+            {
+                [[[UIAlertView alloc] initWithTitle:nil
+                                            message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
+                                            delegate:self
+                                    cancelButtonTitle:@"Ok"
+                                    otherButtonTitles:@"Iniciar Sesión", nil] show];
+                return;
+            }
+            
+            FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
             [revealViewController setFrontViewController:navigationController animated:YES];
         }
     }
@@ -363,24 +368,11 @@ shouldReloadTableForSearchString:(NSString *)searchString
     //self.updateLabel.text = @"Actualizando...";
     self.isUpdating = YES;
     
-    [self getAllInfoFromServer];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate incrementNetworkActivity];
     
-    //[NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(finishUpdateMethod) userInfo:nil repeats:NO];
-    //this is the place where you can perform your data updating procedure(data populating from web or your database), for this section i am simply reloading data after 3 seconds of pull down
-
+    [self getAllInfoFromServer];
 }
-
-/*- (void) startSpinner {
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    self.spinner.center = self.updateImageView.center;
-    self.updateImageView.hidden = YES;
-    [self.spinner startAnimating];
-    [self.tableView addSubview:self.spinner];
-    //self.updateLabel.text = @"Actualizando...";
-    self.isUpdating = YES;
-    [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(finishUpdateMethod) userInfo:nil repeats:NO];
-    //this is the place where you can perform your data updating procedure(data populating from web or your database), for this section i am simply reloading data after 3 seconds of pull down
-}*/
 
 -(void) finishUpdateMethod
 {
@@ -434,6 +426,9 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate decrementNetworkActivity];
+    
     if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
         if ([dictionary objectForKey:@"app"])
         {
@@ -452,6 +447,9 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 -(void)serverError:(NSError *)error
 {
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate decrementNetworkActivity];
+    
     NSLog(@"error");
     [self stopSpinner];
     
@@ -461,6 +459,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
                      otherButtonTitles:nil] show];
 }
 
+#pragma mark - FileSaver
+
 -(NSDictionary*)getDictionaryWithName:(NSString*)name{
     FileSaver *file=[[FileSaver alloc]init];
     return [file getDictionary:name];
@@ -468,6 +468,18 @@ shouldReloadTableForSearchString:(NSString *)searchString
 -(void)setDictionary:(NSDictionary*)dictionary withName:(NSString*)name{
     FileSaver *file=[[FileSaver alloc]init];
     [file setDictionary:dictionary withKey:name];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1)
+    {
+        LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+        loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
+        [self presentViewController:loginVC animated:YES completion:nil];
+    }
 }
 
 @end

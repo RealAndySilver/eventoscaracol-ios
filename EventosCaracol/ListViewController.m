@@ -23,6 +23,7 @@
 @property (nonatomic) BOOL shouldUpdate;
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) NSMutableArray *isFavoritedArray;
+@property (nonatomic) NSUInteger favoriteIndex;
 @end
 
 #define ROW_HEIGHT 70.0
@@ -226,7 +227,6 @@
     
     //Array for storing our left and right buttons, which become visible when the user swipes in the cell.
     NSMutableArray *leftButtons = [[NSMutableArray alloc] init];
-    NSMutableArray *rightButtons = [[NSMutableArray alloc] init];
     
     //////////////////////////////////////////////////////////////////////////
     //Check if the cell's item is favorite or not.
@@ -355,6 +355,8 @@
 
 -(void)makeFavoriteWithIndex:(NSUInteger)index
 {
+    self.favoriteIndex = index;
+    
     //If the dictionary 'user' doesn't exist, we don't allow the user to favorite the items.
     //it's neccesary to log in facebook to fav items.
     if (![self getDictionaryWithName:@"user"])
@@ -369,7 +371,7 @@
     self.rowIndex = index;
     
     //Create a string that contains the parameters to send to the server.
-    NSString *params = [NSString stringWithFormat:@"item_id=%@&_id=%@&type=%@", self.menuItemsArray[index][@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.menuItemsArray[index][@"type"]];
+    NSString *params = [NSString stringWithFormat:@"item_id=%@&user_id=%@&type=%@&app_id=%@", self.menuItemsArray[index][@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.menuItemsArray[index][@"type"], [self getDictionaryWithName:@"master"][@"app"][@"_id"]];
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
     
@@ -390,11 +392,11 @@
         }
         
         //Get the main queue to make user interface updates.
-        dispatch_async(dispatch_get_main_queue(), ^(){
+      /*  dispatch_async(dispatch_get_main_queue(), ^(){
             //[self updateFavoritedButton];
             //[self updateFavoriteLabel];
             [self.isFavoritedArray[index] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
-        });
+        });*/
     });
     NSLog(@"%@", params);
 }
@@ -411,14 +413,18 @@
     static int activeCell = 0;
     if (state == kCellStateRight || state == kCellStateLeft)
     {
+        NSLog(@"cell index: %d", [self.tableView indexPathForCell:cell].row);
+        NSLog(@"scrolling");
         if ([self.tableView indexPathForCell:cell].row != activeCell)
         {
+            NSLog(@"escondí");
             SWTableViewCell *cell = (SWTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:activeCell
                                                                                              inSection:0]];
             [cell hideUtilityButtonsAnimated:YES];
         }
+        activeCell = [self.tableView indexPathForCell:cell].row;
+        NSLog(@"Active cell: %d", activeCell);
     }
-    activeCell = [self.tableView indexPathForCell:cell].row;
 }
 
 -(void)swippableTableViewCell:(SWTableViewCell *)cell didTriggerLeftUtilityButtonWithIndex:(NSInteger)index
@@ -428,10 +434,7 @@
     {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         NSUInteger index = indexPath.row;
-        NSLog(@"%lu", (unsigned long)index);
         [self makeFavoriteWithIndex:index];
-        //Use our custom UIView to display a favorite image on screen
-        //[PopUpView showPopUpViewOverView:self.view image:[UIImage imageNamed:nil]];
     }
     
     //if the user touches the share button of the cell.
@@ -670,6 +673,9 @@
     //self.updateLabel.text = @"Actualizando...";
     self.isUpdating = YES;
     
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate incrementNetworkActivity];
+    
     [self getAllInfoFromServer];
 }
 
@@ -713,10 +719,6 @@
     ServerCommunicator *server = [[ServerCommunicator alloc]init];
     server.delegate = self;
     
-    //Start animating the spinner.
-    //[self.spinner startAnimating];
-    //FileSaver *file=[[FileSaver alloc]init];
-    
     //Load the info from the server asynchronously
     dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
     dispatch_async(infoLoader, ^(){
@@ -726,6 +728,9 @@
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate decrementNetworkActivity];
+    
     if ([methodName isEqualToString:@"FavItem"] || [methodName isEqualToString:@"UnFavItem"])
     {
         NSLog(@"%@", dictionary);
@@ -733,6 +738,7 @@
         [self setDictionary:dictionary[@"user"] withName:@"user"];
         
         [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.rowIndex inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.isFavoritedArray[self.favoriteIndex] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
         //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         //[self.tableView reloadData];
     }
@@ -760,6 +766,8 @@
 
 -(void)serverError:(NSError *)error
 {
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate decrementNetworkActivity];
     [self stopSpinner];
     
     [[[UIAlertView alloc] initWithTitle:nil
