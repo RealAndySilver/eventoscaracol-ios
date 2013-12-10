@@ -14,6 +14,7 @@
 #import "PopUpView.h"
 #import "LoginViewController.h"
 #import "MBHUDView.h"
+#import "DetailsViewController.h"
 
 @interface FavoriteListViewController : UIViewController <ServerCommunicatorDelegate, UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate>
 

@@ -30,18 +30,14 @@
 
 @implementation ListViewController
 
--(void)setupPullDownToRefreshView
-{
-    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 10, -50.0, 20.0, 40.0)];
-    self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
-    [self.tableView addSubview:self.updateImageView];
-}
-
 #pragma mark - View LifeCycle
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
+    
+    //We need to set this properties every time the view appears, because
+    //there are more view controllers that change this properties.
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
@@ -50,10 +46,20 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"ListViewDidLoad");
-    self.isFavoritedArray = [[NSMutableArray alloc] initWithCapacity:[self.menuItemsArray count]];
-    
     SWRevealViewController *revealViewController = [self revealViewController];
+
+    //Add this view controller as an observer of the notification center. it will
+    //observe for a notification that is post when the user favorites an item in
+    //the item detail view.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updateFavItemsWithNotification:)
+                                                 name:@"FavItemNotification"
+                                               object:nil];
+    
+    //Set an array for storing the favorite state of the items. if an item is not
+    //favorite, it will store 0, otherwise it will store 1. We need to know this
+    //state for displaying the correct heart image when the user swipes left in a cell.
+    self.isFavoritedArray = [[NSMutableArray alloc] initWithCapacity:[self.menuItemsArray count]];
     
     if (!self.locationList)
     {
@@ -74,8 +80,7 @@
     
     ///////////////////////////////////////////////////////////////////
     //Create two buttons to filter the events list by date and by location
-    //Filter by date button
-    
+    //this buttons will not be displayed when the user is on the locations list.
     if (!self.locationList)
     {
         UIButton *filterByDayButton = [[UIButton alloc]
@@ -127,13 +132,11 @@
     
     ///////////////////////////////////////////////////////////////////
     //Table View initialization and configuration
-    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.rowHeight = ROW_HEIGHT;
     self.tableView.allowsSelection = YES;
     //self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
-    
     [self setupPullDownToRefreshView];
     
     ///////////////////////////////////////////////////////////////////
@@ -231,18 +234,20 @@
     //////////////////////////////////////////////////////////////////////////
     //Check if the cell's item is favorite or not.
     NSArray *favoriteItemsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
-    UIColor *favoriteButtonColor;
+    UIImage *favoritedImage;
     if ([favoriteItemsArray containsObject:self.menuItemsArray[indexPath.row][@"_id"]])
     {
         [self.isFavoritedArray addObject:@1];
-        favoriteButtonColor = [UIColor purpleColor];
+        favoritedImage = [UIImage imageNamed:@"SwipCellFavoriteActive.png"];
+        //favoriteButtonColor = [UIColor purpleColor];
         //NSLog(@"el objeto %d está favoriteado mirá", indexPath.row);
     }
     
     else
     {
         [self.isFavoritedArray addObject:@0];
-        favoriteButtonColor = [UIColor grayColor];
+        favoritedImage = [UIImage imageNamed:@"SwipCellFavorite.png"];
+        //favoriteButtonColor = [UIColor grayColor];
         //NSLog(@"El objeto %d no está favoriteado mirá", indexPath.row);
     }
     
@@ -250,11 +255,9 @@
     
     //[leftButtons sw_addUtilityButtonWithColor:favoriteButtonColor title:@"Fav"];
     //[leftButtons sw_addUtilityButtonWithColor:[UIColor cyanColor] title:@"Share"];
-    [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellFavorite.png"]];
+    [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:favoritedImage];
     [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellShare.png"]];
     
-    //[rightButtons sw_addUtilityButtonWithColor:[UIColor redColor] title:@"Borrar"];
-        
     eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                         reuseIdentifier:cellIdentifier
                                     containingTableView:tableView
@@ -271,7 +274,20 @@
     imageView.backgroundColor = [UIColor cyanColor];
     
     //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
-    [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    
+    NSArray *itemsImagesArray = [self getDictionaryWithName:@"master"][@"imagenes"];
+    for (int i = 0; i< [itemsImagesArray count]; i++)
+    {
+        if ([itemsImagesArray[i][@"_id"] isEqualToString:self.menuItemsArray[indexPath.row][@"thumb_url"]])
+        {
+            NSURL *thumbURL = itemsImagesArray[i][@"url"];
+            [imageView setImageWithURL:thumbURL
+                      placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+            break;
+        }
+    }
+    
+    //[imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
     
     [eventCell.contentView addSubview:imageView];
     
@@ -340,7 +356,6 @@
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
-        
         //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
         //will display a map on screen.
         if (self.locationList)
@@ -352,6 +367,70 @@
 }
 
 #pragma mark - Custom methods
+
+-(void)setupPullDownToRefreshView
+{
+    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 10, -50.0, 20.0, 40.0)];
+    self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
+    [self.tableView addSubview:self.updateImageView];
+}
+
+-(void)postLocalNotificationForItemAtIndex:(NSUInteger)index
+{
+    NSString *eventTime = self.menuItemsArray[index][@"event_time"];
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"%@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    
+    if (![dateFormatter dateFromString:formattedEventTimeString])
+        NSLog(@"no lo formatée");
+    else
+    {
+        /////////////////////////////////////////////////////////////////////////
+        NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+        
+        if ([sourceDate compare:[NSDate date]] == NSOrderedDescending)
+        {
+            NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+            NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+            
+            NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+            NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+            NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+            
+            NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
+            NSLog(@"si pude formatear y cambiar al time zone adecuado: %@", [destinationDate descriptionWithLocale:[NSLocale currentLocale]]);
+            ///////////////////////////////////////////////////////////////////////////
+            
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.soundName = UILocalNotificationDefaultSoundName;
+            localNotification.userInfo = @{@"name": self.menuItemsArray[index][@"_id"]};
+            localNotification.alertBody = @"Uno de tus eventos favoritos es dentro de una hora!";
+            localNotification.fireDate = destinationDate;
+            NSLog(@"Fire Date: %@", [localNotification.fireDate descriptionWithLocale:[NSLocale currentLocale]]);
+            localNotification.alertAction = @"Ir a la notificación";
+            localNotification.timeZone = [NSTimeZone systemTimeZone];
+            localNotification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
+            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+            NSLog(@"postée la notificación");
+        }
+        
+        else
+        {
+            NSLog(@"EL evento ya pasó entonces no puse ninguna notificación");
+        }
+    }
+}
+
+-(void)updateFavItemsWithNotification:(NSNotification *)notification
+{
+    [self.tableView reloadData];
+}
 
 -(void)makeFavoriteWithIndex:(NSUInteger)index
 {
@@ -375,6 +454,15 @@
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
     
+    if ([self.isFavoritedArray[index] intValue] == 0)
+    {
+        [self postLocalNotificationForItemAtIndex:index];
+        [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+        [serverCommunicator callServerWithPOSTMethod:@"FavItem" andParameter:params httpMethod:@"POST"];
+    }
+    
+    /*[MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+    
     //Communicate asynchronously with the server
     dispatch_queue_t server = dispatch_queue_create("server", nil);
     dispatch_async(server, ^(){
@@ -387,17 +475,11 @@
         else
         {
             [serverCommunicator callServerWithPOSTMethod:@"FavItem" andParameter:params httpMethod:@"POST"];
-            self.isFavoritedArray[index] = @1;
+            //self.isFavoritedArray[index] = @1;
             NSLog(@"me tengo que favoritear");
         }
-        
-        //Get the main queue to make user interface updates.
-      /*  dispatch_async(dispatch_get_main_queue(), ^(){
-            //[self updateFavoritedButton];
-            //[self updateFavoriteLabel];
-            [self.isFavoritedArray[index] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
-        });*/
-    });
+    });*/
+     
     NSLog(@"%@", params);
 }
 
@@ -433,8 +515,8 @@
     if (index == 0)
     {
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-        NSUInteger index = indexPath.row;
-        [self makeFavoriteWithIndex:index];
+        NSUInteger rowIndex = indexPath.row;
+        [self makeFavoriteWithIndex:rowIndex];
     }
     
     //if the user touches the share button of the cell.
@@ -718,48 +800,52 @@
 {
     ServerCommunicator *server = [[ServerCommunicator alloc]init];
     server.delegate = self;
-    
-    //Load the info from the server asynchronously
+    [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
+    /*//Load the info from the server asynchronously
     dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
     dispatch_async(infoLoader, ^(){
-        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
-    });
+    });*/
 }
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
+    [MBHUDView dismissCurrentHUD];
     
     if ([methodName isEqualToString:@"FavItem"] || [methodName isEqualToString:@"UnFavItem"])
     {
-        NSLog(@"%@", dictionary);
-        NSLog(@"Llego la informacion de los favoritos");
-        [self setDictionary:dictionary[@"user"] withName:@"user"];
-        
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.rowIndex inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.isFavoritedArray[self.favoriteIndex] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
-        //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
-        //[self.tableView reloadData];
+        if ([dictionary[@"status"] boolValue])
+        {
+            NSLog(@"%@", dictionary);
+            NSLog(@"Llego la informacion de los favoritos");
+            [self setDictionary:dictionary[@"user"] withName:@"user"];
+            
+            if ([methodName isEqualToString:@"UnFavItem"])
+                self.isFavoritedArray[self.favoriteIndex] = @0;
+            else
+                self.isFavoritedArray[self.favoriteIndex] = @1;
+            
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.rowIndex inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.isFavoritedArray[self.favoriteIndex] intValue] ==  1 ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
+            NSLog(@"se pudo favoritear correctamente desde el listado");
+        }
     }
     
-    else
+    else if ([methodName isEqualToString:@"GetAllInfoWithAppID"])
     {
         NSLog(@"llego información del servidor");
-        if ([methodName isEqualToString:@"GetAllInfoWithAppID"])
+        if ([dictionary objectForKey:@"app"])
         {
-            if ([dictionary objectForKey:@"app"])
-            {
-                [self setDictionary:dictionary withName:@"master"];
-                [self updateDataFromServer];
-                [self finishUpdateMethod];
-                NSLog(@"Me actualizé");
-            }
+            [self setDictionary:dictionary withName:@"master"];
+            [self updateDataFromServer];
+            [self finishUpdateMethod];
+            NSLog(@"Me actualizé");
+        }
             
-            else
-            {
-                //no puede pasar
-            }
+        else
+        {
+            //no puede pasar
         }
     }
 }

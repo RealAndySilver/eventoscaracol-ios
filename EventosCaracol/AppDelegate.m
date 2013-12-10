@@ -16,6 +16,8 @@
 
 @implementation AppDelegate
 
+#pragma mark - Application LifeCycle
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
@@ -31,6 +33,17 @@
     FileSaver *fileSaver = [[FileSaver alloc] init];
     [fileSaver setDictionary:@{@"app_id": @"528c1c396e9f990000000001"} withKey:@"app_id"];
     [fileSaver setDictionary:dic withKey:@"DeviceInfo"];
+    
+    ////////////////////////////////////////////////////////////////////////
+    //Si la aplicación inicia con una notificación
+    /*UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
+    if (localNotification)
+    {
+        application.applicationIconBadgeNumber = 0;
+        NSLog(@"cambie el badge");
+    }*/
+    application.applicationIconBadgeNumber = 0;
+
     
     return YES;
 }
@@ -51,6 +64,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -63,6 +77,8 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#pragma mark - Notifications
+
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     FileSaver *file = [[FileSaver alloc] init];
@@ -70,6 +86,19 @@
     
     NSString *result = [NSString stringWithFormat:@"El token que se guardó fue %@", [file getToken]];
     NSLog(@"%@", result);
+}
+
+-(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    if ([application applicationState] == UIApplicationStateActive)
+    {
+        [[[UIAlertView alloc] initWithTitle:nil
+                                    message:@"Acordaté de ir al evento vé!"
+                                   delegate:self
+                          cancelButtonTitle:@"Ok"
+                          otherButtonTitles:nil] show];
+    }
+    application.applicationIconBadgeNumber = 0;
 }
 
 -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error

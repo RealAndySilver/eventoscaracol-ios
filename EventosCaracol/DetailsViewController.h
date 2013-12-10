@@ -15,6 +15,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "FileSaver.h"
 #import "LoginViewController.h"
+#import "MBHUDView.h"
 
 @interface DetailsViewController : UIViewController <ServerCommunicatorDelegate, UIAlertViewDelegate>
 @property (strong, nonatomic) NSDictionary *objectInfo;

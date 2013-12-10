@@ -20,6 +20,7 @@
 #import "LoginViewController.h"
 #import "WebViewController.h"
 #import "AppDelegate.h"
+#import "MBHUDView.h"
 
 @interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate>
 

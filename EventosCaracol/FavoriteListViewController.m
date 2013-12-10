@@ -13,11 +13,20 @@
 @property (strong, nonatomic) NSMutableArray *favoritedItems;
 @property (strong, nonatomic) UITableView *tableView;
 @property (nonatomic) NSUInteger rowIndex;
+@property (nonatomic) BOOL serverInfoReceived;
 @end
 
 @implementation FavoriteListViewController
 
 #pragma mark - View lifecycle
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+}
 
 -(void)viewDidLoad
 {
@@ -29,9 +38,6 @@
                                                                               action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
     self.navigationItem.title = @"Favoritos";
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
     //////////////////////////////////////////////////////////////////////
     //Create a UITableView to display the favorited items
@@ -42,6 +48,11 @@
     self.tableView.rowHeight = 90.0;
     self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, 0.0, 0.0, 0.0);
     [self.view addSubview:self.tableView];
+    
+    //Show a HUD indicating that some network activity is going on. dismiss this
+    //network activity when we get response from the server.
+    [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+    
     //Get info from the server
     [self getFavoritesInfoFromServer];
 }
@@ -50,65 +61,138 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.favoritedItems count];
+    if ([self.favoritedItems count] > 0)
+        return [self.favoritedItems count];
+    else
+        return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SWTableViewCell *cell = (SWTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"FavoriteCell"];
+    if ([self.favoritedItems count] > 0)
+    {
+        SWTableViewCell *cell = (SWTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"FavoriteCell"];
+        
+        NSMutableArray *rightButton = [[NSMutableArray alloc] init];
+        [rightButton sw_addUtilityButtonWithColor:[UIColor redColor] icon:[UIImage imageNamed:@"SwipeCellErase.png"]];
+        
+        cell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                      reuseIdentifier:@"FavoriteCell"
+                                  containingTableView:tableView
+                                   leftUtilityButtons:nil
+                                  rightUtilityButtons:rightButton];
+        cell.delegate = self;
+        
+        /////////////////////////////////////////////////////////////////////
+        //Create the subviews that will contain the cell.
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
+        imageView.clipsToBounds = YES;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.backgroundColor = [UIColor cyanColor];
+        
+        //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
+        [imageView setImageWithURL:self.favoritedItems[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+        
+        [cell.contentView addSubview:imageView];
+        
+        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 20.0, 150, 20.0)];
+        nameLabel.text = self.favoritedItems[indexPath.row][@"name"];
+        nameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
+        [cell.contentView addSubview:nameLabel];
+        
+        return cell;
+    }
     
-    NSMutableArray *rightButton = [[NSMutableArray alloc] init];
-    [rightButton sw_addUtilityButtonWithColor:[UIColor redColor] icon:[UIImage imageNamed:@"SwipeCellErase.png"]];
-    
-    cell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                    reuseIdentifier:@"FavoriteCell"
-                                containingTableView:tableView
-                                leftUtilityButtons:nil
-                                rightUtilityButtons:rightButton];
-    cell.delegate = self;
-
-    /////////////////////////////////////////////////////////////////////
-    //Create the subviews that will contain the cell.
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
-    imageView.clipsToBounds = YES;
-    imageView.contentMode = UIViewContentModeScaleAspectFill;
-    imageView.backgroundColor = [UIColor cyanColor];
-    
-    //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
-    [imageView setImageWithURL:self.favoritedItems[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-    
-    [cell.contentView addSubview:imageView];
-    
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 20.0, 150, 20.0)];
-    nameLabel.text = self.favoritedItems[indexPath.row][@"name"];
-    nameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
-    [cell.contentView addSubview:nameLabel];
-    
-    return cell;
+    else
+    {
+        UITableViewCell *noFavoritesCell = [tableView dequeueReusableCellWithIdentifier:@"noFavoritesCell"];
+        noFavoritesCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"noFavoritesCell"];
+        
+        //If we have already received a response from the server but there are no favorite
+        //items, show a message to the user.
+        if (self.serverInfoReceived)
+        {
+            UILabel *noFavoritesLabel = [[UILabel alloc] initWithFrame:CGRectMake(noFavoritesCell.contentView.frame.size.width/2 - 100,
+                                                                                  noFavoritesCell.contentView.frame.size.height/2,
+                                                                                  200,
+                                                                                  40)];
+            
+            noFavoritesLabel.text = @"NO TIENES FAVORITOS";
+            noFavoritesLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
+            noFavoritesLabel.textColor = [UIColor darkGrayColor];
+            noFavoritesLabel.textAlignment = NSTextAlignmentCenter;
+            [noFavoritesCell.contentView addSubview:noFavoritesLabel];
+        }
+        
+        noFavoritesCell.userInteractionEnabled = NO;
+        return noFavoritesCell;
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"%@", self.favoritedItems[indexPath.row][@"name"]);
+    //If the item has an external url, we have to check if the url is going to open inside or
+    //outside the application.
+    if (self.favoritedItems[indexPath.row][@"external_url"])
+    {
+        if ([self.favoritedItems[indexPath.row][@"open_inside"] isEqualToString:@"no"])
+        {
+            DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+            detailsVC.objectInfo = self.favoritedItems[indexPath.row];
+            
+            detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
+            [self.navigationController pushViewController:detailsVC animated:YES];
+        }
+        
+        else if ([self.favoritedItems[indexPath.row][@"open_inside"] isEqualToString:@"outside"])
+        {
+            NSURL *url = [NSURL URLWithString:self.favoritedItems[indexPath.row][@"external_url"]];
+            if (![[UIApplication sharedApplication] openURL:url])
+            {
+                [[[UIAlertView alloc] initWithTitle:nil
+                                            message:@"Oops!, no se pudo abrir la URL en este momento."
+                                           delegate:self
+                                  cancelButtonTitle:@"" otherButtonTitles:nil] show];
+            }
+        }
+        
+        else //Else if open_inside = inside
+        {
+            WebViewController *webViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Web"];
+            webViewController.urlString = self.favoritedItems[indexPath.row][@"external_url"];
+            [self.navigationController pushViewController:webViewController animated:YES];
+        }
+    }
+    
+    //if the item doesn't have an external url, open the detail view.
+    else
+    {
+        DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+        detailsVC.objectInfo = self.favoritedItems[indexPath.row];
+        detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
+        [self.navigationController pushViewController:detailsVC animated:YES];
+    }
 }
 
 #pragma mark - Server Communication
 
 -(void)getFavoritesInfoFromServer
 {
+    int random = rand()%1000;
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
-    NSString *parameters = [NSString stringWithFormat:@"%@/%@", [self getDictionaryWithName:@"master"][@"app"][@"_id"],
-                            [self getDictionaryWithName:@"user"][@"_id"]];
+    NSString *parameters = [NSString stringWithFormat:@"%@/%@/%d", [self getDictionaryWithName:@"master"][@"app"][@"_id"],
+                            [self getDictionaryWithName:@"user"][@"_id"], random];
     [serverCommunicator callServerWithGETMethod:@"GetFavoritedItemsFromUser" andParameter:parameters];
 }
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
+    self.serverInfoReceived = YES;
+    [MBHUDView dismissCurrentHUD];
     if ([methodName isEqualToString:@"GetFavoritedItemsFromUser"])
     {
-        BOOL status = [dictionary[@"status"] boolValue];
-        if (status == YES)
+        if ([dictionary[@"status"] boolValue])
         {
             NSLog(@"Recibi el diccionario de favoritos");
             NSLog(@"%@", dictionary);
@@ -131,9 +215,7 @@
     
     else if ([methodName isEqualToString:@"UnFavItem"])
     {
-        [MBHUDView dismissCurrentHUD];
-        BOOL status = [dictionary[@"status"] boolValue];
-        if (status == YES)
+        if ([dictionary[@"status"] boolValue])
         {
             NSLog(@"Se pudo borrar el item");
             [self setDictionary:dictionary[@"user"] withName:@"user"];
@@ -174,6 +256,7 @@
 {
     NSUInteger cellIndex = [self.tableView indexPathForCell:cell].row;
     [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+    [self removeLocalNotificationForItemAtIndex:cellIndex];
     [self unFavItemAtIndex:cellIndex];
 }
 
@@ -199,6 +282,24 @@
 
 #pragma mark - Custom Methods
 
+-(void)removeLocalNotificationForItemAtIndex:(NSUInteger)index
+{
+    NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
+    for (int i=0; i<[localNotifications count]; i++)
+    {
+        UILocalNotification *notification = localNotifications[i];
+        NSDictionary *notificationUserInfo = notification.userInfo;
+        NSString *notificationName = [NSString stringWithFormat:@"%@", notificationUserInfo[@"name"]];
+        if ([notificationName isEqualToString:self.favoritedItems[index][@"_id"]])
+        {
+            //Cancelling local notification
+            [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            NSLog(@"encontré la notificación a eliminar, con el id %@",notificationName);
+            break;
+        }
+    }
+}
+
 -(void)unFavItemAtIndex:(NSUInteger)index
 {
     
@@ -208,12 +309,12 @@
     NSString *params = [NSString stringWithFormat:@"item_id=%@&user_id=%@&type=%@&app_id=%@", self.favoritedItems[index][@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.favoritedItems[index][@"type"], [self getDictionaryWithName:@"master"][@"app"][@"_id"]];
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
-    
+    [serverCommunicator callServerWithPOSTMethod:@"UnFavItem" andParameter:params httpMethod:@"POST"];
     //Communicate asynchronously with the server
-    dispatch_queue_t server = dispatch_queue_create("server", nil);
+    /*dispatch_queue_t server = dispatch_queue_create("server", nil);
     dispatch_async(server, ^(){
             [serverCommunicator callServerWithPOSTMethod:@"UnFavItem" andParameter:params httpMethod:@"POST"];
-    });
+    });*/
 }
 
 @end

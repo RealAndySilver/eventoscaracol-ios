@@ -23,23 +23,8 @@
     
     ////////////////////////////////////////////////////////////////////////////////
     //Time formatting
-    NSLog(@"%@", self.objectInfo[@"event_time"]);
+    NSLog(@"%@", [NSDate date]);
     
-    NSString *eventTime = self.objectInfo[@"event_time"];
-    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
-    NSLog(@"%@", formattedEventTimeString);
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
-    if (![dateFormatter dateFromString:@"1991-01-10 05:30:00"])
-        NSLog(@"no lo formatée");
-    else
-    {
-        NSDate *date = [dateFormatter dateFromString:formattedEventTimeString];
-        NSLog(@"%@", [date descriptionWithLocale:[NSLocale currentLocale]]);
-    }
     ///////////////////////////////////////////////////////////////////////////////
     
     self.navigationItem.title = self.navigationBarTitle;
@@ -148,8 +133,20 @@
     mainImageView.backgroundColor = [UIColor cyanColor];
     mainImageView.clipsToBounds = YES;
     mainImageView.contentMode = UIViewContentModeScaleAspectFill;
-    [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
-                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    
+    NSArray *detailImagesArray = [self getDictionaryWithName:@"master"][@"imagenes"];
+    for (int i = 0; i < [detailImagesArray count]; i++)
+    {
+        if ([detailImagesArray[i][@"_id"] isEqualToString:self.objectInfo[@"image_url"][0]])
+        {
+            NSURL *imageURL = [NSURL URLWithString:detailImagesArray[i][@"url"]];
+            [mainImageView setImageWithURL:imageURL
+                          placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+        }
+    }
+    
+    /*[mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
+                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];*/
     
     self.scrollView.delegate = self;
     self.scrollView.alwaysBounceVertical = YES;
@@ -276,6 +273,20 @@
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
     
+    if (!self.isFavorited)
+    {
+        
+        [self postLocalNotification];
+        
+        [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"FavItemNotification"
+                                                            object:nil];
+         
+        [serverCommunicator callServerWithPOSTMethod:@"FavItem" andParameter:params httpMethod:@"POST"];
+    }
+    
+    /*[MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
+    
     //Communicate asynchronously with the server
     dispatch_queue_t server = dispatch_queue_create("server", nil);
     dispatch_async(server, ^(){
@@ -283,21 +294,64 @@
             [serverCommunicator callServerWithPOSTMethod:@"UnFavItem" andParameter:params httpMethod:@"POST"];
         else
             [serverCommunicator callServerWithPOSTMethod:@"FavItem" andParameter:params httpMethod:@"POST"];
-        
-        /*//Get the main queue to make user interface updates.
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            [self updateFavoritedButton];
-            //[self updateFavoriteLabel];
-            self.isFavorited ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarGris.png"]];
-        });*/
-    });
+    });*/
     NSLog(@"%@", params);
 }
 
-/*-(void)updateFavoriteLabel
+-(void)postLocalNotification
 {
-    self.favoriteCountLabel.text = [NSString stringWithFormat:@"%d", [self.objectInfo[@"favorited"] intValue]];
-}*/
+    NSString *eventTime = self.objectInfo[@"event_time"];
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"fecha formateada %@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    
+    if (![dateFormatter dateFromString:formattedEventTimeString])
+        NSLog(@"no lo formatée asi que la notificación no se pudo establecer.");
+    else
+    {
+        /////////////////////////////////////////////////////////////////////////
+        NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+        
+        //If the event date is later than te actual date, create and post the notification.
+        //If the event date has passed, there is no reason to post the notification.
+        if ([sourceDate compare:[NSDate date]] == NSOrderedDescending)
+        {
+            NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+            NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+            
+            NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+            NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+            NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+            
+            NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
+            NSLog(@"s pude formatear y cambiar al time zone adecuado: %@", [destinationDate descriptionWithLocale:[NSLocale currentLocale]]);
+            ///////////////////////////////////////////////////////////////////////////
+            
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.soundName = UILocalNotificationDefaultSoundName;
+            localNotification.userInfo = @{@"name": self.objectInfo[@"_id"]};
+            localNotification.alertBody = @"Esta es la notificación oís";
+            //localNotification.fireDate = [dateFormatter dateFromString:formattedEventTimeString];
+            localNotification.fireDate = destinationDate;
+            NSLog(@"Fire Date: %@", [localNotification.fireDate descriptionWithLocale:[NSLocale currentLocale]]);
+            localNotification.alertAction = @"Ir a la notificación";
+            localNotification.timeZone = [NSTimeZone systemTimeZone];
+            localNotification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
+            [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+            NSLog(@"postée la notificación");
+        }
+        
+        else
+        {
+            NSLog(@"El evento ya pasó entonces no puse ninguna notificación");
+        }
+    }
+}
 
 -(void)updateFavoritedButton
 {
@@ -325,15 +379,30 @@
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
-    NSLog(@"%@", dictionary);
-    [self setDictionary:dictionary[@"user"] withName:@"user"];
-    self.isFavorited = !self.isFavorited;
-    [self updateFavoritedButton];
-    self.isFavorited ? [self showFavoriteAnimationWithImage:nil] : [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
-
-    //self.objectInfo = dictionary[@"atom"];
+    [MBHUDView dismissCurrentHUD];
     
-    //[self updateFavoriteLabel];
+    if ([methodName isEqualToString:@"UnFavItem"] || [methodName isEqualToString:@"FavItem"])
+    {
+        if ([dictionary[@"status"] boolValue])
+        {
+            NSLog(@"%@", dictionary);
+            [self setDictionary:dictionary[@"user"] withName:@"user"];
+            self.isFavorited = !self.isFavorited;
+            [self updateFavoritedButton];
+            self.isFavorited ? [self showFavoriteAnimationWithImage:nil] :
+            [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
+            NSLog(@"Se pudo favoritear o desfavoritear correctamente");
+        }
+        
+        else
+        {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                       message:@"Hubo un error con el servidor. Por favor intenta de nuevo."
+                                      delegate:self
+                             cancelButtonTitle:@"Ok"
+                             otherButtonTitles:nil] show];
+        }
+    }
 }
 
 -(void)serverError:(NSError *)error
