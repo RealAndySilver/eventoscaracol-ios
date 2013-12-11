@@ -17,11 +17,12 @@
     {
         self.backgroundColor = [UIColor clearColor];
         
-        self.featuredEventNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
-                                                                           self.contentView.bounds.size.height - 40.0,
-                                                                           self.contentView.bounds.size.width,
-                                                                           self.contentView.bounds.size.height - (self.contentView.bounds.size.height - 40.0))];
-        self.featuredEventNameLabel.textAlignment = NSTextAlignmentCenter;
+        self.featuredEventNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0,
+                                                                           self.contentView.bounds.size.height - 60.0,
+                                                                           self.contentView.bounds.size.width - 20,
+                                                                           self.contentView.bounds.size.height - (self.contentView.bounds.size.height - 60.0))];
+        self.featuredEventNameLabel.numberOfLines = 0;
+        self.featuredEventNameLabel.textAlignment = NSTextAlignmentLeft;
         self.featuredEventNameLabel.font = [UIFont fontWithName:@"Helvetica-bold" size:15.0];
         self.featuredEventImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,
                                                                                     0,
@@ -37,7 +38,7 @@
                                                                                  50.0)];
         self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
         
-        self.contentView.backgroundColor = [UIColor cyanColor];
+        self.contentView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.featuredEventImageView];
         [self.contentView addSubview:self.featuredEventNameLabel];
         [self.contentView addSubview:self.spinner];

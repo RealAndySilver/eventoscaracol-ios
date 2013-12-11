@@ -26,7 +26,7 @@
 @property (nonatomic) NSUInteger favoriteIndex;
 @end
 
-#define ROW_HEIGHT 70.0
+#define ROW_HEIGHT 95.0
 
 @implementation ListViewController
 
@@ -239,22 +239,16 @@
     {
         [self.isFavoritedArray addObject:@1];
         favoritedImage = [UIImage imageNamed:@"SwipCellFavoriteActive.png"];
-        //favoriteButtonColor = [UIColor purpleColor];
-        //NSLog(@"el objeto %d está favoriteado mirá", indexPath.row);
     }
     
     else
     {
         [self.isFavoritedArray addObject:@0];
         favoritedImage = [UIImage imageNamed:@"SwipCellFavorite.png"];
-        //favoriteButtonColor = [UIColor grayColor];
-        //NSLog(@"El objeto %d no está favoriteado mirá", indexPath.row);
     }
     
     NSLog(@"%@", self.isFavoritedArray[indexPath.row]);
-    
-    //[leftButtons sw_addUtilityButtonWithColor:favoriteButtonColor title:@"Fav"];
-    //[leftButtons sw_addUtilityButtonWithColor:[UIColor cyanColor] title:@"Share"];
+
     [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:favoritedImage];
     [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellShare.png"]];
     
@@ -268,44 +262,109 @@
     
     /////////////////////////////////////////////////////////////////////
     //Create the subviews that will contain the cell.
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 50.0, 50.0)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 100.0, 75.0)];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    imageView.backgroundColor = [UIColor cyanColor];
+    imageView.backgroundColor = [UIColor clearColor];
     
-    //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
-    
-    NSArray *itemsImagesArray = [self getDictionaryWithName:@"master"][@"imagenes"];
-    for (int i = 0; i< [itemsImagesArray count]; i++)
-    {
-        if ([itemsImagesArray[i][@"_id"] isEqualToString:self.menuItemsArray[indexPath.row][@"thumb_url"]])
-        {
-            NSURL *thumbURL = itemsImagesArray[i][@"url"];
-            [imageView setImageWithURL:thumbURL
-                      placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-            break;
-        }
-    }
-    
-    //[imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+  
+    [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
     
     [eventCell.contentView addSubview:imageView];
     
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 20.0, 150, 20.0)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
+                                                                   0.0,
+                                                                   self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10),
+                                                                   40.0)];
+    nameLabel.textAlignment = NSTextAlignmentLeft;
+    nameLabel.numberOfLines = 2;
     nameLabel.text = self.menuItemsArray[indexPath.row][@"name"];
     nameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
     [eventCell.contentView addSubview:nameLabel];
     
-    /*UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 50.0, 100.0, 20.0)];
-    descriptionLabel.text = @"Plaza roja";
+    ///////////////////////////////////////////////////////////////////////////////
+    //Get the item location name
+    NSString *itemLocationName = [[NSString alloc] init];
+    //First check if we are in a list of locations items. if not, search for the
+    //location_id of the item to display it's location in the cell
+    if (!self.locationList)
+    {
+        //First we see if the item has a location associated.
+        if ([self.menuItemsArray[indexPath.row][@"location_id"] length] > 0)
+        {
+            //Location id exist.
+            NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+            for (int i = 0; i < [locationsArray count]; i++)
+            {
+                if ([self.menuItemsArray[indexPath.row][@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                {
+                    itemLocationName = locationsArray[i][@"name"];
+                    break;
+                }
+            }
+        }
+        
+        else
+        {
+            itemLocationName = @"";
+        }
+    }
+    
+    //if we are in a list of location items, search for the short detail description
+    //of the item to display it in the cell.
+    else
+    {
+        itemLocationName = self.menuItemsArray[indexPath.row][@"short_detail"];
+    }
+    
+    
+    UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                          40.0,
+                                                                          self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                          20.0)];
+    
+    descriptionLabel.text = [NSString stringWithFormat:@"📍%@", itemLocationName];
     descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    descriptionLabel.textColor = [UIColor lightGrayColor];
     [eventCell.contentView addSubview:descriptionLabel];
     
-    UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(210.0, 50.0, 100.0, 20.0)];
-    eventTimeLabel.text = @"10:00AM";
-    eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
-    [eventCell.contentView addSubview:eventTimeLabel];*/
+    /////////////////////////////////////////////////////////////////////////////
+    //Get the date of the event
+    NSString *eventTime = self.menuItemsArray[indexPath.row][@"event_time"];
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"%@", formattedEventTimeString);
     
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+
+    NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+    
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
+    
+    /////////////////////////////////////////////////////////////////////////////////////
+    //If we are not in the localist list view, display a label with the time of the event.
+    //the location list view don't contain a label for this.
+    if (!self.locationList)
+    {
+        UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height, self.view.frame.size.width - descriptionLabel.frame.origin.x,
+                                                                            20.0)];
+        NSString *finalEventTime = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", finalEventTime];
+        eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+        eventTimeLabel.textColor = [UIColor lightGrayColor];
+        [eventCell.contentView addSubview:eventTimeLabel];
+   
+    }
     return eventCell;
 }
 
@@ -404,16 +463,21 @@
             NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
             
             NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
+            
+            //We have to substract one hour from the event time because we want the reminder notification
+            //to be post one hour earlier.
+            NSDate *oneHourEarlierDate = [destinationDate dateByAddingTimeInterval:-(60*60)];
             NSLog(@"si pude formatear y cambiar al time zone adecuado: %@", [destinationDate descriptionWithLocale:[NSLocale currentLocale]]);
+            NSLog(@"recordaré del evento a las : %@", [oneHourEarlierDate descriptionWithLocale:[NSLocale currentLocale]]);
             ///////////////////////////////////////////////////////////////////////////
             
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
             localNotification.soundName = UILocalNotificationDefaultSoundName;
             localNotification.userInfo = @{@"name": self.menuItemsArray[index][@"_id"]};
-            localNotification.alertBody = @"Uno de tus eventos favoritos es dentro de una hora!";
-            localNotification.fireDate = destinationDate;
+            localNotification.alertBody = [NSString stringWithFormat:@"El evento '%@' es dentro de una hora, no te lo pierdas!", self.menuItemsArray[index][@"name"]];
+            localNotification.fireDate = oneHourEarlierDate;
             NSLog(@"Fire Date: %@", [localNotification.fireDate descriptionWithLocale:[NSLocale currentLocale]]);
-            localNotification.alertAction = @"Ir a la notificación";
+            localNotification.alertAction = @"Ver el evento";
             localNotification.timeZone = [NSTimeZone systemTimeZone];
             localNotification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
             [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
@@ -438,7 +502,7 @@
     
     //If the dictionary 'user' doesn't exist, we don't allow the user to favorite the items.
     //it's neccesary to log in facebook to fav items.
-    if (![self getDictionaryWithName:@"user"])
+    if (![self getDictionaryWithName:@"user"][@"_id"])
     {
         [[[UIAlertView alloc] initWithTitle:nil
                                     message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."

@@ -119,7 +119,7 @@
             [webView loadHTMLString:formattedHTML baseURL:nil];
             [self.view addSubview:webView];
             
-            self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,webView.frame.origin.y + webView.frame.size.height,
+            self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,webView.frame.origin.y + webView.frame.size.height + 10,
                                                                              self.view.frame.size.width,
                                                                              self.view.frame.size.height - (                                                                           webView.frame.origin.y + webView.frame.size.height))];
         }
@@ -133,20 +133,8 @@
     mainImageView.backgroundColor = [UIColor cyanColor];
     mainImageView.clipsToBounds = YES;
     mainImageView.contentMode = UIViewContentModeScaleAspectFill;
-    
-    NSArray *detailImagesArray = [self getDictionaryWithName:@"master"][@"imagenes"];
-    for (int i = 0; i < [detailImagesArray count]; i++)
-    {
-        if ([detailImagesArray[i][@"_id"] isEqualToString:self.objectInfo[@"image_url"][0]])
-        {
-            NSURL *imageURL = [NSURL URLWithString:detailImagesArray[i][@"url"]];
-            [mainImageView setImageWithURL:imageURL
-                          placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-        }
-    }
-    
-    /*[mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
-                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];*/
+    [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
+                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
     
     self.scrollView.delegate = self;
     self.scrollView.alwaysBounceVertical = YES;
@@ -258,7 +246,7 @@
 {
     //If the dictionary 'user' doesn't exist, we don't allow the user to favorite the items.
     //it's neccesary to log in facebook to fav items.
-    if (![self getDictionaryWithName:@"user"])
+    if (![self getDictionaryWithName:@"user"][@"_id"])
     {
         [[[UIAlertView alloc] initWithTitle:nil
                                    message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
@@ -330,16 +318,17 @@
             
             NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
             NSLog(@"s pude formatear y cambiar al time zone adecuado: %@", [destinationDate descriptionWithLocale:[NSLocale currentLocale]]);
+            NSDate *oneHourEarlierDate = [destinationDate dateByAddingTimeInterval:-(60*60)];
+            NSLog(@"se notificará del evento a las : %@", [oneHourEarlierDate descriptionWithLocale:[NSLocale currentLocale]]);
             ///////////////////////////////////////////////////////////////////////////
             
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
             localNotification.soundName = UILocalNotificationDefaultSoundName;
             localNotification.userInfo = @{@"name": self.objectInfo[@"_id"]};
-            localNotification.alertBody = @"Esta es la notificación oís";
-            //localNotification.fireDate = [dateFormatter dateFromString:formattedEventTimeString];
-            localNotification.fireDate = destinationDate;
+            localNotification.alertBody = [NSString stringWithFormat:@"¡El evento '%@' es dentro de una hora, no te lo pierdas!", self.objectInfo[@"name"]];
+            localNotification.fireDate = oneHourEarlierDate;
             NSLog(@"Fire Date: %@", [localNotification.fireDate descriptionWithLocale:[NSLocale currentLocale]]);
-            localNotification.alertAction = @"Ir a la notificación";
+            localNotification.alertAction = @"Ver el evento";
             localNotification.timeZone = [NSTimeZone systemTimeZone];
             localNotification.applicationIconBadgeNumber = [UIApplication sharedApplication].applicationIconBadgeNumber + 1;
             [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];

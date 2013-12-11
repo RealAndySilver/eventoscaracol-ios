@@ -41,14 +41,29 @@
     [self.tableView addSubview:self.updateImageView];
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
 -(void)viewDidLoad
 {
     NSLog(@"me cargué");
+    [super viewDidLoad];
     
     [self updateDataFromServer];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(FacebookLoginNotificationReceived:)
+                                                 name:@"FacebookLogin"
+                                               object:nil];
+    
     //Store the info for the aditional buttons of the slide menu table view
-    self.aditionalMenuItemsArray = @[@"Favoritos"];
+    if ([self getDictionaryWithName:@"user"][@"_id"])
+        self.aditionalMenuItemsArray = @[@"Favoritos", @"Cerrar Sesión"];
+    else
+        self.aditionalMenuItemsArray = @[@"Favoritos", @"Iniciar Sesión"];
+
     
     ///////////////////////////////////////////////////////////////
     //Create the image view
@@ -125,9 +140,7 @@
     }
     
     else
-    {
         return ([self.menuArray count] + [self.aditionalMenuItemsArray count]);
-    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -244,24 +257,69 @@
         
         else
         {
-            if (![self getDictionaryWithName:@"user"])
+            if (indexPath.row - [self.menuArray count] == 0)
             {
-                [[[UIAlertView alloc] initWithTitle:nil
-                                            message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
-                                            delegate:self
-                                    cancelButtonTitle:@"Ok"
-                                    otherButtonTitles:@"Iniciar Sesión", nil] show];
-                return;
+                if (![self getDictionaryWithName:@"user"][@"_id"])
+                {
+                    [[[UIAlertView alloc] initWithTitle:nil
+                                                message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
+                                               delegate:self
+                                      cancelButtonTitle:@"Ok"
+                                      otherButtonTitles:@"Iniciar Sesión", nil] show];
+                    return;
+                }
+                
+                FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
+                [revealViewController setFrontViewController:navigationController animated:YES];
             }
-            
-            FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
-            [revealViewController setFrontViewController:navigationController animated:YES];
+            else
+            {
+                if (![self getDictionaryWithName:@"user"][@"_id"])
+                {
+                    LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+                    loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
+                    [self presentViewController:loginVC animated:YES completion:nil];
+                }
+                
+                else
+                {
+                    [[[UIActionSheet alloc] initWithTitle:@"¿Estás seguro que deseas cerrar sesión?, ya no podrás acceder a tus favoritos."
+                                                delegate:self
+                                       cancelButtonTitle:@"Cancelar"
+                                  destructiveButtonTitle:@"Cerrar Sesión"
+                                        otherButtonTitles:nil]showInView:self.view];
+                }
+            }
         }
     }
 }
 
 #pragma mark - Custom Methods
+
+-(void)facebookLogout
+{
+    //Erase the user info from the application
+    NSDictionary *dic = [[NSDictionary alloc] init];
+    [self setDictionary:dic withName:@"user"];
+    
+    self.aditionalMenuItemsArray = @[@"Favoritos", @"Iniciar Sesión"];
+    [self.tableView reloadData];
+    [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeCheckmark hidesAfter:5 show:YES];
+    
+    //Go to the main page
+    SWRevealViewController *revelViewController = [self revealViewController];
+    
+    DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
+    [revelViewController setFrontViewController:navigationController animated:YES];
+}
+
+-(void)FacebookLoginNotificationReceived:(NSNotification *)notification
+{
+    self.aditionalMenuItemsArray = @[@"Favoritos", @"Cerrar Sesión"];
+    [self.tableView reloadData];
+}
 
 -(void)presentListViewControllerWithObjectsOfType:(NSString *)objectType selectedRow:(NSInteger)row
 {
@@ -287,6 +345,7 @@
     listVC.objectType = objectType;
     listVC.navigationBarTitle = self.menuArray[row][@"name"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
+    navigationController.navigationBar.translucent = YES;
     [revealViewController setFrontViewController:navigationController animated:YES];
 }
 
@@ -479,6 +538,16 @@ shouldReloadTableForSearchString:(NSString *)searchString
         LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
         loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
         [self presentViewController:loginVC animated:YES completion:nil];
+    }
+}
+
+#pragma mark - UIActionSheetDelegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        [self facebookLogout];
     }
 }
 

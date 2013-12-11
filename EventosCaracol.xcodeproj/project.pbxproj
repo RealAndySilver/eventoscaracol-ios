@@ -44,6 +44,10 @@
 		8B3BC98F18528A0000CAD92E /* CorazonApagado.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98D18528A0000CAD92E /* CorazonApagado.png */; };
 		8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98E18528A0000CAD92E /* CorazonPrendido.png */; };
 		8B8BFC8D183BFE5A003552EC /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */; };
+		8B9AF8E31858C1F7000DE122 /* Back.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF8E21858C1F7000DE122 /* Back.png */; };
+		8B9AF8E51858C2FE000DE122 /* Forward.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF8E41858C2FE000DE122 /* Forward.png */; };
+		8B9AF8E81858C3E5000DE122 /* Back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF8E61858C3E5000DE122 /* Back@2x.png */; };
+		8B9AF8E91858C3E5000DE122 /* Forward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF8E71858C3E5000DE122 /* Forward@2x.png */; };
 		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
 		8BA59699185128C400B6E7D0 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA59698185128C400B6E7D0 /* WebViewController.m */; };
@@ -164,6 +168,10 @@
 		8B3BC98D18528A0000CAD92E /* CorazonApagado.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonApagado.png; path = Resources/Images/CorazonApagado.png; sourceTree = "<group>"; };
 		8B3BC98E18528A0000CAD92E /* CorazonPrendido.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CorazonPrendido.png; path = Resources/Images/CorazonPrendido.png; sourceTree = "<group>"; };
 		8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		8B9AF8E21858C1F7000DE122 /* Back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Back.png; path = Resources/Images/Back.png; sourceTree = "<group>"; };
+		8B9AF8E41858C2FE000DE122 /* Forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Forward.png; path = Resources/Images/Forward.png; sourceTree = "<group>"; };
+		8B9AF8E61858C3E5000DE122 /* Back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Back@2x.png"; path = "Resources/Images/Back@2x.png"; sourceTree = "<group>"; };
+		8B9AF8E71858C3E5000DE122 /* Forward@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Forward@2x.png"; path = "Resources/Images/Forward@2x.png"; sourceTree = "<group>"; };
 		8BA11EBD183BDAA0003616AB /* LoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
 		8BA11EBE183BDAA0003616AB /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
 		8BA11EC0183BDB5D003616AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -528,6 +536,10 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8B9AF8E21858C1F7000DE122 /* Back.png */,
+				8B9AF8E61858C3E5000DE122 /* Back@2x.png */,
+				8B9AF8E71858C3E5000DE122 /* Forward@2x.png */,
+				8B9AF8E41858C2FE000DE122 /* Forward.png */,
 				8BA758C91857578B0057A2EE /* SwipCellFavoriteActive.png */,
 				8B2C518A185632BC00A373A8 /* SwipeCellErase.png */,
 				A08E87781855106B00C5E960 /* LoadingiPad.png */,
@@ -664,10 +676,13 @@
 				A08A392A1853F3ED00E2A6C8 /* BotonTodosLosSitios.png in Resources */,
 				8BBE1251184CE97A00D90BE5 /* CarnavalPrueba.jpg in Resources */,
 				8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */,
+				8B9AF8E51858C2FE000DE122 /* Forward.png in Resources */,
 				8BB37E511849332200274848 /* CaracolPrueba3.png in Resources */,
 				A08E87791855106B00C5E960 /* LoadingiPad.png in Resources */,
 				8B3BC98618526D9300CAD92E /* Loading.png in Resources */,
 				8BF0E32B185246BD0048D32D /* SwipCellFavorite.png in Resources */,
+				8B9AF8E81858C3E5000DE122 /* Back@2x.png in Resources */,
+				8B9AF8E31858C1F7000DE122 /* Back.png in Resources */,
 				8BD09F59184F81E900BA45FC /* CorazonGris.png in Resources */,
 				8B3BC98F18528A0000CAD92E /* CorazonApagado.png in Resources */,
 				8B3BC98C185282E100CAD92E /* FondoMenu.png in Resources */,
@@ -687,6 +702,7 @@
 				8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */,
 				8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */,
 				8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */,
+				8B9AF8E91858C3E5000DE122 /* Forward@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

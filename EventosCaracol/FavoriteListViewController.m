@@ -45,7 +45,7 @@
                                                           style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.rowHeight = 90.0;
+    self.tableView.rowHeight = 95.0;
     self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, 0.0, 0.0, 0.0);
     [self.view addSubview:self.tableView];
     
@@ -85,17 +85,21 @@
         
         /////////////////////////////////////////////////////////////////////
         //Create the subviews that will contain the cell.
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 70.0, 70.0)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 100.0, 75.0)];
         imageView.clipsToBounds = YES;
         imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.backgroundColor = [UIColor cyanColor];
+        imageView.backgroundColor = [UIColor clearColor];
         
         //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
         [imageView setImageWithURL:self.favoritedItems[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
         
         [cell.contentView addSubview:imageView];
         
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(100.0, 20.0, 150, 20.0)];
+        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
+                                                                       0.0,
+                                                                       self.view.frame.size.width - imageView.frame.origin.x + imageView.frame.size.width + 10,
+                                                                       40.0)];
+        nameLabel.numberOfLines = 2;
         nameLabel.text = self.favoritedItems[indexPath.row][@"name"];
         nameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
         [cell.contentView addSubview:nameLabel];
@@ -119,7 +123,7 @@
             
             noFavoritesLabel.text = @"NO TIENES FAVORITOS";
             noFavoritesLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
-            noFavoritesLabel.textColor = [UIColor darkGrayColor];
+            noFavoritesLabel.textColor = [UIColor lightGrayColor];
             noFavoritesLabel.textAlignment = NSTextAlignmentCenter;
             [noFavoritesCell.contentView addSubview:noFavoritesLabel];
         }

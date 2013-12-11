@@ -19,6 +19,6 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
 
-@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate>
+@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
 
 @end

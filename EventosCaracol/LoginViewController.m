@@ -53,6 +53,7 @@
                                                                        self.view.bounds.size.height/1.4,
                                                                        250.0,
                                                                        50.0)];
+    loginButton.tintColor = [UIColor grayColor];
     loginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
     [loginButton setTitle:@"Iniciar sesión con Facebook" forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
@@ -180,7 +181,6 @@
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     [MBHUDView dismissCurrentHUD];
-    
     //Check if the method returned by the server is the correct one.
     if ([methodName isEqualToString:@"SignUp"])
     {
@@ -191,8 +191,11 @@
         //to the next view controller.
         if([[dictionary objectForKey:@"status"] boolValue])
         {
+            [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeCheckmark hidesAfter:2 show:YES];
             [self setDictionary:dictionary[@"user"] withKey:@"user"];
-            [self goToNextVC];
+            [self postFacebookLoginNotification];
+            [self performSelector:@selector(goToNextVC) withObject:nil afterDelay:2.0];
+            //[self goToNextVC];
         }
         
         //if the status returned is cero, the Facebook registration failed, so we tell
@@ -226,6 +229,11 @@
 }
 
 #pragma mark - Go To Next ViewController
+
+-(void)postFacebookLoginNotification
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FacebookLogin" object:nil];
+}
 
 -(void)goToNextVC
 {

@@ -240,24 +240,14 @@
         DestacadosCollectionViewCell *specialEventCell = (DestacadosCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:SPECIAL_IDENTIFIER forIndexPath:indexPath];
         
         specialEventCell.featuredEventNameLabel.text = self.specialItemsArray[indexPath.item][@"short_detail"];
+        specialEventCell.featuredEventImageView.image = [UIImage imageNamed:@"CaracolPrueba4.png"];
         
-        NSArray *itemImagesArray = [self getDictionaryWithName:@"master"][@"imagenes"]; //Of NSDictionary
-        for (int i = 0; i < [itemImagesArray count]; i++)
-        {
-            if ([itemImagesArray[i][@"_id"] isEqualToString:self.specialItemsArray[indexPath.row][@"thumb_url"]])
-            {
-                NSURL *imageURL = [NSURL URLWithString:itemImagesArray[i][@"url"]];
-                [specialEventCell.featuredEventImageView setImageWithURL:imageURL
-                                                        placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-            }
-        }
-        
-        /*//Use the method -setImageURL to download the image from the server and store it in caché.
+        //Use the method -setImageURL to download the image from the server and store it in caché.
         [specialEventCell.featuredEventImageView setImageWithURL:self.specialItemsArray[indexPath.row][@"thumb_url"]
                                                 placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]
                                                        completed:^(UIImage *image, NSError *error, SDImageCacheType type){
                                                            //[appDelegate decrementNetworkActivity];
-                                                       }];*/
+                                                       }];
         
         
         return specialEventCell;
@@ -272,22 +262,12 @@
         DestacadosCollectionViewCell *featuredEventCell = (DestacadosCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:FEATURED_IDENTIFIER forIndexPath:indexPath];
         
         featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"short_detail"];
-        NSArray *itemImagesArray = [self getDictionaryWithName:@"master"][@"imagenes"]; //Of NSDictionary
-        for (int i = 0; i < [itemImagesArray count]; i++)
-        {
-            if ([itemImagesArray[i][@"_id"] isEqualToString:self.featuredEventsArray[indexPath.row][@"thumb_url"]])
-            {
-                NSURL *imageURL = [NSURL URLWithString:itemImagesArray[i][@"url"]];
-                [featuredEventCell.featuredEventImageView setImageWithURL:imageURL
-                                                        placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-            }
-        }
-        //[featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.item][@"thumb_url"]];
-        /*[featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.row][@"thumb_url"]
+        
+        [featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.row][@"thumb_url"]
                                                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]
                                                         completed:^(UIImage *image, NSError *error, SDImageCacheType type){
                                                             //[appDelegate decrementNetworkActivity];
-                                                        }];*/
+                                                        }];
         
         return featuredEventCell;
     }
@@ -310,7 +290,6 @@
     
     else
         return CGSizeZero;
-
 }
 
 #pragma mark - UIScrollViewDelegate

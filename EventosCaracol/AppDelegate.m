@@ -93,9 +93,9 @@
     if ([application applicationState] == UIApplicationStateActive)
     {
         [[[UIAlertView alloc] initWithTitle:nil
-                                    message:@"Acordaté de ir al evento vé!"
+                                    message:@"¡Uno de tus eventos favoritos empezará dentro de una hora!"
                                    delegate:self
-                          cancelButtonTitle:@"Ok"
+                          cancelButtonTitle:@"Ver el evento"
                           otherButtonTitles:nil] show];
     }
     application.applicationIconBadgeNumber = 0;
