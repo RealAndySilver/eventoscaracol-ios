@@ -60,9 +60,9 @@
     
     //Store the info for the aditional buttons of the slide menu table view
     if ([self getDictionaryWithName:@"user"][@"_id"])
-        self.aditionalMenuItemsArray = @[@"Favoritos", @"Cerrar Sesión"];
+        self.aditionalMenuItemsArray = @[@"Cerrar Sesión"];
     else
-        self.aditionalMenuItemsArray = @[@"Favoritos", @"Iniciar Sesión"];
+        self.aditionalMenuItemsArray = @[@"Iniciar Sesión"];
 
     
     ///////////////////////////////////////////////////////////////
@@ -108,7 +108,10 @@
     
     ////////////////////////////////////////////////////////////////////////////////
     //searchDisplayController configuration.
-    self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:116.0/255.0 green:155.0/255.0 blue:49.0/255.0 alpha:1.0];
+    [[UISearchBar appearance] setSearchFieldBackgroundImage:[UIImage imageNamed:@"BarraBusqueda.png"] forState:UIControlStateNormal];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
+    [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
+    self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:13.0/255.0 green:36.0/255.0 blue:102.0/255.0 alpha:1.0];
     [self.searchDisplayController.searchResultsTableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     self.searchDisplayController.searchResultsTableView.rowHeight = 50.0;
     self.searchDisplayController.searchResultsTableView.frame = CGRectMake(0.0,
@@ -160,16 +163,12 @@
     {
         if (indexPath.row < [self.menuArray count])
         {
-            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-            [appDelegate incrementNetworkActivity];
+            /*AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            [appDelegate incrementNetworkActivity];*/
             
             cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
             [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
-                                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]
-                                          completed:^(UIImage *image, NSError *error, SDImageCacheType type){
-                                              [appDelegate decrementNetworkActivity];
-                                              NSLog(@"me completé");
-                                          }];
+                                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
         }
         
         else
@@ -219,7 +218,18 @@
         
         if (indexPath.row < [self.menuArray count])
         {
-            if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"artistas"])
+            if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"home"])
+            {
+                SWRevealViewController *revelViewController = [self revealViewController];
+                
+                DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
+                [revelViewController setFrontViewController:navigationController animated:YES];
+                
+                NSLog(@"me tapee");
+            }
+            
+            else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"artistas"])
                 //Present the list view passing the type of object that was selected and the row
                 //that was selected
                 [self presentListViewControllerWithObjectsOfType:@"artistas" selectedRow:indexPath.row];
@@ -230,6 +240,23 @@
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"noticias"])
                 [self presentListViewControllerWithObjectsOfType:@"noticias" selectedRow:indexPath.row];
+            
+            else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"favoritos"])
+            {
+                if (![self getDictionaryWithName:@"user"][@"_id"])
+                {
+                    [[[UIAlertView alloc] initWithTitle:nil
+                                                message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
+                                               delegate:self
+                                      cancelButtonTitle:@"Ok"
+                                      otherButtonTitles:@"Iniciar Sesión", nil] show];
+                    return;
+                }
+                
+                FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
+                [revealViewController setFrontViewController:navigationController animated:YES];
+            }
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"locaciones"])
             {
@@ -259,7 +286,7 @@
         {
             if (indexPath.row - [self.menuArray count] == 0)
             {
-                if (![self getDictionaryWithName:@"user"][@"_id"])
+                /*if (![self getDictionaryWithName:@"user"][@"_id"])
                 {
                     [[[UIAlertView alloc] initWithTitle:nil
                                                 message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
@@ -271,11 +298,28 @@
                 
                 FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
-                [revealViewController setFrontViewController:navigationController animated:YES];
+                [revealViewController setFrontViewController:navigationController animated:YES];*/
+                
+                if (![self getDictionaryWithName:@"user"][@"_id"])
+                {
+                    LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
+                    loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
+                    [self presentViewController:loginVC animated:YES completion:nil];
+                }
+                
+                else
+                {
+                    [[[UIActionSheet alloc] initWithTitle:@"¿Estás seguro que deseas cerrar sesión?, ya no podrás acceder a tus favoritos."
+                                                 delegate:self
+                                        cancelButtonTitle:@"Cancelar"
+                                   destructiveButtonTitle:@"Cerrar Sesión"
+                                        otherButtonTitles:nil]showInView:self.view];
+                }
+
             }
             else
             {
-                if (![self getDictionaryWithName:@"user"][@"_id"])
+                /*if (![self getDictionaryWithName:@"user"][@"_id"])
                 {
                     LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
                     loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
@@ -289,7 +333,7 @@
                                        cancelButtonTitle:@"Cancelar"
                                   destructiveButtonTitle:@"Cerrar Sesión"
                                         otherButtonTitles:nil]showInView:self.view];
-                }
+                }*/
             }
         }
     }
@@ -303,7 +347,7 @@
     NSDictionary *dic = [[NSDictionary alloc] init];
     [self setDictionary:dic withName:@"user"];
     
-    self.aditionalMenuItemsArray = @[@"Favoritos", @"Iniciar Sesión"];
+    self.aditionalMenuItemsArray = @[@"Iniciar Sesión"];
     [self.tableView reloadData];
     [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeCheckmark hidesAfter:5 show:YES];
     
@@ -317,7 +361,7 @@
 
 -(void)FacebookLoginNotificationReceived:(NSNotification *)notification
 {
-    self.aditionalMenuItemsArray = @[@"Favoritos", @"Cerrar Sesión"];
+    self.aditionalMenuItemsArray = @[@"Cerrar Sesión"];
     [self.tableView reloadData];
 }
 
@@ -419,7 +463,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
 - (void) updateMethod
 {
     //[self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.spinner.center = self.updateImageView.center;
     self.updateImageView.hidden = YES;
     [self.spinner startAnimating];

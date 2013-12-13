@@ -50,24 +50,31 @@
     //////////////////////////////////////////////////////////////////////////////////////
     //Create the login button
     UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 125.0,
-                                                                       self.view.bounds.size.height/1.4,
+                                                                       self.view.bounds.size.height/1.2,
                                                                        250.0,
-                                                                       50.0)];
-    loginButton.tintColor = [UIColor grayColor];
-    loginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
+                                                                       30.0)];
+    //loginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
     [loginButton setTitle:@"Iniciar sesión con Facebook" forState:UIControlStateNormal];
+    loginButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
     [self.view addSubview:loginButton];
     [loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
     /////////////////////////////////////////////////////////////////////////////////////
     //Creathe the 'continue without login' button
-    UIButton *continueWithoutLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 125.0,
+    /*UIButton *continueWithoutLoginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 125.0,
                                                                                       loginButton.frame.origin.y + loginButton.frame.size.height + 20,
                                                                                       250.0,
-                                                                                      50.0)];
-    
-    continueWithoutLoginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
+                                                                                      30.0)];*/
+    UIButton *continueWithoutLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    continueWithoutLoginButton.frame = CGRectMake(self.view.frame.size.width/2 - 125.0,
+                                                  loginButton.frame.origin.y + loginButton.frame.size.height + 20,
+                                                  250.0,
+                                                  30.0);
+    //continueWithoutLoginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
     [continueWithoutLoginButton setTitle:@"Continuar sin iniciar sesión" forState:UIControlStateNormal];
+    [continueWithoutLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [continueWithoutLoginButton setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
+    continueWithoutLoginButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
     [continueWithoutLoginButton addTarget:self action:@selector(goToNextVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:continueWithoutLoginButton];
 }

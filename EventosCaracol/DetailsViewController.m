@@ -27,10 +27,20 @@
     
     ///////////////////////////////////////////////////////////////////////////////
     
-    self.navigationItem.title = self.navigationBarTitle;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
+                                                                    0.0,
+                                                                    200.0,
+                                                                    44.0)];
+    titleLabel.text = self.navigationBarTitle;
+    titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = titleLabel;
+    //self.navigationItem.title = self.navigationBarTitle;
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0]};
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0]};
 
     //Create the UIBarButtonItem to share the event.
     UIBarButtonItem *shareBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ShareIcon.png"]
@@ -175,16 +185,16 @@
     ///////////////////////////////////////////////////////////////////////////////////////////
     UILabel *objectName = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
                                                                    self.favoriteButton.frame.origin.y,
-                                                                   self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
+                                                                   self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 10,
                                                                     self.view.frame.size.height/18.93)];
     objectName.numberOfLines = 2;
     objectName.textAlignment = NSTextAlignmentLeft;
     objectName.text = self.objectInfo[@"name"];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        objectName.font = [UIFont fontWithName:@"Helvetica" size:40.0];
+        objectName.font = [UIFont fontWithName:@"Montserrat-Regular" size:40.0];
     else
-        objectName.font = [UIFont fontWithName:@"Helvetica" size:20.0];
+        objectName.font = [UIFont fontWithName:@"Montserrat-Regular" size:20.0];
     
     [self.scrollView addSubview:objectName];
     
@@ -193,12 +203,15 @@
                                                                             objectName.frame.origin.y + objectName.frame.size.height,
                                                                             self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                             self.view.frame.size.height/28.4)];
-    eventLocationLabel.text = @"Plaza Cervantes";
+    //eventLocationLabel.text = @"Plaza Cervantes";
+    eventLocationLabel.text = [NSString stringWithFormat:@"📍%@", self.objectLocation];
+    eventLocationLabel.textColor = [UIColor lightGrayColor];
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:24.0];
+        eventLocationLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+
     else
-        eventLocationLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+        eventLocationLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     
     [self.scrollView addSubview:eventLocationLabel];
     
@@ -207,13 +220,24 @@
                                                                         eventLocationLabel.frame.origin.y + eventLocationLabel.frame.size.height,
                                                                         self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                         self.view.frame.size.height/28.4)];
-    eventTimeLabel.text = @"11:30AM";
+    //eventTimeLabel.text = @"11:30AM";
+    eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.objectTime];
+    eventTimeLabel.textColor = [UIColor lightGrayColor];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:24.0];
+        eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
     else
-        eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+        eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     
     [self.scrollView addSubview:eventTimeLabel];
+    
+    /////////////////////////////////////////////////////////////////////////////////////////
+    UILabel *dotsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0,
+                                                                   eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height,
+                                                                   self.view.frame.size.width - 40.0,
+                                                                   10.0)];
+    dotsLabel.text = @"..................................................................";
+    dotsLabel.textColor = [UIColor lightGrayColor];
+    [self.scrollView addSubview:dotsLabel];
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     UITextView *description = [[UITextView alloc]
@@ -221,15 +245,17 @@
                                                              eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20,
                                                              self.view.frame.size.width - 40.0,
                                                              self.view.frame.size.height - (eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20) - 80)];
-    description.text = self.objectInfo[@"detail"];
-    /*description.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";*/
+    //description.text = self.objectInfo[@"detail"];
+    description.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        description.font = [UIFont fontWithName:@"Helvetica" size:28.0];
+        description.font = [UIFont fontWithName:@"Montserrat-Regular" size:28.0];
     else
-        description.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+        description.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
     
     description.selectable = YES;
+    description.textAlignment = NSTextAlignmentJustified;
+    description.textColor = [UIColor lightGrayColor];
     description.editable = NO;
     [self.scrollView addSubview:description];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, description.frame.origin.y + description.frame.size.height + 20);

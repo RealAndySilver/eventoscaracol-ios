@@ -20,6 +20,8 @@
 @interface DetailsViewController : UIViewController <ServerCommunicatorDelegate, UIAlertViewDelegate>
 @property (strong, nonatomic) NSDictionary *objectInfo;
 @property (strong, nonatomic) NSString *navigationBarTitle;
+@property (strong, nonatomic) NSString *objectLocation;
+@property (strong, nonatomic) NSString *objectTime;
 @property (nonatomic) BOOL presentLocationObject;
 @property (nonatomic) BOOL presentViewControllerFromSearchBar;
 @end

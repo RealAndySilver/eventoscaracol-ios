@@ -179,7 +179,7 @@
 -(void)goToLogin
 {
     //Check if the user has alredy login with Facebook; if so, go to the main page.
-    if ([self getDictionaryWithName:@"user"])
+    if ([self getDictionaryWithName:@"user"][@"_id"])
     {
         DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
         SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Sidebar"];

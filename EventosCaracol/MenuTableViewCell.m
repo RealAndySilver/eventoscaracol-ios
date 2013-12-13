@@ -21,6 +21,8 @@
                                                                        self.contentView.frame.size.height/2 - 10.0,
                                                                        self.contentView.frame.size.width,
                                                                        20.0)];
+        
+        self.menuItemLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
         self.menuItemLabel.textColor = [UIColor whiteColor];
         [self.contentView addSubview:self.menuItemLabel];
         

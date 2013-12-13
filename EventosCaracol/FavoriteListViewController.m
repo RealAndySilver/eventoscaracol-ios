@@ -14,6 +14,8 @@
 @property (strong, nonatomic) UITableView *tableView;
 @property (nonatomic) NSUInteger rowIndex;
 @property (nonatomic) BOOL serverInfoReceived;
+@property (strong, nonatomic) NSString *itemLocation;
+@property (strong, nonatomic) NSString *itemDate;
 @end
 
 @implementation FavoriteListViewController
@@ -23,7 +25,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 }
@@ -97,12 +99,37 @@
         
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
                                                                        0.0,
-                                                                       self.view.frame.size.width - imageView.frame.origin.x + imageView.frame.size.width + 10,
+                                                                       self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10) - 20,
                                                                        40.0)];
         nameLabel.numberOfLines = 2;
         nameLabel.text = self.favoritedItems[indexPath.row][@"name"];
-        nameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
+        nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
         [cell.contentView addSubview:nameLabel];
+        
+        ////////////////////////////////////////////////////////////////////
+        //Item location label
+        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                              40.0,
+                                                                              self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                              20.0)];
+        
+        self.itemLocation = [self getItemLocation:self.favoritedItems[indexPath.row]];
+        descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocation];
+        descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+        descriptionLabel.textColor = [UIColor lightGrayColor];
+        [cell.contentView addSubview:descriptionLabel];
+        
+        ////////////////////////////////////////////////////////////////////
+        //item date label
+        UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height, self.view.frame.size.width - descriptionLabel.frame.origin.x,
+                                                                            20.0)];
+        
+        self.itemDate = [self getItemDate:self.favoritedItems[indexPath.row]];
+        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
+        eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+        eventTimeLabel.textColor = [UIColor lightGrayColor];
+        [cell.contentView addSubview:eventTimeLabel];
         
         return cell;
     }
@@ -143,7 +170,8 @@
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = self.favoritedItems[indexPath.row];
-            
+            detailsVC.objectLocation = self.itemLocation;
+            detailsVC.objectTime = self.itemDate;
             detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
             [self.navigationController pushViewController:detailsVC animated:YES];
         }
@@ -173,9 +201,84 @@
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = self.favoritedItems[indexPath.row];
+        detailsVC.objectTime = self.itemDate;
+        detailsVC.objectLocation = self.itemLocation;
         detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
         [self.navigationController pushViewController:detailsVC animated:YES];
     }
+}
+
+#pragma mark - Custom Methods
+
+-(NSString *)getItemDate:(NSDictionary *)item
+{
+    NSString *date = [[NSString alloc] init];
+    
+    //Get the date of the event
+    NSString *eventTime = item[@"event_time"];
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"%@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+    
+    NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+    
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
+    
+    date = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+    
+    return date;
+}
+
+-(NSString *)getItemLocation:(NSDictionary *)item
+{
+    NSString *itemLocation = [[NSString alloc] init];
+    ////////////////////////////////////////////////////////////
+    //obtain the item location to pass it to the next view controller
+    //First check if we are in a list of locations items. if not, search for the
+    //location_id of the item to display it's location in the cell
+    if (![item[@"type"] isEqualToString:@"locaciones"])
+    {
+        //First we see if the item has a location associated.
+        if ([item[@"location_id"] length] > 0)
+        {
+            //Location id exist.
+            NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+            for (int i = 0; i < [locationsArray count]; i++)
+            {
+                if ([item[@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                {
+                    itemLocation = locationsArray[i][@"name"];
+                    break;
+                }
+            }
+        }
+        
+        else
+        {
+            itemLocation = @"No hay locación asignada";
+        }
+    }
+    
+    //if we are in a list of location items, search for the short detail description
+    //of the item to display it in the cell.
+    else
+    {
+        itemLocation = item[@"short_detail"];
+    }
+    
+    return itemLocation;
+    /////////////////////////////////////////////////////////////////////////////////
 }
 
 #pragma mark - Server Communication

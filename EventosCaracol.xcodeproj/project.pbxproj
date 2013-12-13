@@ -23,6 +23,11 @@
 		75EE557C183BBFE900C52654 /* EventosCaracolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE557B183BBFE900C52654 /* EventosCaracolTests.m */; };
 		75EE5589183BC45300C52654 /* ServerCommunicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5586183BC45300C52654 /* ServerCommunicator.m */; };
 		75EE558A183BC45300C52654 /* FileSaver.m in Sources */ = {isa = PBXBuildFile; fileRef = 75EE5588183BC45300C52654 /* FileSaver.m */; };
+		8B1B122E185B6326007383CA /* BarraBusqueda.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1B122D185B6326007383CA /* BarraBusqueda.png */; };
+		8B1B1230185B646D007383CA /* BarraBusqueda2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1B122F185B646D007383CA /* BarraBusqueda2.png */; };
+		8B1B1234185B7038007383CA /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B1B1232185B7038007383CA /* Montserrat-Bold.ttf */; };
+		8B1B1235185B7038007383CA /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B1B1233185B7038007383CA /* Montserrat-Regular.ttf */; };
+		8B1B1237185BBA18007383CA /* Pattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1B1236185BBA18007383CA /* Pattern.png */; };
 		8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */; };
 		8B1ED256184544DB00312DCE /* FAQViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED255184544DB00312DCE /* FAQViewController.m */; };
 		8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1ED2571845482E00312DCE /* IconoPrueba.png */; };
@@ -139,6 +144,11 @@
 		75EE5586183BC45300C52654 /* ServerCommunicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerCommunicator.m; sourceTree = "<group>"; };
 		75EE5587183BC45300C52654 /* FileSaver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSaver.h; sourceTree = "<group>"; };
 		75EE5588183BC45300C52654 /* FileSaver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileSaver.m; sourceTree = "<group>"; };
+		8B1B122D185B6326007383CA /* BarraBusqueda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BarraBusqueda.png; path = Resources/Images/BarraBusqueda.png; sourceTree = "<group>"; };
+		8B1B122F185B646D007383CA /* BarraBusqueda2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BarraBusqueda2.png; path = Resources/Images/BarraBusqueda2.png; sourceTree = "<group>"; };
+		8B1B1232185B7038007383CA /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		8B1B1233185B7038007383CA /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		8B1B1236185BBA18007383CA /* Pattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Pattern.png; path = Resources/Images/Pattern.png; sourceTree = "<group>"; };
 		8B1ED2511844E30E00312DCE /* MenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuTableViewCell.h; sourceTree = "<group>"; };
 		8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewCell.m; sourceTree = "<group>"; };
 		8B1ED254184544DB00312DCE /* FAQViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FAQViewController.h; sourceTree = "<group>"; };
@@ -387,6 +397,7 @@
 		75EE5554183BBFE900C52654 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8B1B1231185B7038007383CA /* Fonts */,
 				8BCD7D3D183FB20D00849D8A /* Images */,
 				75EE5555183BBFE900C52654 /* EventosCaracol-Info.plist */,
 				75EE5556183BBFE900C52654 /* InfoPlist.strings */,
@@ -434,6 +445,16 @@
 				8B2D0039183D2EF30007D502 /* Location.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		8B1B1231185B7038007383CA /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8B1B1232185B7038007383CA /* Montserrat-Bold.ttf */,
+				8B1B1233185B7038007383CA /* Montserrat-Regular.ttf */,
+			);
+			name = Fonts;
+			path = Resources/Fonts;
 			sourceTree = "<group>";
 		};
 		8BA9C3B21843A20800876AA5 /* SlideMenu */ = {
@@ -536,6 +557,9 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8B1B1236185BBA18007383CA /* Pattern.png */,
+				8B1B122F185B646D007383CA /* BarraBusqueda2.png */,
+				8B1B122D185B6326007383CA /* BarraBusqueda.png */,
 				8B9AF8E21858C1F7000DE122 /* Back.png */,
 				8B9AF8E61858C3E5000DE122 /* Back@2x.png */,
 				8B9AF8E71858C3E5000DE122 /* Forward@2x.png */,
@@ -669,10 +693,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BB37E091848FA9700274848 /* CaracolPrueba.jpg in Resources */,
+				8B1B1230185B646D007383CA /* BarraBusqueda2.png in Resources */,
 				75EE5564183BBFE900C52654 /* Main_iPad.storyboard in Resources */,
 				8BBE1296184D309900D90BE5 /* updateArrow.png in Resources */,
 				8B1ED2581845482E00312DCE /* IconoPrueba.png in Resources */,
 				8BF0E327185242580048D32D /* CorazonRojo.png in Resources */,
+				8B1B1235185B7038007383CA /* Montserrat-Regular.ttf in Resources */,
 				A08A392A1853F3ED00E2A6C8 /* BotonTodosLosSitios.png in Resources */,
 				8BBE1251184CE97A00D90BE5 /* CarnavalPrueba.jpg in Resources */,
 				8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */,
@@ -694,10 +720,13 @@
 				8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */,
 				8B2C518B185632BC00A373A8 /* SwipeCellErase.png in Resources */,
 				A08A39281853DC9200E2A6C8 /* GoogleMaps.bundle in Resources */,
+				8B1B1237185BBA18007383CA /* Pattern.png in Resources */,
 				A08A392C1853FBAC00E2A6C8 /* FondoBarraBusqueda.png in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				8BA758CA1857578B0057A2EE /* SwipCellFavoriteActive.png in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
+				8B1B122E185B6326007383CA /* BarraBusqueda.png in Resources */,
+				8B1B1234185B7038007383CA /* Montserrat-Bold.ttf in Resources */,
 				8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */,
 				8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */,
 				8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */,

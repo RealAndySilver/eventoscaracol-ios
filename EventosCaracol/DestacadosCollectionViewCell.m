@@ -23,7 +23,8 @@
                                                                            self.contentView.bounds.size.height - (self.contentView.bounds.size.height - 60.0))];
         self.featuredEventNameLabel.numberOfLines = 0;
         self.featuredEventNameLabel.textAlignment = NSTextAlignmentLeft;
-        self.featuredEventNameLabel.font = [UIFont fontWithName:@"Helvetica-bold" size:15.0];
+        self.featuredEventNameLabel.textColor = [UIColor whiteColor];
+        self.featuredEventNameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
         self.featuredEventImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,
                                                                                     0,
                                                                                     self.contentView.bounds.size.width,
@@ -32,14 +33,21 @@
         [self.featuredEventImageView setContentMode:UIViewContentModeScaleAspectFill];
         self.featuredEventImageView.clipsToBounds = YES;
         
-        self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width/2 - 25.0,
+        UIView *patternView = [[UIView alloc] initWithFrame:self.contentView.frame];
+        UIImage *patternImage = [UIImage imageNamed:@"Pattern.png"];
+        patternView.backgroundColor = [UIColor colorWithPatternImage:patternImage];
+        
+        
+        
+        /*self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width/2 - 25.0,
                                                                                  self.contentView.frame.size.height/2 - 25.0,
                                                                                  50.0,
                                                                                  50.0)];
-        self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+        self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;*/
         
         self.contentView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.featuredEventImageView];
+        [self.contentView addSubview:patternView];
         [self.contentView addSubview:self.featuredEventNameLabel];
         [self.contentView addSubview:self.spinner];
     }

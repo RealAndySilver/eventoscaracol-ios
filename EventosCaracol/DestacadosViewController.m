@@ -18,6 +18,7 @@
 @property (strong, nonatomic) UICollectionView *specialItemsCollectionView;
 @property (strong, nonatomic) NSTimer * timer;
 @property (nonatomic) NSInteger currentPage;
+@property (strong, nonatomic) NSString *itemLocationName;
 @end
 
 @implementation DestacadosViewController
@@ -41,7 +42,7 @@
     //Set the color properties of the NavigationBar. we have to do this every
     //time the view appears, because this properties are differente in the other
     //controllers.
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 }
@@ -49,7 +50,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
+    NSLog(@"desaparecí");
     //Stop the timer.
     [self.timer invalidate];
     self.timer = nil;
@@ -58,6 +59,16 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    /*for (NSString* family in [UIFont familyNames])
+    {
+        NSLog(@"%@", family);
+        
+        for (NSString* name in [UIFont fontNamesForFamilyName: family])
+        {
+            NSLog(@"  %@", name);
+        }
+    }*/
     
     //Create the back button that will be displayed in the next view controller
     //that is push by this view controller.
@@ -92,7 +103,17 @@
     ///////////////////////////////////////////////////////////////////////////
     //Store the JSON info in a dictionary
     NSDictionary *myDictionary = [self getDictionaryWithName:@"master"][@"app"];
-    self.navigationItem.title = [myDictionary objectForKey:@"name"];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
+                                                                    0.0,
+                                                                    200.0,
+                                                                    44.0)];
+    titleLabel.text = [myDictionary objectForKey:@"name"];
+    titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = titleLabel;
+    //self.navigationItem.title = [myDictionary objectForKey:@"name"];
     
     //define an array with only the featured events information
     self.featuredEventsArray = [self getDictionaryWithName:@"master"][@"destacados"];
@@ -106,7 +127,7 @@
     specialItemsCollectionViewLayout.minimumInteritemSpacing = 0;
     specialItemsCollectionViewLayout.minimumLineSpacing = 0;
     specialItemsCollectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 10.0, self.view.frame.size.width, self.view.frame.size.height/4.3) collectionViewLayout:specialItemsCollectionViewLayout];
+    self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/4.3) collectionViewLayout:specialItemsCollectionViewLayout];
     self.specialItemsCollectionView.tag = 0;
     self.specialItemsCollectionView.dataSource = self;
     self.specialItemsCollectionView.delegate = self;
@@ -128,6 +149,12 @@
     [collectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:FEATURED_IDENTIFIER];
     collectionView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:collectionView];
+}
+
+-(void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    NSLog(@"recibí un aviso de memoria");
 }
 
 #pragma mark - Custom Methods
@@ -152,6 +179,77 @@
     }
 }
 
+-(NSString *)getItemDate:(NSDictionary *)item
+{
+    NSString *date = [[NSString alloc] init];
+    
+    //Get the date of the event
+    NSString *eventTime = item[@"event_time"];
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"%@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+    
+    NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+    
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
+    
+    date = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+    
+    return date;
+}
+
+-(NSString *)getItemLocation:(NSDictionary *)item
+{
+    NSString *itemLocation = [[NSString alloc] init];
+    ////////////////////////////////////////////////////////////
+    //obtain the item location to pass it to the next view controller
+    //First check if we are in a list of locations items. if not, search for the
+    //location_id of the item to display it's location in the cell
+    if (![item[@"type"] isEqualToString:@"locaciones"])
+    {
+        //First we see if the item has a location associated.
+        if ([item[@"location_id"] length] > 0)
+        {
+            //Location id exist.
+            NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+            for (int i = 0; i < [locationsArray count]; i++)
+            {
+                if ([item[@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                {
+                    itemLocation = locationsArray[i][@"name"];
+                    break;
+                }
+            }
+        }
+        
+        else
+        {
+            itemLocation = @"No hay locación asignada";
+        }
+    }
+    
+    //if we are in a list of location items, search for the short detail description
+    //of the item to display it in the cell.
+    else
+    {
+        itemLocation = item[@"short_detail"];
+    }
+    
+    return itemLocation;
+    /////////////////////////////////////////////////////////////////////////////////
+}
+
 -(void)goToNextViewControllerFromItemInArray:(NSArray *)array atIndex:(NSInteger)index
 {
     //If the item has an external url, we have to check if the url is going to open inside or
@@ -163,6 +261,10 @@
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = array[index];
+            self.itemLocationName = [self getItemLocation:array[index]];
+            NSString *itemDate = [self getItemDate:array[index]];
+            detailsVC.objectTime = itemDate;
+            detailsVC.objectLocation = self.itemLocationName;
             detailsVC.navigationBarTitle = array[index][@"name"];
             [self.navigationController pushViewController:detailsVC animated:YES];
         }
@@ -196,6 +298,10 @@
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = array[index];
+        self.itemLocationName = [self getItemLocation:array[index]];
+        NSString *itemDate = [self getItemDate:array[index]];
+        detailsVC.objectTime = itemDate;
+        detailsVC.objectLocation = self.itemLocationName;
         detailsVC.navigationBarTitle = array[index][@"name"];
         [self.navigationController pushViewController:detailsVC animated:YES];
     }
@@ -296,10 +402,13 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    //We use this method to determine the curren page of the special items ScrollView.
-    CGFloat pageWidth = self.specialItemsCollectionView.frame.size.width;
-    float fractionalPage = self.specialItemsCollectionView.contentOffset.x / pageWidth;
-    self.currentPage = round(fractionalPage) + 1;
+    if ([scrollView tag] == 0)
+    {
+        //We use this method to determine the curren page of the special items ScrollView.
+        CGFloat pageWidth = self.specialItemsCollectionView.frame.size.width;
+        float fractionalPage = self.specialItemsCollectionView.contentOffset.x / pageWidth;
+        self.currentPage = round(fractionalPage) + 1;
+    }
 }
 
 #pragma mark - FileSaver Stuff

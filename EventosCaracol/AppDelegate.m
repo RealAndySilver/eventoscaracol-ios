@@ -43,7 +43,6 @@
         NSLog(@"cambie el badge");
     }*/
     application.applicationIconBadgeNumber = 0;
-
     
     return YES;
 }

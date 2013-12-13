@@ -24,6 +24,8 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) NSMutableArray *isFavoritedArray;
 @property (nonatomic) NSUInteger favoriteIndex;
+@property (strong, nonatomic) NSString *itemLocationName;
+@property (strong, nonatomic) NSString *finalEventTime;
 @end
 
 #define ROW_HEIGHT 95.0
@@ -38,7 +40,7 @@
     
     //We need to set this properties every time the view appears, because
     //there are more view controllers that change this properties.
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 }
@@ -71,12 +73,24 @@
         [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
     }
     
+    //////////////////////////////////////////////////////////////////////////////////////////////
     //Configure the backBarButtonItem that will be displayed in the Navigation Bar when the user moves to EventDetailsViewController
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Atrás"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
                                                                             action:nil];
-    self.navigationItem.title = self.navigationBarTitle;
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
+                                                                    0.0,
+                                                                    150.0,
+                                                                    44.0)];
+    titleLabel.text = self.navigationBarTitle;
+    titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = titleLabel;
+    //self.navigationItem.title = self.navigationBarTitle;
     
     ///////////////////////////////////////////////////////////////////
     //Create two buttons to filter the events list by date and by location
@@ -279,12 +293,12 @@
     nameLabel.textAlignment = NSTextAlignmentLeft;
     nameLabel.numberOfLines = 2;
     nameLabel.text = self.menuItemsArray[indexPath.row][@"name"];
-    nameLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
+    nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
     [eventCell.contentView addSubview:nameLabel];
     
     ///////////////////////////////////////////////////////////////////////////////
     //Get the item location name
-    NSString *itemLocationName = [[NSString alloc] init];
+    self.itemLocationName = [[NSString alloc] init];
     //First check if we are in a list of locations items. if not, search for the
     //location_id of the item to display it's location in the cell
     if (!self.locationList)
@@ -298,7 +312,7 @@
             {
                 if ([self.menuItemsArray[indexPath.row][@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
                 {
-                    itemLocationName = locationsArray[i][@"name"];
+                    self.itemLocationName = locationsArray[i][@"name"];
                     break;
                 }
             }
@@ -306,7 +320,7 @@
         
         else
         {
-            itemLocationName = @"";
+            self.itemLocationName = @"No hay locación asignada";
         }
     }
     
@@ -314,7 +328,7 @@
     //of the item to display it in the cell.
     else
     {
-        itemLocationName = self.menuItemsArray[indexPath.row][@"short_detail"];
+        self.itemLocationName = self.menuItemsArray[indexPath.row][@"short_detail"];
     }
     
     
@@ -323,8 +337,8 @@
                                                                           self.view.frame.size.width - nameLabel.frame.origin.x,
                                                                           20.0)];
     
-    descriptionLabel.text = [NSString stringWithFormat:@"📍%@", itemLocationName];
-    descriptionLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+    descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocationName];
+    descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     descriptionLabel.textColor = [UIColor lightGrayColor];
     [eventCell.contentView addSubview:descriptionLabel];
     
@@ -358,9 +372,9 @@
         UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
                                                                             descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height, self.view.frame.size.width - descriptionLabel.frame.origin.x,
                                                                             20.0)];
-        NSString *finalEventTime = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
-        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", finalEventTime];
-        eventTimeLabel.font = [UIFont fontWithName:@"Helvetica" size:12.0];
+        self.finalEventTime = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.finalEventTime];
+        eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
         eventTimeLabel.textColor = [UIColor lightGrayColor];
         [eventCell.contentView addSubview:eventTimeLabel];
    
@@ -380,7 +394,8 @@
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
-            
+            detailsVC.objectLocation = self.itemLocationName;
+            detailsVC.objectTime = self.finalEventTime;
             //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
             //will display a map on screen.
             if (self.locationList)
@@ -415,6 +430,8 @@
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
+        detailsVC.objectLocation = self.itemLocationName;
+        detailsVC.objectTime = self.finalEventTime;
         //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
         //will display a map on screen.
         if (self.locationList)
