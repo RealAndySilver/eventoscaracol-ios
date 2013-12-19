@@ -57,7 +57,7 @@
     self.loadingLabel.textAlignment = NSTextAlignmentCenter;
     self.loadingLabel.textColor = [UIColor whiteColor];
     self.loadingLabel.adjustsFontSizeToFitWidth = YES;
-    self.loadingLabel.font = [UIFont fontWithName:@"Helvetica" size:30.0];
+    self.loadingLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
     [self.view addSubview:self.loadingLabel];
     
     ///////////////////////////////////////////////////////////////////////

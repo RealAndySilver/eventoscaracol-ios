@@ -174,7 +174,7 @@
         else
         {
             cell.menuItemLabel.text = self.aditionalMenuItemsArray[indexPath.row-[self.menuArray count]];
-            cell.menuItemImageView.image = nil;
+            cell.menuItemImageView.image = [UIImage imageNamed:@"Facebook.png"];
         }
     }
     return cell;
@@ -192,9 +192,11 @@
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.navigationBarTitle = self.searchResults[indexPath.row][@"name"];
             detailsVC.objectInfo = self.searchResults[indexPath.row];
+            detailsVC.objectLocation = [self getItemLocation:self.searchResults[indexPath.row]];
+            detailsVC.objectTime = [self getFormattedItemDate:self.searchResults[indexPath.row]];
             detailsVC.presentViewControllerFromSearchBar = YES;
             detailsVC.presentLocationObject = YES;
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
+            UINavigationController                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
             navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             [self presentViewController:navigationController animated:YES completion:nil];
         }
@@ -203,6 +205,8 @@
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.navigationBarTitle = self.searchResults[indexPath.row][@"name"];
+            detailsVC.objectTime = [self getFormattedItemDate:self.searchResults[indexPath.row]];
+            detailsVC.objectLocation = [self getItemLocation:self.searchResults[indexPath.row]];
             detailsVC.objectInfo = self.searchResults[indexPath.row];
             detailsVC.presentViewControllerFromSearchBar = YES;
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsVC];
@@ -337,9 +341,95 @@
             }
         }
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Custom Methods
+
+-(NSString *)getFormattedItemDate:(NSDictionary *)item
+{
+    NSString *eventTime = item[@"event_time"];
+    NSLog(@"Fecha del server: %@", eventTime);
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"Formatted string: %@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    //[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    NSLog(@"Locale: %@", [[NSLocale currentLocale] localeIdentifier]);
+    //[NSTimeZone resetSystemTimeZone];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    NSLog(@"TImeZone: %@", [[NSTimeZone timeZoneWithAbbreviation:@"GMT"] description]);
+    NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+    NSLog(@"SourceDate: %@", sourceDate);
+    
+    [dateFormatter setDateFormat:nil];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    NSTimeInterval timeInterval = [sourceDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceReferenceDate:0.0]];
+    NSDate *SourceDateFormatted = [NSDate dateWithTimeIntervalSinceReferenceDate:timeInterval];
+    NSLog(@"SourceDate Formatted: %@", [dateFormatter stringFromDate:SourceDateFormatted]);
+    
+    NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone localTimeZone];
+    
+    ///!!!!!!!!! cambiar sourcedate por sourcedateformatted
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:SourceDateFormatted];
+    NSLog(@"Destination Date Formatted: %@", [dateFormatter stringFromDate:destinationDate]);
+    NSString *date = [dateFormatter stringFromDate:destinationDate];
+    return date;
+}
+
+-(NSString *)getItemLocation:(NSDictionary *)item
+{
+    NSString *itemLocation = [[NSString alloc] init];
+    ////////////////////////////////////////////////////////////
+    //obtain the item location to pass it to the next view controller
+    //First check if we are in a list of locations items. if not, search for the
+    //location_id of the item to display it's location in the cell
+    if (![item[@"type"] isEqualToString:@"locaciones"])
+    {
+        //First we see if the item has a location associated.
+        if ([item[@"location_id"] length] > 0)
+        {
+            //Location id exist.
+            NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+            for (int i = 0; i < [locationsArray count]; i++)
+            {
+                if ([item[@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                {
+                    itemLocation = locationsArray[i][@"name"];
+                    break;
+                }
+            }
+        }
+        
+        else
+        {
+            itemLocation = @"No hay locación asignada";
+        }
+    }
+    
+    //if we are in a list of location items, search for the short detail description
+    //of the item to display it in the cell.
+    else
+    {
+        itemLocation = item[@"short_detail"];
+    }
+    
+    return itemLocation;
+    /////////////////////////////////////////////////////////////////////////////////
+}
 
 -(void)facebookLogout
 {

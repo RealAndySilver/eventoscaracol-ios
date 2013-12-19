@@ -160,7 +160,11 @@
     [self.favoriteButton addTarget:self action:@selector(makeFavorite) forControlEvents:UIControlEventTouchUpInside];
     
     //Store the favorited atoms of the user (array of NSString)
-    NSArray *favoritedObjectsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
+    NSArray *favoritedObjectsArray;
+    if (self.presentLocationObject)
+        favoritedObjectsArray = [self getDictionaryWithName:@"user"][@"favorited_locations"];
+    else
+        favoritedObjectsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
     
     //If the current object is favorite, show the favorite button with purple color.
     if ([favoritedObjectsArray containsObject:self.objectInfo[@"_id"]])
@@ -221,7 +225,11 @@
                                                                         self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                         self.view.frame.size.height/28.4)];
     //eventTimeLabel.text = @"11:30AM";
-    eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.objectTime];
+    if (!self.presentLocationObject)
+        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.objectTime];
+    else
+        eventTimeLabel.text = @"";
+    
     eventTimeLabel.textColor = [UIColor lightGrayColor];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
@@ -422,6 +430,8 @@
 
 -(void)serverError:(NSError *)error
 {
+    [MBHUDView dismissCurrentHUD];
+    
     NSLog(@"error con el servidor");
     [[[UIAlertView alloc] initWithTitle:nil
                                message:@"No hay conexión."

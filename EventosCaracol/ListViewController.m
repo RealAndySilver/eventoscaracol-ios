@@ -26,6 +26,12 @@
 @property (nonatomic) NSUInteger favoriteIndex;
 @property (strong, nonatomic) NSString *itemLocationName;
 @property (strong, nonatomic) NSString *finalEventTime;
+@property (strong, nonatomic) NSMutableArray *tempMenuArray;
+
+/*------Filter Buttons-----------*/
+@property (strong, nonatomic) UIButton *filterByDayButton;
+@property (strong, nonatomic) UIButton *filterByLocationButton;
+
 @end
 
 #define ROW_HEIGHT 95.0
@@ -48,8 +54,8 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    SWRevealViewController *revealViewController = [self revealViewController];
-
+    self.tempMenuArray = [NSMutableArray arrayWithArray:self.menuItemsArray];
+    
     //Add this view controller as an observer of the notification center. it will
     //observe for a notification that is post when the user favorites an item in
     //the item detail view.
@@ -61,16 +67,16 @@
     //Set an array for storing the favorite state of the items. if an item is not
     //favorite, it will store 0, otherwise it will store 1. We need to know this
     //state for displaying the correct heart image when the user swipes left in a cell.
-    self.isFavoritedArray = [[NSMutableArray alloc] initWithCapacity:[self.menuItemsArray count]];
+    self.isFavoritedArray = [[NSMutableArray alloc] initWithCapacity:[self.tempMenuArray count]];
     
     if (!self.locationList)
     {
         UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                                    style:UIBarButtonItemStylePlain
-                                                                                  target:revealViewController
+                                                                                  target:self.revealViewController
                                                                                   action:@selector(revealToggle:)];
         self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
-        [self.view addGestureRecognizer:revealViewController.panGestureRecognizer];
+        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     }
     
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,7 +103,7 @@
     //this buttons will not be displayed when the user is on the locations list.
     if (!self.locationList)
     {
-        UIButton *filterByDayButton = [[UIButton alloc]
+        self.filterByDayButton = [[UIButton alloc]
                                        initWithFrame:CGRectMake(0,
                                                                 self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
                                                                 self.view.frame.size.width/2,
@@ -105,31 +111,31 @@
         
         //We need to set the button tag of filterByDayButton and filterByLocationButton to show the correct picker
         //when the user touches one of these buttons.
-        filterByDayButton.tag = 1;
+        self.filterByDayButton.tag = 1;
         
-        [filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
-        [filterByDayButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
-        [filterByDayButton setTitle:@"Todos los dias" forState:UIControlStateNormal];
-        filterByDayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-        [filterByDayButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self.view addSubview:filterByDayButton];
+        [self.filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+        [self.filterByDayButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
+        [self.filterByDayButton setTitle:@"Todos los Paises" forState:UIControlStateNormal];
+        self.filterByDayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+        [self.filterByDayButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.view addSubview:self.filterByDayButton];
         
         //Filter by location button
-        UIButton *filterByLocationButton = [[UIButton alloc]
+        self.filterByLocationButton = [[UIButton alloc]
                                             initWithFrame:CGRectMake(self.view.frame.size.width/2,
                                                                      self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
                                                                      self.view.frame.size.width/2,
                                                                      44.0)];
-        filterByLocationButton.tag = 2;
+        self.filterByLocationButton.tag = 2;
         
-        [filterByLocationButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
-        [filterByLocationButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
-        filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-        [filterByLocationButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [filterByLocationButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
-        [self.view addSubview:filterByLocationButton];
+        [self.filterByLocationButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+        [self.filterByLocationButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
+        self.filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+        [self.filterByLocationButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        [self.filterByLocationButton setTitle:@"Todas las locaciones" forState:UIControlStateNormal];
+        [self.view addSubview:self.filterByLocationButton];
         
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, filterByLocationButton.frame.origin.y + filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (filterByLocationButton.frame.origin.y + filterByLocationButton.frame.size.height)) style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.filterByLocationButton.frame.origin.y + self.filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (self.filterByLocationButton.frame.origin.y + self.filterByLocationButton.frame.size.height)) style:UITableViewStylePlain];
         [self.view addSubview:self.tableView];
     }
     
@@ -160,7 +166,7 @@
                                                                              self.containerLocationPickerView.frame.size.width,
                                                                              self.containerLocationPickerView.frame.size.height)];
     self.locationPickerView.tag = 2;
-    self.locationPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:1.0];
+    self.locationPickerView.backgroundColor = [UIColor clearColor];
     self.locationPickerView.delegate = self;
     self.locationPickerView.dataSource = self;
     
@@ -177,13 +183,13 @@
     ////////////////////////////////////////////////////////////////////
     //Configure container view for the Location Picker
     self.containerLocationPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/2.5)];
-    self.containerLocationPickerView.backgroundColor = [UIColor whiteColor];
+    self.containerLocationPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
     [self.containerLocationPickerView addSubview:self.locationPickerView];
     
     //////////////////////////////////////////////////////////////////
     //Configure container view for the Dates picker.
     self.containerDatesPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/2.5)];
-    self.containerDatesPickerView.backgroundColor = [UIColor whiteColor];
+    self.containerDatesPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
     [self.containerDatesPickerView addSubview:self.datePickerView];
 
     
@@ -191,14 +197,16 @@
     //Create a button to dismiss the location picker view.
     UIButton *dismissLocationPickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerLocationPickerView.frame.size.width - 40.0, self.containerLocationPickerView.frame.size.height - 40.0, 40.0, 40.0)];
     dismissLocationPickerButton.tag = 2;
-    dismissLocationPickerButton.backgroundColor = [UIColor purpleColor];
+    dismissLocationPickerButton.backgroundColor = [UIColor clearColor];
+    [dismissLocationPickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
     [dismissLocationPickerButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.containerLocationPickerView addSubview:dismissLocationPickerButton];
     
     /////////////////////////////////////////////////////////////////
     UIButton *dismissDatePickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerDatesPickerView.frame.size.width - 40.0,self.containerDatesPickerView.frame.size.height - 40.0, 40.0, 40.0)];
     dismissDatePickerButton.tag = 1;
-    dismissDatePickerButton.backgroundColor = [UIColor purpleColor];
+    [dismissDatePickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
+    dismissDatePickerButton.backgroundColor = [UIColor clearColor];
     [dismissDatePickerButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.containerDatesPickerView addSubview:dismissDatePickerButton];
 }
@@ -232,7 +240,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.menuItemsArray count];
+    return [self.tempMenuArray count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -247,9 +255,14 @@
     
     //////////////////////////////////////////////////////////////////////////
     //Check if the cell's item is favorite or not.
-    NSArray *favoriteItemsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
+    NSArray *favoriteItemsArray;
+    if (self.locationList)
+        favoriteItemsArray = [self getDictionaryWithName:@"user"][@"favorited_locations"];
+    else
+        favoriteItemsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
+    
     UIImage *favoritedImage;
-    if ([favoriteItemsArray containsObject:self.menuItemsArray[indexPath.row][@"_id"]])
+    if ([favoriteItemsArray containsObject:self.tempMenuArray[indexPath.row][@"_id"]])
     {
         [self.isFavoritedArray addObject:@1];
         favoritedImage = [UIImage imageNamed:@"SwipCellFavoriteActive.png"];
@@ -282,7 +295,7 @@
     imageView.backgroundColor = [UIColor clearColor];
     
   
-    [imageView setImageWithURL:self.menuItemsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    [imageView setImageWithURL:self.tempMenuArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
     
     [eventCell.contentView addSubview:imageView];
     
@@ -292,7 +305,7 @@
                                                                    40.0)];
     nameLabel.textAlignment = NSTextAlignmentLeft;
     nameLabel.numberOfLines = 2;
-    nameLabel.text = self.menuItemsArray[indexPath.row][@"name"];
+    nameLabel.text = self.tempMenuArray[indexPath.row][@"name"];
     nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
     [eventCell.contentView addSubview:nameLabel];
     
@@ -304,13 +317,13 @@
     if (!self.locationList)
     {
         //First we see if the item has a location associated.
-        if ([self.menuItemsArray[indexPath.row][@"location_id"] length] > 0)
+        if ([self.tempMenuArray[indexPath.row][@"location_id"] length] > 0)
         {
             //Location id exist.
             NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
             for (int i = 0; i < [locationsArray count]; i++)
             {
-                if ([self.menuItemsArray[indexPath.row][@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                if ([self.tempMenuArray[indexPath.row][@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
                 {
                     self.itemLocationName = locationsArray[i][@"name"];
                     break;
@@ -328,7 +341,7 @@
     //of the item to display it in the cell.
     else
     {
-        self.itemLocationName = self.menuItemsArray[indexPath.row][@"short_detail"];
+        self.itemLocationName = self.tempMenuArray[indexPath.row][@"short_detail"];
     }
     
     
@@ -342,28 +355,6 @@
     descriptionLabel.textColor = [UIColor lightGrayColor];
     [eventCell.contentView addSubview:descriptionLabel];
     
-    /////////////////////////////////////////////////////////////////////////////
-    //Get the date of the event
-    NSString *eventTime = self.menuItemsArray[indexPath.row][@"event_time"];
-    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
-    NSLog(@"%@", formattedEventTimeString);
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
-    NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
-
-    NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-    NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
-    
-    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
-    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
-    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
-    
-    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
-    
     /////////////////////////////////////////////////////////////////////////////////////
     //If we are not in the localist list view, display a label with the time of the event.
     //the location list view don't contain a label for this.
@@ -372,7 +363,8 @@
         UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
                                                                             descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height, self.view.frame.size.width - descriptionLabel.frame.origin.x,
                                                                             20.0)];
-        self.finalEventTime = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
+        //self.finalEventTime = [dateFormatter stringFromDate:destinationDate];
+        self.finalEventTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
         eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.finalEventTime];
         eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
         eventTimeLabel.textColor = [UIColor lightGrayColor];
@@ -388,12 +380,12 @@
     
     //If the item has an external url, we have to check if the url is going to open inside or
     //outside the application.
-    if (self.menuItemsArray[indexPath.row][@"external_url"])
+    if (self.tempMenuArray[indexPath.row][@"external_url"])
     {
-        if ([self.menuItemsArray[indexPath.row][@"open_inside"] isEqualToString:@"no"])
+        if ([self.tempMenuArray[indexPath.row][@"open_inside"] isEqualToString:@"no"])
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
-            detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
+            detailsVC.objectInfo = self.tempMenuArray[indexPath.row];
             detailsVC.objectLocation = self.itemLocationName;
             detailsVC.objectTime = self.finalEventTime;
             //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
@@ -401,13 +393,13 @@
             if (self.locationList)
                 detailsVC.presentLocationObject = YES;
             
-            detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
+            detailsVC.navigationBarTitle = self.tempMenuArray[indexPath.row][@"name"];
             [self.navigationController pushViewController:detailsVC animated:YES];
         }
         
-        else if ([self.menuItemsArray[indexPath.row][@"open_inside"] isEqualToString:@"outside"])
+        else if ([self.tempMenuArray[indexPath.row][@"open_inside"] isEqualToString:@"outside"])
         {
-            NSURL *url = [NSURL URLWithString:self.menuItemsArray[indexPath.row][@"external_url"]];
+            NSURL *url = [NSURL URLWithString:self.tempMenuArray[indexPath.row][@"external_url"]];
             if (![[UIApplication sharedApplication] openURL:url])
             {
                 [[[UIAlertView alloc] initWithTitle:nil
@@ -420,7 +412,7 @@
         else //Else if open_inside = inside
         {
             WebViewController *webViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"Web"];
-            webViewController.urlString = self.menuItemsArray[indexPath.row][@"external_url"];
+            webViewController.urlString = self.tempMenuArray[indexPath.row][@"external_url"];
             [self.navigationController pushViewController:webViewController animated:YES];
         }
     }
@@ -429,7 +421,7 @@
     else
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
-        detailsVC.objectInfo = self.menuItemsArray[indexPath.row];
+        detailsVC.objectInfo = self.tempMenuArray[indexPath.row];
         detailsVC.objectLocation = self.itemLocationName;
         detailsVC.objectTime = self.finalEventTime;
         //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
@@ -437,12 +429,55 @@
         if (self.locationList)
             detailsVC.presentLocationObject = YES;
         
-        detailsVC.navigationBarTitle = self.menuItemsArray[indexPath.row][@"name"];
+        detailsVC.navigationBarTitle = self.tempMenuArray[indexPath.row][@"name"];
         [self.navigationController pushViewController:detailsVC animated:YES];
     }
 }
 
 #pragma mark - Custom methods
+
+-(NSString *)getFormattedItemDate:(NSDictionary *)item
+{
+    NSString *eventTime = item[@"event_time"];
+    NSLog(@"Fecha del server: %@", eventTime);
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"Formatted string: %@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    //[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    NSLog(@"Locale: %@", [[NSLocale currentLocale] localeIdentifier]);
+    //[NSTimeZone resetSystemTimeZone];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    NSLog(@"TImeZone: %@", [[NSTimeZone timeZoneWithAbbreviation:@"GMT"] description]);
+    NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+    NSLog(@"SourceDate: %@", sourceDate);
+    
+    [dateFormatter setDateFormat:nil];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    NSTimeInterval timeInterval = [sourceDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceReferenceDate:0.0]];
+    NSDate *SourceDateFormatted = [NSDate dateWithTimeIntervalSinceReferenceDate:timeInterval];
+    NSLog(@"SourceDate Formatted: %@", [dateFormatter stringFromDate:SourceDateFormatted]);
+    
+    NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone localTimeZone];
+    
+    ///!!!!!!!!! cambiar sourcedate por sourcedateformatted
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:SourceDateFormatted];
+    NSLog(@"Destination Date Formatted: %@", [dateFormatter stringFromDate:destinationDate]);
+    NSString *date = [dateFormatter stringFromDate:destinationDate];
+    return date;
+}
 
 -(void)setupPullDownToRefreshView
 {
@@ -453,14 +488,14 @@
 
 -(void)postLocalNotificationForItemAtIndex:(NSUInteger)index
 {
-    NSString *eventTime = self.menuItemsArray[index][@"event_time"];
+    NSString *eventTime = self.tempMenuArray[index][@"event_time"];
     NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
     NSLog(@"%@", formattedEventTimeString);
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
     
     if (![dateFormatter dateFromString:formattedEventTimeString])
@@ -490,8 +525,8 @@
             
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
             localNotification.soundName = UILocalNotificationDefaultSoundName;
-            localNotification.userInfo = @{@"name": self.menuItemsArray[index][@"_id"]};
-            localNotification.alertBody = [NSString stringWithFormat:@"El evento '%@' es dentro de una hora, no te lo pierdas!", self.menuItemsArray[index][@"name"]];
+            localNotification.userInfo = @{@"name": self.tempMenuArray[index][@"_id"]};
+            localNotification.alertBody = [NSString stringWithFormat:@"El evento '%@' es dentro de una hora, no te lo pierdas!", self.tempMenuArray[index][@"name"]];
             localNotification.fireDate = oneHourEarlierDate;
             NSLog(@"Fire Date: %@", [localNotification.fireDate descriptionWithLocale:[NSLocale currentLocale]]);
             localNotification.alertAction = @"Ver el evento";
@@ -531,7 +566,7 @@
     self.rowIndex = index;
     
     //Create a string that contains the parameters to send to the server.
-    NSString *params = [NSString stringWithFormat:@"item_id=%@&user_id=%@&type=%@&app_id=%@", self.menuItemsArray[index][@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.menuItemsArray[index][@"type"], [self getDictionaryWithName:@"master"][@"app"][@"_id"]];
+    NSString *params = [NSString stringWithFormat:@"item_id=%@&user_id=%@&type=%@&app_id=%@", self.tempMenuArray[index][@"_id"], [self getDictionaryWithName:@"user"][@"_id"], self.tempMenuArray[index][@"type"], [self getDictionaryWithName:@"master"][@"app"][@"_id"]];
     ServerCommunicator *serverCommunicator = [[ServerCommunicator alloc] init];
     serverCommunicator.delegate = self;
     
@@ -690,7 +725,64 @@
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    if (pickerView.tag == 1)
+    {
+        if (row == 0)
+        {
+            self.tempMenuArray = self.menuItemsArray;
+            [self.filterByDayButton setTitle:@"Todos los paises" forState:UIControlStateNormal];
+            [self.tableView reloadData];
+        }
+        
+        else
+        {
+            NSDictionary *selectedCategory = [self getDictionaryWithName:@"master"][@"categorias"][row - 1];
+            NSString *categoryID = selectedCategory[@"_id"];
+            [self.filterByDayButton setTitle:selectedCategory[@"name"] forState:UIControlStateNormal];
+            NSLog(@"Category id: %@", categoryID);
+            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [self.menuItemsArray count]; i++)
+            {
+                if ([self.menuItemsArray[i][@"category_id"] isEqualToString:categoryID])
+                    [tempArray addObject:self.menuItemsArray[i]];
+            }
+            //[self.menuItemsArray removeAllObjects];
+            self.tempMenuArray = tempArray;
+            NSLog(@"number of items: %d", [self.tempMenuArray count]);
+            
+            [self.tableView reloadData];
+
+        }
+    }
     
+    if (pickerView.tag == 2)
+    {
+        if (row == 0)
+        {
+            self.tempMenuArray = self.menuItemsArray;
+            [self.filterByLocationButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
+            [self.tableView reloadData];
+        }
+        
+        else
+        {
+            NSDictionary *selectedLocation = [self getDictionaryWithName:@"master"][@"locaciones"][row - 1];
+            NSString *locationID = selectedLocation[@"_id"];
+            [self.filterByLocationButton setTitle:selectedLocation[@"name"] forState:UIControlStateNormal];
+            NSLog(@"location id: %@", locationID);
+            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [self.menuItemsArray count]; i++)
+            {
+                if ([self.menuItemsArray[i][@"location_id"] isEqualToString:locationID])
+                    [tempArray addObject:self.menuItemsArray[i]];
+            }
+            //[self.menuItemsArray removeAllObjects];
+            self.tempMenuArray = tempArray;
+            NSLog(@"number of items: %d", [self.tempMenuArray count]);
+            
+            [self.tableView reloadData];
+        }
+    }
 }
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -700,23 +792,50 @@
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return 1;
+    if (pickerView.tag == 1)
+    {
+        return [[self getDictionaryWithName:@"master"][@"categorias"] count] + 1;
+    }
+    
+    else if (pickerView.tag == 2)
+    {
+        return ([[self getDictionaryWithName:@"master"][@"locaciones"] count] + 1);
+    }
+    
+    else return 0;
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return @"hola";
+    if (pickerView.tag == 1)
+    {
+        if (row == 0)
+            return @"Todos los paises";
+        else
+            return [self getDictionaryWithName:@"master"][@"categorias"][row - 1][@"name"];
+    }
+    
+    else if (pickerView.tag == 2)
+    {
+        if (row == 0)
+            return @"Todos los lugares";
+        else
+            return [self getDictionaryWithName:@"master"][@"locaciones"][row - 1][@"name"];
+    }
+    
+    else
+        return @"";
 }
 
 #pragma mark - Actions
 
--(void)showPickerView:(id)sender
+-(void)showPickerView:(UIPickerView*)sender
 {
     UIView *containerView = nil;
-    if ([sender tag] == 1)
+    if (sender.tag == 1)
         containerView = self.containerDatesPickerView;
     
-    else if ([sender tag] == 2)
+    else if (sender.tag == 2)
         containerView = self.containerLocationPickerView;
         
     //If pickerIsActivated = NO, create and animation to show the picker on screen.
@@ -872,7 +991,7 @@
             [tempMutableArray addObject:tempArray[i]];
     }
     
-    self.menuItemsArray = tempMutableArray;
+    self.tempMenuArray = tempMutableArray;
 }
 
 #pragma mark - Server
@@ -936,9 +1055,10 @@
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     [self stopSpinner];
+    [MBHUDView dismissCurrentHUD];
     
     [[[UIAlertView alloc] initWithTitle:nil
-                               message:@"No hay conexión a internet"
+                               message:@"En este momento no hay conexión a internet. Para asiganr favoritos debes tener conexion a internet"
                               delegate:self
                      cancelButtonTitle:@"Ok"
                      otherButtonTitles:nil] show];

@@ -13,7 +13,7 @@
 
 @interface MapViewController ()
 @property (strong, nonatomic) GMSMapView *mapView;
-//@property (strong, nonatomic) NSMutableArray *correctLocationsArray;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
 @implementation MapViewController
@@ -26,6 +26,73 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
+    [self createMap];
+    [self createFilterButtons];
+    
+    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
+                                                                               style:UIBarButtonItemStylePlain
+                                                                              target:self.revealViewController
+                                                                              action:@selector(revealToggle:)];
+    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
+    self.navigationItem.title = self.navigationBarTitle;
+    
+}
+
+-(void)createMap
+{
+    /////////////////////////////////////////////////////////////////////////
+    //Google Maps configuration
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+    [self.locationManager startUpdatingLocation];
+    
+    int nearestLocationFromUserIndex = 0;
+    for (int i = 0; i < [self.locationsArray count]; i++)
+    {
+        static double lessDistance = 1000000;
+        CLLocationDegrees latitudeDegrees = [self.locationsArray[i][@"lat"] doubleValue];
+        CLLocationDegrees longitudeDegrees = [self.locationsArray[i][@"lon"] doubleValue];
+        CLLocation *location = [[CLLocation alloc] initWithLatitude:latitudeDegrees longitude:longitudeDegrees];
+        CLLocationDistance distance = [self.locationManager.location distanceFromLocation:location]/1000;
+        
+        if (distance < lessDistance)
+        {
+            lessDistance = distance;
+            nearestLocationFromUserIndex = i;
+        }
+        NSLog(@"Distance: %f", distance);
+    }
+    
+    NSLog(@"El lugar mas cercano está en la posicion %d", nearestLocationFromUserIndex);
+    
+    [self.locationManager stopUpdatingLocation];
+    self.locationManager = nil;
+    
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.locationsArray[nearestLocationFromUserIndex][@"lat"] doubleValue]
+                                                            longitude:[self.locationsArray[nearestLocationFromUserIndex][@"lon"] doubleValue]
+                                                                 zoom:12.0];
+    
+    self.mapView = [GMSMapView mapWithFrame:CGRectMake(0.0,
+                                                       0.0,
+                                                       self.view.frame.size.width,
+                                                       self.view.frame.size.height)
+                                     camera:camera];
+    //self.mapView.myLocationEnabled = YES;
+    [self.view addSubview:self.mapView];
+    for (int i = 0; i < [self.locationsArray count]; i++)
+    {
+        double markerLatitute = [self.locationsArray[i][@"lat"] doubleValue];
+        double markerLongitude = [self.locationsArray[i][@"lon"] doubleValue];
+        GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(markerLatitute, markerLongitude)];
+        marker.title = self.locationsArray[i][@"name"];
+        //marker.snippet = @"Australia";
+        marker.map = self.mapView;
+    }
+}
+
+-(void)createFilterButtons
+{
     /////////////////////////////////////////////////////////////////////////
     //Create two buttons, one for sorting the places, and other to see the places in a list.
     UIButton *sortPlacesButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0,
@@ -50,52 +117,15 @@
     [viewPlacesInListButton addTarget:self action:@selector(goToListViewController) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:viewPlacesInListButton];
 
-        
-    /////////////////////////////////////////////////////////////////////////
-    //Slide Menu configuration
-    SWRevealViewController *revealViewController = [self revealViewController];
-    
-    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
-                                                                               style:UIBarButtonItemStylePlain
-                                                                              target:revealViewController
-                                                                              action:@selector(revealToggle:)];
-    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
-    self.navigationItem.title = self.navigationBarTitle;
-    
-    
-    /////////////////////////////////////////////////////////////////////////
-    //Google Maps configuration
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.locationsArray[0][@"lat"] doubleValue]
-                                                            longitude:[self.locationsArray[0][@"lon"] doubleValue]
-                                                                 zoom:12.0];
-    
-    self.mapView = [GMSMapView mapWithFrame:CGRectMake(0.0,
-                                                       sortPlacesButton.frame.origin.y + sortPlacesButton.frame.size.height,
-                                                       self.view.frame.size.width,
-                                                       self.view.frame.size.height - (sortPlacesButton.frame.origin.y + sortPlacesButton.frame.size.height))
-                                     camera:camera];
-    
-    self.mapView.myLocationEnabled = YES;
-    //self.view = self.mapView;
-    [self.view addSubview:self.mapView];
-    for (int i = 0; i < [self.locationsArray count]; i++)
-    {
-        double markerLatitute = [self.locationsArray[i][@"lat"] doubleValue];
-        double markerLongitude = [self.locationsArray[i][@"lon"] doubleValue];
-        GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(markerLatitute, markerLongitude)];
-        marker.title = self.locationsArray[i][@"name"];
-        //marker.snippet = @"Australia";
-        marker.map = self.mapView;
-    }
 }
 
 -(void)goToListViewController
 {
     ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
-    listVC.menuItemsArray = self.locationsArray;
+    listVC.menuItemsArray = [self.locationsArray copy];
     listVC.menuID = self.menuID;
     listVC.objectType = self.objectType;
-    listVC.navigationBarTitle = self.navigationBarTitle;
+    listVC.navigationBarTitle = @"Listado Locaciones";
     listVC.locationList = YES;
     [self.navigationController pushViewController:listVC animated:YES];
 }

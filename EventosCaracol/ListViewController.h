@@ -25,7 +25,7 @@
 @interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) NSString *navigationBarTitle;
-@property (strong, nonatomic) NSArray *menuItemsArray; //Of NSDictionary
+@property (strong, nonatomic) NSMutableArray *menuItemsArray; //Of NSDictionary
 @property (nonatomic) BOOL locationList;
 @property (strong, nonatomic) NSString *menuID;
 @property (strong, nonatomic) NSString *objectType;

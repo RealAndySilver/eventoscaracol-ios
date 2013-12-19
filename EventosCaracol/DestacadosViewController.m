@@ -56,19 +56,15 @@
     self.timer = nil;
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
+}
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    /*for (NSString* family in [UIFont familyNames])
-    {
-        NSLog(@"%@", family);
-        
-        for (NSString* name in [UIFont fontNamesForFamilyName: family])
-        {
-            NSLog(@"  %@", name);
-        }
-    }*/
     
     //Create the back button that will be displayed in the next view controller
     //that is push by this view controller.
@@ -113,7 +109,6 @@
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
-    //self.navigationItem.title = [myDictionary objectForKey:@"name"];
     
     //define an array with only the featured events information
     self.featuredEventsArray = [self getDictionaryWithName:@"master"][@"destacados"];
@@ -129,6 +124,7 @@
     specialItemsCollectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/4.3) collectionViewLayout:specialItemsCollectionViewLayout];
     self.specialItemsCollectionView.tag = 0;
+    self.specialItemsCollectionView.showsHorizontalScrollIndicator = NO;
     self.specialItemsCollectionView.dataSource = self;
     self.specialItemsCollectionView.delegate = self;
     self.specialItemsCollectionView.alwaysBounceHorizontal = YES;
@@ -142,6 +138,7 @@
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
     UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 10.0, self.view.frame.size.width, self.view.frame.size.height - (self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 20.0)) collectionViewLayout:collectionViewLayout];
     collectionView.tag = 1;
+    collectionView.showsVerticalScrollIndicator = NO;
     collectionView.dataSource = self;
     [collectionView setAlwaysBounceVertical:YES];
     collectionView.contentInset = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0);
@@ -179,33 +176,54 @@
     }
 }
 
--(NSString *)getItemDate:(NSDictionary *)item
+-(NSString *)getFormattedItemDate:(NSDictionary *)item
 {
-    NSString *date = [[NSString alloc] init];
+    /////////////////////////////////////////////////////////
+    //This method returns a NSString object that contains the
+    //the date of the item formatted to the locale of the user
     
-    //Get the date of the event
+    //Obtains the date string from the server and delete the
+    //unnecesary characters
     NSString *eventTime = item[@"event_time"];
+    NSLog(@"Fecha del server: %@", eventTime);
     NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
-    NSLog(@"%@", formattedEventTimeString);
+    NSLog(@"Formatted string: %@", formattedEventTimeString);
     
+    //Create a NSDateFormatter to get a NSDate object from the
+    //date string obtained from the server
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    NSLog(@"Locale: %@", [[NSLocale currentLocale] localeIdentifier]);
+    //[NSTimeZone resetSystemTimeZone];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    NSLog(@"TImeZone: %@", [[NSTimeZone timeZoneWithAbbreviation:@"GMT"] description]);
     NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+    NSLog(@"SourceDate: %@", sourceDate);
+    
+    [dateFormatter setDateFormat:nil];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    //We have to convert the NSDate object, which is on GMT Time to
+    //our locale time.
+    NSTimeInterval timeInterval = [sourceDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceReferenceDate:0.0]];
+    NSDate *SourceDateFormatted = [NSDate dateWithTimeIntervalSinceReferenceDate:timeInterval];
+    NSLog(@"SourceDate Formatted: %@", [dateFormatter stringFromDate:SourceDateFormatted]);
     
     NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-    NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone localTimeZone];
     
-    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
-    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:SourceDateFormatted];
     NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
     
-    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
-    
-    date = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
-    
+    //Create the NSDate object with the locale date & time.
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:SourceDateFormatted];
+    NSLog(@"Destination Date Formatted: %@", [dateFormatter stringFromDate:destinationDate]);
+    NSString *date = [dateFormatter stringFromDate:destinationDate];
     return date;
 }
 
@@ -262,7 +280,7 @@
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = array[index];
             self.itemLocationName = [self getItemLocation:array[index]];
-            NSString *itemDate = [self getItemDate:array[index]];
+            NSString *itemDate = [self getFormattedItemDate:array[index]];
             detailsVC.objectTime = itemDate;
             detailsVC.objectLocation = self.itemLocationName;
             detailsVC.navigationBarTitle = array[index][@"name"];
@@ -299,7 +317,7 @@
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = array[index];
         self.itemLocationName = [self getItemLocation:array[index]];
-        NSString *itemDate = [self getItemDate:array[index]];
+        NSString *itemDate = [self getFormattedItemDate:array[index]];
         detailsVC.objectTime = itemDate;
         detailsVC.objectLocation = self.itemLocationName;
         detailsVC.navigationBarTitle = array[index][@"name"];
@@ -399,6 +417,20 @@
 }
 
 #pragma mark - UIScrollViewDelegate
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollView.tag == 0)
+    {
+        NSLog(@"terminé de dragearme");
+        [self.timer invalidate];
+        self.timer = nil;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                      target:self
+                                                    selector:@selector(slideShowSpecialItems)
+                                                    userInfo:nil
+                                                     repeats:YES];
+    }
+}
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {

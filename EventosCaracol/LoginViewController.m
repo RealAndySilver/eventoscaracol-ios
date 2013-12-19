@@ -118,6 +118,7 @@
                                                        else{
                                                            if (error.code==5) {
                                                                NSLog(@"No hay conexión %ld",(long)error.code);
+                                                               [appDelegate decrementNetworkActivity];
                                                                [MBHUDView dismissCurrentHUD];
                                                                [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                                            }
@@ -129,11 +130,13 @@
                                               NSLog(@"Hubo un error");
                                               if (error.code==5) {
                                                   NSLog(@"No hay conexión %ld",(long)error.code);
+                                                  [appDelegate decrementNetworkActivity];
                                                   [MBHUDView dismissCurrentHUD];
                                                   [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }
                                               else if (error.code==2){
                                                   NSLog(@"no autorizado error %ld",(long)error.code);
+                                                  [appDelegate decrementNetworkActivity];
                                                   [MBHUDView dismissCurrentHUD];
                                                   [MBHUDView hudWithBody:@"No se inició sesión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }

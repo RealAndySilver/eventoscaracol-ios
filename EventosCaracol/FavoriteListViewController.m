@@ -125,7 +125,7 @@
                                                                             descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height, self.view.frame.size.width - descriptionLabel.frame.origin.x,
                                                                             20.0)];
         
-        self.itemDate = [self getItemDate:self.favoritedItems[indexPath.row]];
+        self.itemDate = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
         eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
         eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
         eventTimeLabel.textColor = [UIColor lightGrayColor];
@@ -173,6 +173,10 @@
             detailsVC.objectLocation = self.itemLocation;
             detailsVC.objectTime = self.itemDate;
             detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
+            
+            if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
+                detailsVC.presentLocationObject = YES;
+            
             [self.navigationController pushViewController:detailsVC animated:YES];
         }
         
@@ -204,39 +208,56 @@
         detailsVC.objectTime = self.itemDate;
         detailsVC.objectLocation = self.itemLocation;
         detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
+        
+        if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
+            detailsVC.presentLocationObject = YES;
+        
         [self.navigationController pushViewController:detailsVC animated:YES];
     }
 }
 
 #pragma mark - Custom Methods
 
--(NSString *)getItemDate:(NSDictionary *)item
+-(NSString *)getFormattedItemDate:(NSDictionary *)item
 {
-    NSString *date = [[NSString alloc] init];
-    
-    //Get the date of the event
     NSString *eventTime = item[@"event_time"];
+    NSLog(@"Fecha del server: %@", eventTime);
     NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
-    NSLog(@"%@", formattedEventTimeString);
+    NSLog(@"Formatted string: %@", formattedEventTimeString);
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    //[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    //[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    NSLog(@"Locale: %@", [[NSLocale currentLocale] localeIdentifier]);
+    //[NSTimeZone resetSystemTimeZone];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    NSLog(@"TImeZone: %@", [[NSTimeZone timeZoneWithAbbreviation:@"GMT"] description]);
     NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+    NSLog(@"SourceDate: %@", sourceDate);
+    
+    [dateFormatter setDateFormat:nil];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    NSTimeInterval timeInterval = [sourceDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceReferenceDate:0.0]];
+    NSDate *SourceDateFormatted = [NSDate dateWithTimeIntervalSinceReferenceDate:timeInterval];
+    NSLog(@"SourceDate Formatted: %@", [dateFormatter stringFromDate:SourceDateFormatted]);
     
     NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-    NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone localTimeZone];
     
-    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
-    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+    ///!!!!!!!!! cambiar sourcedate por sourcedateformatted
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:SourceDateFormatted];
     NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
     
-    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
-    
-    date = [[destinationDate description] stringByReplacingOccurrencesOfString:@"+0000" withString:@""];
-    
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:SourceDateFormatted];
+    NSLog(@"Destination Date Formatted: %@", [dateFormatter stringFromDate:destinationDate]);
+    NSString *date = [dateFormatter stringFromDate:destinationDate];
     return date;
 }
 
@@ -343,6 +364,12 @@
 
 -(void)serverError:(NSError *)error
 {
+    [MBHUDView dismissCurrentHUD];
+    [[[UIAlertView alloc] initWithTitle:nil
+                               message:@"No hay conexión a internet"
+                              delegate:self
+                     cancelButtonTitle:@"Ok"
+                     otherButtonTitles:nil] show];
     NSLog(@"error en el server");
 }
 
