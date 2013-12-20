@@ -12,6 +12,7 @@
 
 @interface AppDelegate()
 @property (nonatomic, readwrite) int networkActivityCounter;
+@property (nonatomic, readwrite) int badgeNumberCounter;
 @end
 
 @implementation AppDelegate
@@ -63,12 +64,24 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    application.applicationIconBadgeNumber = 0;
+    self.badgeNumberCounter = 0;
+    NSArray *localNotifications = [[UIApplication sharedApplication] scheduledLocalNotifications];
+    NSLog(@"Number of local notifications pending: %d", [localNotifications count]);
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    for (int i = 0; i < [localNotifications count]; i++)
+    {
+        UILocalNotification *localNotification = localNotifications[i];
+        localNotification.applicationIconBadgeNumber = i + 1;
+        NSLog(@"Local notification badge number: %d", localNotification.applicationIconBadgeNumber);
+        [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    }
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -92,9 +105,9 @@
     if ([application applicationState] == UIApplicationStateActive)
     {
         [[[UIAlertView alloc] initWithTitle:nil
-                                    message:@"¡Uno de tus eventos favoritos empezará dentro de una hora!"
+                                    message:@"¡Uno de los eventos que tienes como favorito empezará dentro de una hora!"
                                    delegate:self
-                          cancelButtonTitle:@"Ver el evento"
+                          cancelButtonTitle:@"Ok"
                           otherButtonTitles:nil] show];
     }
     application.applicationIconBadgeNumber = 0;
@@ -131,6 +144,13 @@
 {
     self.networkActivityCounter = 0;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+}
+
+#pragma mark - BadgeNumberCounter
+
+-(void)incrementBadgeNumberCounter
+{
+    self.badgeNumberCounter++;
 }
 
 @end

@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, readonly) int networkActivityCounter;
+@property (nonatomic, readonly) int badgeNumberCounter;
+-(void)incrementBadgeNumberCounter;
 -(void)incrementNetworkActivity;
 -(void)decrementNetworkActivity;
 -(void)resetNetworkActivity;

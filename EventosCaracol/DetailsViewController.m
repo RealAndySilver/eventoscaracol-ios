@@ -325,41 +325,42 @@
     NSString *eventTime = self.objectInfo[@"event_time"];
     NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
-    NSLog(@"fecha formateada %@", formattedEventTimeString);
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    [dateFormatter setLocale:[NSLocale currentLocale]];
-    [dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    [dateFormatter setTimeZone:[NSTimeZone localTimeZone]];
     
     if (![dateFormatter dateFromString:formattedEventTimeString])
-        NSLog(@"no lo formatée asi que la notificación no se pudo establecer.");
+        NSLog(@"no lo formatée");
     else
     {
-        /////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
         NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
         
-        //If the event date is later than te actual date, create and post the notification.
-        //If the event date has passed, there is no reason to post the notification.
-        if ([sourceDate compare:[NSDate date]] == NSOrderedDescending)
+        NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+        NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
+        
+        NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
+        NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
+        NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+        
+        NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
+        
+        //We have to substract one hour from the event time because we want the reminder notification
+        //to be post one hour earlier.
+        NSDate *oneHourEarlierDate = [destinationDate dateByAddingTimeInterval:-(60*60)];
+        NSLog(@"si pude formatear y cambiar al time zone adecuado: %@", [destinationDate descriptionWithLocale:[NSLocale currentLocale]]);
+        NSLog(@"recordaré del evento a las : %@", [oneHourEarlierDate descriptionWithLocale:[NSLocale currentLocale]]);
+        NSLog(@"Hour: %@", oneHourEarlierDate);
+        NSLog(@"Actual hour: %@", [NSDate date]);
+        
+        if ([oneHourEarlierDate compare:[NSDate date]] == NSOrderedDescending)
         {
-            NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
-            NSTimeZone  *destinationTimeZone = [NSTimeZone systemTimeZone];
-            
-            NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:sourceDate];
-            NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:sourceDate];
-            NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
-            
-            NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
-            NSLog(@"s pude formatear y cambiar al time zone adecuado: %@", [destinationDate descriptionWithLocale:[NSLocale currentLocale]]);
-            NSDate *oneHourEarlierDate = [destinationDate dateByAddingTimeInterval:-(60*60)];
-            NSLog(@"se notificará del evento a las : %@", [oneHourEarlierDate descriptionWithLocale:[NSLocale currentLocale]]);
-            ///////////////////////////////////////////////////////////////////////////
-            
             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
             localNotification.soundName = UILocalNotificationDefaultSoundName;
             localNotification.userInfo = @{@"name": self.objectInfo[@"_id"]};
-            localNotification.alertBody = [NSString stringWithFormat:@"¡El evento '%@' es dentro de una hora, no te lo pierdas!", self.objectInfo[@"name"]];
+            localNotification.alertBody = [NSString stringWithFormat:@"El evento '%@' es dentro de una hora, no te lo pierdas!", self.objectInfo[@"name"]];
             localNotification.fireDate = oneHourEarlierDate;
             NSLog(@"Fire Date: %@", [localNotification.fireDate descriptionWithLocale:[NSLocale currentLocale]]);
             localNotification.alertAction = @"Ver el evento";
@@ -371,7 +372,7 @@
         
         else
         {
-            NSLog(@"El evento ya pasó entonces no puse ninguna notificación");
+            NSLog(@"No posteé la notificación porque el evento ya pasó");
         }
     }
 }

@@ -167,8 +167,11 @@
             [appDelegate incrementNetworkActivity];*/
             
             cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
-            [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
-                                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
+            if (![self.menuArray[indexPath.row][@"type"] isEqualToString:@"general"])
+                [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
+                                       placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
+            else
+                cell.menuItemImageView.image = nil;
         }
         
         else
