@@ -25,6 +25,7 @@
                                                                      self.view.frame.size.height)];
     self.scrollView.pagingEnabled = YES;
     self.scrollView.delegate = self;
+    [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.view addSubview:self.scrollView];
     
     

@@ -29,12 +29,6 @@
 
 -(void)setupPullDownToRefreshView
 {
-    /*self.updateLabel = [[UILabel alloc] initWithFrame:CGRectMake(80.0, -40.0, self.view.frame.size.width - 80.0, 20.0)];
-    self.updateLabel.text = @"Hala para actualizar";
-    self.updateLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
-    self.updateLabel.textAlignment = NSTextAlignmentLeft;
-    self.updateLabel.textColor = [UIColor lightGrayColor];*/
-    
     self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 40.0, -50.0, 20.0, 40.0)];
     self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
     //[self.tableView addSubview:self.updateLabel];
@@ -538,7 +532,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     //self.updateLabel.text = @"Actualizando...";
     self.isUpdating = YES;
     
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate incrementNetworkActivity];
     
     [self getAllInfoFromServer];
@@ -596,7 +590,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     
     if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
@@ -617,7 +611,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 -(void)serverError:(NSError *)error
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     
     NSLog(@"error");

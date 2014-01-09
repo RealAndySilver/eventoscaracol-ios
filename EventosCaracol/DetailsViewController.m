@@ -17,6 +17,14 @@
 
 @implementation DetailsViewController
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0]};
+}
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -211,17 +219,16 @@
     eventLocationLabel.text = [NSString stringWithFormat:@"📍%@", self.objectLocation];
     eventLocationLabel.textColor = [UIColor lightGrayColor];*/
     
-    UIButton *eventLocationButton = [[UIButton alloc] initWithFrame:CGRectMake(- 40 + 20.0 + self.favoriteButton.frame.size.width,
+    UIButton *eventLocationButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
                                                                                objectName.frame.origin.y + objectName.frame.size.height,
                                                                                self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                                self.view.frame.size.height/28.4)];
     [eventLocationButton setTitle:[NSString stringWithFormat:@"📍%@", self.objectLocation] forState:UIControlStateNormal];
-    eventLocationButton.titleLabel.textAlignment = NSTextAlignmentLeft;
-    
-    if (![self.objectInfo[@"type"] isEqualToString:@"locaciones"])
+    eventLocationButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    if (![self.objectInfo[@"type"] isEqualToString:@"locaciones"] && ![self.objectInfo[@"location_id"] isEqualToString:@""])
     {
         [eventLocationButton addTarget:self action:@selector(goToItemLocationDetail) forControlEvents:UIControlEventTouchUpInside];
-        [eventLocationButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [eventLocationButton setTitleColor:[UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0] forState:UIControlStateNormal];
     }
     else
         [eventLocationButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];

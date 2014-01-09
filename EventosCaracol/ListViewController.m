@@ -525,7 +525,7 @@
 
 -(void)postLocalNotificationForItemAtIndex:(NSUInteger)index
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     
     NSString *eventTime = self.tempMenuArray[index][@"event_time"];
     NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
@@ -571,7 +571,7 @@
             localNotification.alertAction = @"Ver el evento";
             localNotification.timeZone = [NSTimeZone systemTimeZone];
             [appDelegate incrementBadgeNumberCounter];
-            localNotification.applicationIconBadgeNumber = appDelegate.badgeNumberCounter;
+            localNotification.applicationIconBadgeNumber = ((AppDelegate *)appDelegate).badgeNumberCounter;
             [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
             NSLog(@"postée la notificación");
             NSLog(@"BadgeNumber: %d", localNotification.applicationIconBadgeNumber);
@@ -998,7 +998,7 @@
     //self.updateLabel.text = @"Actualizando...";
     self.isUpdating = YES;
     
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate incrementNetworkActivity];
     
     [self getAllInfoFromServer];
@@ -1052,7 +1052,7 @@
 
 -(void)receivedDataFromServer:(NSDictionary *)dictionary withMethodName:(NSString *)methodName
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     [MBHUDView dismissCurrentHUD];
     
@@ -1095,7 +1095,7 @@
 
 -(void)serverError:(NSError *)error
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     [self stopSpinner];
     [MBHUDView dismissCurrentHUD];

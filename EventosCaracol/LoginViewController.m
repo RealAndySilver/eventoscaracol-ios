@@ -88,7 +88,7 @@
     {
         //Display the network activity indicator because we are accesing
         //the network.
-        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        id appDelegate = [UIApplication sharedApplication].delegate;
         [appDelegate incrementNetworkActivity];
         [MBHUDView hudWithBody:@"Conectando" type:MBAlertViewHUDTypeActivityIndicator hidesAfter:1000 show:YES];
         
@@ -188,7 +188,7 @@
 {
     //At this point we are no longer connecting with the network, so we
     //have to decrement the netoworj activity indicator count.
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     [MBHUDView dismissCurrentHUD];
     //Check if the method returned by the server is the correct one.
@@ -225,7 +225,7 @@
 {
     //At this point we are no longer connecting with the network, so we
     //have to decrement the netoworj activity indicator count.
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate decrementNetworkActivity];
     [MBHUDView dismissCurrentHUD];
     
