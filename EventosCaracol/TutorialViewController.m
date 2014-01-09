@@ -30,24 +30,25 @@
     
     int j=0;
     for (int i=0; i<5; i++) {
-        [self createPage:i+1 withImage:[UIImage imageNamed:@"CaracolPrueba.jpg"]];
+        [self createPage:i+1 withImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
         j=i+1;
     }
     self.scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*j, self.view.frame.size.height);
 
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2- 50.0,
-                                                                       self.view.frame.size.height/1.2,
+                                                                       self.view.frame.size.height/1.1,
                                                                        100.0,
                                                                        37.0)];
-    self.pageControl.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
     self.pageControl.numberOfPages = j;
     [self.view addSubview:self.pageControl];
     
-    UIButton *enterButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 25,
-                                                                       50.0,
-                                                                       50.0,
+    UIButton *enterButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50,
+                                                                       20.0,
+                                                                       100.0,
                                                                        50.0)];
-    [enterButton setTitle:@"X" forState:UIControlStateNormal];
+    [enterButton setTitle:@"Cerrar" forState:UIControlStateNormal];
+    [enterButton addTarget:self
+                    action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:enterButton];
 }
 -(void)createPage:(int)pageNumber withImage:(UIImage*)image{
@@ -56,9 +57,16 @@
                                                                                    0.0,
                                                                                    self.view.frame.size.width,
                                                                                    self.view.frame.size.height)];
+    tutorialIMageView.clipsToBounds = YES;
+    tutorialIMageView.contentMode = UIViewContentModeScaleAspectFill;
     tutorialIMageView.image = image;
     [page addSubview:tutorialIMageView];
     [_scrollView addSubview:page];
+}
+
+-(void)dismissVC
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - ScrollViewDelegate

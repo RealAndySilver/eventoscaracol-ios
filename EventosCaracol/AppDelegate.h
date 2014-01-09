@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DetailsViewController.h"
+#import <GoogleMaps/GoogleMaps.h>
+#import "FileSaver.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, readonly) int networkActivityCounter;

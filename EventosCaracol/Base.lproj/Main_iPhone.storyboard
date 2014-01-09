@@ -137,7 +137,7 @@
         <!--Tutorial View Controller-->
         <scene sceneID="6br-IF-CT9">
             <objects>
-                <viewController id="Imt-fx-DJK" customClass="TutorialViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Tutorial" id="Imt-fx-DJK" customClass="TutorialViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Kdl-Dc-AR3"/>
                         <viewControllerLayoutGuide type="bottom" id="Zwb-vv-mCZ"/>

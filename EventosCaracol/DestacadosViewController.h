@@ -15,6 +15,6 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
 
-@interface DestacadosViewController : UIViewController
+@interface DestacadosViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
 
 @end

@@ -6,13 +6,12 @@
 //  Copyright (c) 2013 iAmStudio. All rights reserved.
 //
 
-#import <GoogleMaps/GoogleMaps.h>
-#import "FileSaver.h"
 #import "AppDelegate.h"
 
 @interface AppDelegate()
 @property (nonatomic, readwrite) int networkActivityCounter;
 @property (nonatomic, readwrite) int badgeNumberCounter;
+@property (strong, nonatomic) NSDictionary *itemInfo;
 @end
 
 @implementation AppDelegate
@@ -36,15 +35,25 @@
     [fileSaver setDictionary:dic withKey:@"DeviceInfo"];
     
     ////////////////////////////////////////////////////////////////////////
-    //Si la aplicación inicia con una notificación
+    //If the application launch from a local notification
     /*UILocalNotification *localNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
     if (localNotification)
     {
-        application.applicationIconBadgeNumber = 0;
-        NSLog(@"cambie el badge");
+        //application.applicationIconBadgeNumber = 0;
+        //NSLog(@"cambie el badge");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"appStartedFromNotification"
+                                                            object:nil
+                                                          userInfo:@{@"notificationInfo": localNotification}];
+        NSDictionary *notificationInfoDic = [NSDictionary dictionaryWithObjectsAndKeys:localNotification,@"notificationInfo", nil];
+        [fileSaver setDictionary:notificationInfoDic withKey:@"notificationInfo"];
+        NSLog(@"Entré desde una notificación");
+        
+        if ([fileSaver getDictionary:@"notificationInfo"])
+            NSLog(@"Pude guardar el dic de la notificacion correctamente %@", [fileSaver getDictionary:@"notificationInfo"]);
+        else
+            NSLog(@"No pude guardar el diccionario de info de la notificacion");
     }*/
     application.applicationIconBadgeNumber = 0;
-    
     return YES;
 }
 							
@@ -81,7 +90,6 @@
         NSLog(@"Local notification badge number: %d", localNotification.applicationIconBadgeNumber);
         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
     }
-    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -108,8 +116,60 @@
                                     message:@"¡Uno de los eventos que tienes como favorito empezará dentro de una hora!"
                                    delegate:self
                           cancelButtonTitle:@"Ok"
-                          otherButtonTitles:nil] show];
+                          otherButtonTitles:@"Ver el evento", nil] show];
+        
+        NSString *itemID = notification.userInfo[@"name"];
+        NSMutableArray *allItemsArray = [[NSMutableArray alloc] init];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"artistas"]];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"locaciones"]];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"noticias"]];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"eventos"]];
+        
+        for (int i = 0; i < [allItemsArray count]; i++)
+        {
+            if ([allItemsArray[i][@"_id"] isEqualToString:itemID])
+            {
+                self.itemInfo = allItemsArray[i];
+                break;
+            }
+        }
     }
+    
+    else if ([application applicationState] == UIApplicationStateInactive)
+    {
+        NSLog(@"recibí la notificación desde un estado inactivo");
+        NSString *itemID = notification.userInfo[@"name"];
+        NSMutableArray *allItemsArray = [[NSMutableArray alloc] init];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"artistas"]];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"locaciones"]];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"noticias"]];
+        [allItemsArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"eventos"]];
+        
+        for (int i = 0; i < [allItemsArray count]; i++)
+        {
+            if ([allItemsArray[i][@"_id"] isEqualToString:itemID])
+            {
+                self.itemInfo = allItemsArray[i];
+                break;
+            }
+        }
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        DetailsViewController *detailsViewController = [storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+        detailsViewController.objectInfo = self.itemInfo;
+        detailsViewController.objectLocation = [self getItemLocationName:self.itemInfo];
+        detailsViewController.objectTime = [self getFormattedItemDate:self.itemInfo];
+        detailsViewController.navigationBarTitle = self.itemInfo[@"name"];
+        detailsViewController.presentViewControllerFromSearchBar = YES;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsViewController];
+        UIViewController *actualViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+        while (actualViewController.presentedViewController)
+        {
+            actualViewController = actualViewController.presentedViewController;
+        }
+        [actualViewController presentViewController:navigationController animated:YES completion:nil];
+    }
+    
     application.applicationIconBadgeNumber = 0;
 }
 
@@ -151,6 +211,110 @@
 -(void)incrementBadgeNumberCounter
 {
     self.badgeNumberCounter++;
+}
+
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1)
+    {
+        NSLog(@"Entré a ver el evento que posteó la notificación");
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+        DetailsViewController *detailsViewController = [storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+        detailsViewController.objectInfo = self.itemInfo;
+        detailsViewController.objectLocation = [self getItemLocationName:self.itemInfo];
+        detailsViewController.objectTime = [self getFormattedItemDate:self.itemInfo];
+        detailsViewController.navigationBarTitle = self.itemInfo[@"name"];
+        detailsViewController.presentViewControllerFromSearchBar = YES;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:detailsViewController];
+        UIViewController *actualViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+        while (actualViewController.presentedViewController)
+        {
+            actualViewController = actualViewController.presentedViewController;
+        }
+        [actualViewController presentViewController:navigationController animated:YES completion:nil];
+    }
+}
+
+#pragma mark - FileSaver
+
+-(NSDictionary*)getDictionaryWithName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    return [file getDictionary:name];
+}
+-(void)setDictionary:(NSDictionary*)dictionary withName:(NSString*)name{
+    FileSaver *file=[[FileSaver alloc]init];
+    [file setDictionary:dictionary withKey:name];
+}
+
+-(NSString *)getFormattedItemDate:(NSDictionary *)item
+{
+    NSString *eventTime = item[@"event_time"];
+    NSLog(@"Fecha del server: %@", eventTime);
+    NSString *newString = [eventTime stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    NSString *formattedEventTimeString = [newString stringByReplacingOccurrencesOfString:@".000Z" withString:@""];
+    NSLog(@"Formatted string: %@", formattedEventTimeString);
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    //[dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    //[dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    NSLog(@"Locale: %@", [[NSLocale currentLocale] localeIdentifier]);
+    //[NSTimeZone resetSystemTimeZone];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
+    NSLog(@"TImeZone: %@", [[NSTimeZone timeZoneWithAbbreviation:@"GMT"] description]);
+    NSDate *sourceDate = [dateFormatter dateFromString:formattedEventTimeString];
+    NSLog(@"SourceDate: %@", sourceDate);
+    
+    [dateFormatter setDateFormat:nil];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
+    
+    NSTimeInterval timeInterval = [sourceDate timeIntervalSinceDate:[NSDate dateWithTimeIntervalSinceReferenceDate:0.0]];
+    NSDate *SourceDateFormatted = [NSDate dateWithTimeIntervalSinceReferenceDate:timeInterval];
+    NSLog(@"SourceDate Formatted: %@", [dateFormatter stringFromDate:SourceDateFormatted]);
+    
+    NSTimeZone  *sourceTimeZone = [NSTimeZone timeZoneWithAbbreviation:@"GMT"];
+    NSTimeZone  *destinationTimeZone = [NSTimeZone localTimeZone];
+    
+    ///!!!!!!!!! cambiar sourcedate por sourcedateformatted
+    NSInteger sourceGMTOffset = [sourceTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSInteger destinationGMTOffset = [destinationTimeZone secondsFromGMTForDate:SourceDateFormatted];
+    NSTimeInterval interval = destinationGMTOffset - sourceGMTOffset;
+    
+    NSDate *destinationDate = [[NSDate alloc] initWithTimeInterval:interval sinceDate:SourceDateFormatted];
+    NSLog(@"Destination Date Formatted: %@", [dateFormatter stringFromDate:destinationDate]);
+    NSString *date = [dateFormatter stringFromDate:destinationDate];
+    return date;
+}
+
+-(NSString *)getItemLocationName:(NSDictionary *)item
+{
+    NSString *itemLocationName = [[NSString alloc] init];
+    //First we see if the item has a location associated.
+    if ([item[@"location_id"] length] > 0)
+    {
+        //Location id exist.
+        NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+        for (int i = 0; i < [locationsArray count]; i++)
+        {
+            if ([item[@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+            {
+                itemLocationName = locationsArray[i][@"name"];
+                break;
+            }
+        }
+    }
+    
+    else
+    {
+        itemLocationName = @"No hay locación asignada";
+    }
+    
+    return itemLocationName;
 }
 
 @end

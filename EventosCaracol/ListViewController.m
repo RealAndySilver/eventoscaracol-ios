@@ -32,6 +32,9 @@
 @property (strong, nonatomic) UIButton *filterByDayButton;
 @property (strong, nonatomic) UIButton *filterByLocationButton;
 
+/*------text to share with the share button---------*/
+@property (strong, nonatomic) NSString *textToShare;
+
 @end
 
 #define ROW_HEIGHT 95.0
@@ -351,6 +354,7 @@
                                                                           20.0)];
     
     descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocationName];
+    NSLog(@"locacion del item: %@", descriptionLabel.text);
     descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     descriptionLabel.textColor = [UIColor lightGrayColor];
     [eventCell.contentView addSubview:descriptionLabel];
@@ -386,8 +390,8 @@
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = self.tempMenuArray[indexPath.row];
-            detailsVC.objectLocation = self.itemLocationName;
-            detailsVC.objectTime = self.finalEventTime;
+            detailsVC.objectLocation = [self getItemLocationName:self.tempMenuArray[indexPath.row]];
+            detailsVC.objectTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
             //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
             //will display a map on screen.
             if (self.locationList)
@@ -422,8 +426,8 @@
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = self.tempMenuArray[indexPath.row];
-        detailsVC.objectLocation = self.itemLocationName;
-        detailsVC.objectTime = self.finalEventTime;
+        detailsVC.objectLocation = [self getItemLocationName:self.tempMenuArray[indexPath.row]];
+        detailsVC.objectTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
         //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
         //will display a map on screen.
         if (self.locationList)
@@ -435,6 +439,39 @@
 }
 
 #pragma mark - Custom methods
+
+-(NSString *)getItemLocationName:(NSDictionary *)item
+{
+    NSString *itemLocationName = [[NSString alloc] init];
+    //First we see if the item has a location associated.
+    if (![item[@"type"] isEqualToString:@"locaciones"])
+    {
+        if ([item[@"location_id"] length] > 0)
+        {
+            //Location id exist.
+            NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+            for (int i = 0; i < [locationsArray count]; i++)
+            {
+                if ([item[@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                {
+                    itemLocationName = locationsArray[i][@"name"];
+                    break;
+                }
+            }
+        }
+        
+        else
+        {
+            itemLocationName = @"No hay locación asignada";
+        }
+        
+        return itemLocationName;
+    }
+    
+    else
+        return item[@"short_detail"];
+}
+
 
 -(NSString *)getFormattedItemDate:(NSDictionary *)item
 {
@@ -642,6 +679,10 @@
     //if the user touches the share button of the cell.
     else if (index == 1)
     {
+        NSUInteger objectRow = [self.tableView indexPathForCell:cell].row;
+        self.textToShare = [self.tempMenuArray[objectRow][@"name"] stringByAppendingString:@" : "];
+        self.textToShare = [self.textToShare stringByAppendingString:self.tempMenuArray[objectRow][@"short_detail"]];
+        self.textToShare = [self.textToShare stringByAppendingString:@"\n Enviado desde la aplicación 'EuroCine 2014'"];
         [[[UIActionSheet alloc] initWithTitle:@""
                                     delegate:self
                            cancelButtonTitle:@"Volver"
@@ -672,7 +713,7 @@
         {
             MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
             messageViewController.messageComposeDelegate = self;
-            [messageViewController setBody:@"Hola! te recomiendo este evento!"];
+            [messageViewController setBody:self.textToShare];
             [self presentViewController:messageViewController animated:YES completion:nil];
             NSLog(@"presenté el viewcontroller");
         }
@@ -684,7 +725,7 @@
         NSLog(@"Facebook");
        
         SLComposeViewController *facebookViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-        [facebookViewController setInitialText:@"Me acabo de inscribir al evento que vamos a ir todos."];
+        [facebookViewController setInitialText:self.textToShare];
         [self presentViewController:facebookViewController animated:YES completion:nil];
     }
     
@@ -694,7 +735,7 @@
         NSLog(@"Twitter");
     
         SLComposeViewController *twitterViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [twitterViewController setInitialText:@"Me acbo de inscribir a este genial evento"];
+        [twitterViewController setInitialText:self.textToShare];
         [self presentViewController:twitterViewController animated:YES completion:nil];
     }
     
@@ -703,8 +744,8 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"Te recomiendo este evento!"];
-        [mailComposeViewController setMessageBody:@"¡Hola!, me acabo de inscribir en la presentación del evento al que todos vamos a ir. " isHTML:NO];
+        [mailComposeViewController setSubject:@"¡EuroCine 2014!"];
+        [mailComposeViewController setMessageBody:self.textToShare isHTML:NO];
         
         mailComposeViewController.mailComposeDelegate = self;
         [self presentViewController:mailComposeViewController animated:YES completion:nil];

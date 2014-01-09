@@ -60,9 +60,9 @@
     
     //Store the info for the aditional buttons of the slide menu table view
     if ([self getDictionaryWithName:@"user"][@"_id"])
-        self.aditionalMenuItemsArray = @[@"Cerrar Sesión"];
+        self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
     else
-        self.aditionalMenuItemsArray = @[@"Iniciar Sesión"];
+        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
 
     
     ///////////////////////////////////////////////////////////////
@@ -293,20 +293,6 @@
         {
             if (indexPath.row - [self.menuArray count] == 0)
             {
-                /*if (![self getDictionaryWithName:@"user"][@"_id"])
-                {
-                    [[[UIAlertView alloc] initWithTitle:nil
-                                                message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
-                                               delegate:self
-                                      cancelButtonTitle:@"Ok"
-                                      otherButtonTitles:@"Iniciar Sesión", nil] show];
-                    return;
-                }
-                
-                FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
-                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
-                [revealViewController setFrontViewController:navigationController animated:YES];*/
-                
                 if (![self getDictionaryWithName:@"user"][@"_id"])
                 {
                     LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
@@ -324,23 +310,11 @@
                 }
 
             }
+            
             else
             {
-                /*if (![self getDictionaryWithName:@"user"][@"_id"])
-                {
-                    LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
-                    loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
-                    [self presentViewController:loginVC animated:YES completion:nil];
-                }
-                
-                else
-                {
-                    [[[UIActionSheet alloc] initWithTitle:@"¿Estás seguro que deseas cerrar sesión?, ya no podrás acceder a tus favoritos."
-                                                delegate:self
-                                       cancelButtonTitle:@"Cancelar"
-                                  destructiveButtonTitle:@"Cerrar Sesión"
-                                        otherButtonTitles:nil]showInView:self.view];
-                }*/
+                TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
+                [self presentViewController:tutorialVC animated:YES completion:nil];
             }
         }
     }
@@ -440,7 +414,7 @@
     NSDictionary *dic = [[NSDictionary alloc] init];
     [self setDictionary:dic withName:@"user"];
     
-    self.aditionalMenuItemsArray = @[@"Iniciar Sesión"];
+    self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
     [self.tableView reloadData];
     [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeCheckmark hidesAfter:5 show:YES];
     
@@ -454,7 +428,7 @@
 
 -(void)FacebookLoginNotificationReceived:(NSNotification *)notification
 {
-    self.aditionalMenuItemsArray = @[@"Cerrar Sesión"];
+    self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
     [self.tableView reloadData];
 }
 

@@ -203,25 +203,41 @@
     [self.scrollView addSubview:objectName];
     
     ///////////////////////////////////////////////////////////////////////////////////////////
-    UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
+    /*UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
                                                                             objectName.frame.origin.y + objectName.frame.size.height,
                                                                             self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                             self.view.frame.size.height/28.4)];
     //eventLocationLabel.text = @"Plaza Cervantes";
     eventLocationLabel.text = [NSString stringWithFormat:@"📍%@", self.objectLocation];
-    eventLocationLabel.textColor = [UIColor lightGrayColor];
+    eventLocationLabel.textColor = [UIColor lightGrayColor];*/
+    
+    UIButton *eventLocationButton = [[UIButton alloc] initWithFrame:CGRectMake(- 40 + 20.0 + self.favoriteButton.frame.size.width,
+                                                                               objectName.frame.origin.y + objectName.frame.size.height,
+                                                                               self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
+                                                                               self.view.frame.size.height/28.4)];
+    [eventLocationButton setTitle:[NSString stringWithFormat:@"📍%@", self.objectLocation] forState:UIControlStateNormal];
+    eventLocationButton.titleLabel.textAlignment = NSTextAlignmentLeft;
+    
+    if (![self.objectInfo[@"type"] isEqualToString:@"locaciones"])
+    {
+        [eventLocationButton addTarget:self action:@selector(goToItemLocationDetail) forControlEvents:UIControlEventTouchUpInside];
+        [eventLocationButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    }
+    else
+        [eventLocationButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        eventLocationLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+        eventLocationButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
 
     else
-        eventLocationLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+        eventLocationButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     
-    [self.scrollView addSubview:eventLocationLabel];
+    [self.scrollView addSubview:eventLocationButton];
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
-                                                                        eventLocationLabel.frame.origin.y + eventLocationLabel.frame.size.height,
+                                                                        eventLocationButton.frame.origin.y + eventLocationButton.frame.size.height,
                                                                         self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
                                                                         self.view.frame.size.height/28.4)];
     //eventTimeLabel.text = @"11:30AM";
@@ -270,6 +286,29 @@
 }
 
 #pragma mark - Actions
+
+-(void)goToItemLocationDetail
+{
+    NSString *itemLocationID = self.objectInfo[@"location_id"];
+    NSDictionary *locationItem;
+    
+    NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+    for (int i = 0; i < [locationsArray count]; i++)
+    {
+        if ([locationsArray[i][@"_id"] isEqualToString:itemLocationID])
+        {
+            locationItem = locationsArray[i];
+            break;
+        }
+    }
+    
+    DetailsViewController *locationDetailsViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
+    locationDetailsViewController.navigationBarTitle = locationItem[@"name"];
+    locationDetailsViewController.objectInfo = locationItem;
+    locationDetailsViewController.objectLocation = locationItem[@"short_detail"];
+    locationDetailsViewController.presentLocationObject = YES;
+    [self.navigationController pushViewController:locationDetailsViewController animated:YES];
+}
 
 -(void)dismiss
 {
@@ -416,6 +455,7 @@
             self.isFavorited ? [self showFavoriteAnimationWithImage:nil] :
             [self showFavoriteAnimationWithImage:[UIImage imageNamed:@"BorrarRojo.png"]];
             NSLog(@"Se pudo favoritear o desfavoritear correctamente");
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"serverUpdateNeededNotification" object:nil];
         }
         
         else
@@ -445,6 +485,9 @@
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    NSString *textToShare = [self.objectInfo[@"name"] stringByAppendingString:@" : "];
+    textToShare = [textToShare stringByAppendingString:self.objectInfo[@"short_detail"]];
+    textToShare = [textToShare stringByAppendingString:@"\n Enviado desde la aplicación 'EuroCine 2014'"];
     if(buttonIndex == 0)
     {
         NSLog(@"SMS");
@@ -461,7 +504,7 @@
         {
             MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
             messageViewController.messageComposeDelegate = self;
-            [messageViewController setBody:@"Hola! te recomiendo este evento!"];
+            [messageViewController setBody:textToShare];
             [self presentViewController:messageViewController animated:YES completion:nil];
             NSLog(@"presenté el viewcontroller");
         }
@@ -472,7 +515,7 @@
         NSLog(@"Facebook");
         
         SLComposeViewController *facebookViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-        [facebookViewController setInitialText:@"Me acabo de inscribir al evento que vamos a ir todos."];
+        [facebookViewController setInitialText:textToShare];
         [self presentViewController:facebookViewController animated:YES completion:nil];
     }
     
@@ -481,7 +524,7 @@
         NSLog(@"Twitter");
         
         SLComposeViewController *twitterViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [twitterViewController setInitialText:@"Me acbo de inscribir a este genial evento"];
+        [twitterViewController setInitialText:textToShare];
         [self presentViewController:twitterViewController animated:YES completion:nil];
     }
     
@@ -489,8 +532,8 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"Te recomiendo este evento!"];
-        [mailComposeViewController setMessageBody:@"¡Hola!, me acabo de inscribir en la presentación del evento al que todos vamos a ir. " isHTML:NO];
+        [mailComposeViewController setSubject:@"¡EuroCine 2014!"];
+        [mailComposeViewController setMessageBody:textToShare isHTML:NO];
         
         mailComposeViewController.mailComposeDelegate = self;
         

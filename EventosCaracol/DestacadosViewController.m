@@ -66,6 +66,12 @@
 {
     [super viewDidLoad];
     
+    //Register as an observer of the appStartedFromNotification notification
+    /*[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(appStartedFromNotificationReceivedWithNotification:)
+                                                 name:@"appStartedFromNotification"
+                                               object:nil];*/
+    
     //Create the back button that will be displayed in the next view controller
     //that is push by this view controller.
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Atrás"
@@ -86,7 +92,7 @@
     UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ShareIcon.png"]
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
-                                                                   action:nil];
+                                                                   action:@selector(shareApp)];
     
     //Add the buttons to the NavigationBar.
     self.navigationItem.rightBarButtonItem = shareButton;
@@ -146,6 +152,46 @@
     [collectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:FEATURED_IDENTIFIER];
     collectionView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:collectionView];
+    
+    ///////////////////////////////////////////////////////////////
+    //Check if there is a notificationInfo dictionary stored in the
+    //app. If so, that means the app was launch from a local
+    //notification, so we have to present the view controller of the
+    //notification event from this view controller.
+    /*FileSaver *fileSaver = [[FileSaver alloc] init];
+    if ([fileSaver getDictionary:@"notificationInfo"])
+    {
+        NSLog(@"Si existía el dic entonces toca mostrar el detail del evento");
+        //The dictionary exist, so we have to present the detail view
+        //controller of the notification event
+        [[[UIAlertView alloc] initWithTitle:nil
+                                    message:@"me presenté desde una notificación"
+                                   delegate:self
+                          cancelButtonTitle:@"Ok"
+                          otherButtonTitles:nil] show];
+        
+        //Erase the dictionary info
+        //[self setDictionary:nil withName:@"notificationInfo"];
+    }
+    
+    else
+    {
+        NSLog(@"el diccionario no existe");
+    }*/
+
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    if (![fileSaver getDictionary:@"firstAppLaunch"])
+    {
+        TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
+        [self presentViewController:tutorialVC animated:YES completion:nil];
+        [fileSaver setDictionary:@{@"firstAppLaunch": @YES} withKey:@"firstAppLaunch"];
+    }
 }
 
 -(void)didReceiveMemoryWarning
@@ -154,14 +200,36 @@
     NSLog(@"recibí un aviso de memoria");
 }
 
+#pragma mark - Notification Handler
+
+/*-(void)appStartedFromNotificationReceivedWithNotification:(NSNotification *)notification
+{
+    NSDictionary *info = [notification userInfo];
+    [[[UIAlertView alloc] initWithTitle:nil
+                               message:@"La aplicacion empezó desde una notificación"
+                              delegate:self
+                     cancelButtonTitle:@"Ok"
+                      otherButtonTitles:nil] show];
+    NSLog(@"llegó la notificación");
+}*/
+
 #pragma mark - Custom Methods
+
+-(void)shareApp
+{
+    [[[UIActionSheet alloc] initWithTitle:@""
+                                 delegate:self
+                        cancelButtonTitle:@"Volver"
+                   destructiveButtonTitle:nil
+                        otherButtonTitles:@"SMS", @"Facebook", @"Twitter", @"Correo" ,nil] showInView:self.view];
+}
 
 -(void)slideShowSpecialItems
 {
     //This methods gets called every time the timer fires.
     
     //It's neccesary to know the max number of 'pages' that are going to be
-    //display in the top scrollview. So, when the presentation gets to this page
+    //displayed in the top scrollview. So, when the presentation gets to this page
     //it returns to the page 1.
     NSUInteger maxPage = [self.specialItemsArray count];
     
@@ -440,6 +508,79 @@
         CGFloat pageWidth = self.specialItemsCollectionView.frame.size.width;
         float fractionalPage = self.specialItemsCollectionView.contentOffset.x / pageWidth;
         self.currentPage = round(fractionalPage) + 1;
+    }
+}
+
+#pragma mark - MFMailComposeDelegate
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - MFMessageComposeViewControllerDelegate
+
+-(void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //SMS button
+    if(buttonIndex == 0)
+    {
+        NSLog(@"SMS");
+        if (![MFMessageComposeViewController canSendText])
+        {
+            NSLog(@"No se pueden enviar mensajes");
+        }
+        
+        else
+        {
+            MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
+            messageViewController.messageComposeDelegate = self;
+            [messageViewController setBody:@"¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"];
+            //[messageViewController addAttachmentURL:<#(NSURL *)#> withAlternateFilename:<#(NSString *)#>]
+            [self presentViewController:messageViewController animated:YES completion:nil];
+            NSLog(@"presenté el viewcontroller");
+        }
+    }
+    
+    //Facebook button
+    else if (buttonIndex == 1)
+    {
+        NSLog(@"Facebook");
+        
+        SLComposeViewController *facebookViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+        [facebookViewController setInitialText:@"Post de Prueba. ¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore."];
+        [facebookViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
+        [self presentViewController:facebookViewController animated:YES completion:nil];
+    }
+    
+    //Twitter button
+    else if (buttonIndex == 2)
+    {
+        NSLog(@"Twitter");
+        
+        SLComposeViewController *twitterViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+        [twitterViewController setInitialText:@"Post de Prueba. ¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore."];
+        [twitterViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
+        [self presentViewController:twitterViewController animated:YES completion:nil];
+    }
+    
+    //Email button
+    else if (buttonIndex == 3)
+    {
+        NSLog(@"Mail");
+        MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
+        [mailComposeViewController setSubject:@"Te recomiendo la app 'BogoTaxi'"];
+        [mailComposeViewController setMessageBody:@"¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8" isHTML:NO];
+        
+        mailComposeViewController.mailComposeDelegate = self;
+        [self presentViewController:mailComposeViewController animated:YES completion:nil];
     }
 }
 

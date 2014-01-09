@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "ServerCommunicator.h"
 #import "FileSaver.h"
+#import "DestacadosViewController.h"
+#import "SWRevealViewController.h"
+#import "SidebarViewController.h"
+#import "LoginViewController.h"
+#import "MBHUDView.h"
+#import "AppDelegate.h"
+#import "TutorialViewController.h"
 
 @interface LoadingViewController : UIViewController<ServerCommunicatorDelegate>
 

@@ -33,6 +33,15 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //Add ourselfs as an observer for 'serverUpdateNeeded' notification.
+    //Whent this notification is received, it means we have to update the favorite
+    //items info from the server.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(serverUpdateNotificationReceived:)
+                                                 name:@"serverUpdateNeededNotification"
+                                               object:nil];
+    
     SWRevealViewController *revealViewController = [self revealViewController];
     UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                                style:UIBarButtonItemStylePlain
@@ -170,8 +179,8 @@
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = self.favoritedItems[indexPath.row];
-            detailsVC.objectLocation = self.itemLocation;
-            detailsVC.objectTime = self.itemDate;
+            detailsVC.objectLocation = [self getItemLocation:self.favoritedItems[indexPath.row]];
+            detailsVC.objectTime = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
             detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
             
             if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
@@ -205,8 +214,8 @@
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = self.favoritedItems[indexPath.row];
-        detailsVC.objectTime = self.itemDate;
-        detailsVC.objectLocation = self.itemLocation;
+        detailsVC.objectTime = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
+        detailsVC.objectLocation = [self getItemLocation:self.favoritedItems[indexPath.row]];
         detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
         
         if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
@@ -300,6 +309,13 @@
     
     return itemLocation;
     /////////////////////////////////////////////////////////////////////////////////
+}
+
+#pragma mark - Notification handlers
+
+-(void)serverUpdateNotificationReceived:(NSNotification *)notification
+{
+    [self getFavoritesInfoFromServer];
 }
 
 #pragma mark - Server Communication
