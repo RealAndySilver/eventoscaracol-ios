@@ -131,11 +131,20 @@
         ////////////////////////////////////////////////////////////////////
         //item date label
         UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height, self.view.frame.size.width - descriptionLabel.frame.origin.x,
-                                                                            20.0)];
+                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x,
+                                                                            40.0)];
+        eventTimeLabel.numberOfLines = 0;
         
-        self.itemDate = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
-        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
+        if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"eventos"])
+        {
+            self.itemDate = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
+            eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
+        }
+        else
+        {
+            eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.favoritedItems[indexPath.row][@"short_detail"]];
+        }
+
         eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
         eventTimeLabel.textColor = [UIColor lightGrayColor];
         [cell.contentView addSubview:eventTimeLabel];
@@ -180,7 +189,12 @@
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = self.favoritedItems[indexPath.row];
             detailsVC.objectLocation = [self getItemLocation:self.favoritedItems[indexPath.row]];
-            detailsVC.objectTime = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
+            
+            if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"eventos"])
+                detailsVC.objectTime = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
+            else
+                detailsVC.objectTime = self.favoritedItems[indexPath.row][@"short_detail"];
+            
             detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
             
             if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
@@ -214,7 +228,12 @@
     {
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = self.favoritedItems[indexPath.row];
-        detailsVC.objectTime = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
+        
+        if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"eventos"])
+            detailsVC.objectTime = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
+        else
+            detailsVC.objectTime = self.favoritedItems[indexPath.row][@"short_detail"];
+
         detailsVC.objectLocation = [self getItemLocation:self.favoritedItems[indexPath.row]];
         detailsVC.navigationBarTitle = self.favoritedItems[indexPath.row][@"name"];
         

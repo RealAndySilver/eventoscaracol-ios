@@ -347,7 +347,6 @@
         self.itemLocationName = self.tempMenuArray[indexPath.row][@"short_detail"];
     }
     
-    
     UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
                                                                           40.0,
                                                                           self.view.frame.size.width - nameLabel.frame.origin.x,
@@ -362,14 +361,23 @@
     /////////////////////////////////////////////////////////////////////////////////////
     //If we are not in the localist list view, display a label with the time of the event.
     //the location list view don't contain a label for this.
+    //Esto hay que modificarlo para que solo me muestre el label de la fecha del evento cuando
+    //el item es de tipo evento.!!!!!!!!!!!
     if (!self.locationList)
     {
         UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height, self.view.frame.size.width - descriptionLabel.frame.origin.x,
-                                                                            20.0)];
-        //self.finalEventTime = [dateFormatter stringFromDate:destinationDate];
-        self.finalEventTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
-        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.finalEventTime];
+                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                            40.0)];
+        eventTimeLabel.numberOfLines = 0;
+        if ([self.tempMenuArray[indexPath.row][@"type"] isEqualToString:@"eventos"])
+        {
+            self.finalEventTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
+            eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.finalEventTime];
+        }
+        else
+        {
+            eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.tempMenuArray[indexPath.row][@"short_detail"]];
+        }
         eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
         eventTimeLabel.textColor = [UIColor lightGrayColor];
         [eventCell.contentView addSubview:eventTimeLabel];
@@ -391,7 +399,10 @@
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = self.tempMenuArray[indexPath.row];
             detailsVC.objectLocation = [self getItemLocationName:self.tempMenuArray[indexPath.row]];
-            detailsVC.objectTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
+            if ([self.tempMenuArray[indexPath.row][@"type"]  isEqualToString:@"eventos"])
+                detailsVC.objectTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
+            else
+                detailsVC.objectTime = self.tempMenuArray[indexPath.row][@"short_detail"];
             //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
             //will display a map on screen.
             if (self.locationList)
@@ -427,8 +438,11 @@
         DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
         detailsVC.objectInfo = self.tempMenuArray[indexPath.row];
         detailsVC.objectLocation = [self getItemLocationName:self.tempMenuArray[indexPath.row]];
-        detailsVC.objectTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
-        //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
+        
+        if ([self.tempMenuArray[indexPath.row][@"type"]  isEqualToString:@"eventos"])
+            detailsVC.objectTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
+        else
+            detailsVC.objectTime = self.tempMenuArray[indexPath.row][@"short_detail"];        //We have to check if the cell that the user touched contained a location type object. If so, the next view controller
         //will display a map on screen.
         if (self.locationList)
             detailsVC.presentLocationObject = YES;

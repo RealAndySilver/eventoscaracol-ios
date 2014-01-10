@@ -249,7 +249,12 @@
                                                                         self.view.frame.size.height/28.4)];
     //eventTimeLabel.text = @"11:30AM";
     if (!self.presentLocationObject)
-        eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.objectTime];
+    {
+        if ([self.objectInfo[@"type"] isEqualToString:@"eventos"])
+            eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.objectTime];
+        else
+            eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.objectTime];
+    }
     else
         eventTimeLabel.text = @"";
     

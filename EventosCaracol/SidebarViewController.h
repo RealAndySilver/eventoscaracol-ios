@@ -18,7 +18,8 @@
 #import "DestacadosViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
+#import "SocialActivityViewController.h"
 
-@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate>
+@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate, UITabBarControllerDelegate>
 
 @end

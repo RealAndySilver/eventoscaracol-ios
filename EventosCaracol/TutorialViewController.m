@@ -19,6 +19,8 @@
 {
     [super viewDidLoad];
     
+    //////////////////////////////////////////////////////
+    //Create a ScrollView to display the pages of the tutorial
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
                                                                      0.0,
                                                                      self.view.frame.size.width,
@@ -28,14 +30,17 @@
     [self.scrollView setShowsHorizontalScrollIndicator:NO];
     [self.view addSubview:self.scrollView];
     
-    
+    ///////////////////////////////////////////////////////
+    //Create the pages
     int j=0;
     for (int i=0; i<5; i++) {
         [self createPage:i+1 withImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
         j=i+1;
     }
     self.scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*j, self.view.frame.size.height);
-
+    
+    ///////////////////////////////////////////////////////
+    //Create a page control to show the user the current page
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2- 50.0,
                                                                        self.view.frame.size.height/1.1,
                                                                        100.0,
@@ -43,6 +48,8 @@
     self.pageControl.numberOfPages = j;
     [self.view addSubview:self.pageControl];
     
+    //////////////////////////////////////////////////////
+    //Create a button to close the tutorial
     UIButton *enterButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50,
                                                                        20.0,
                                                                        100.0,
@@ -52,7 +59,8 @@
                     action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:enterButton];
 }
--(void)createPage:(int)pageNumber withImage:(UIImage*)image{
+-(void)createPage:(int)pageNumber withImage:(UIImage*)image
+{
     UIView *page=[[UIView alloc]initWithFrame:CGRectMake(_scrollView.frame.size.width*(pageNumber-1), 0, _scrollView.frame.size.width, _scrollView.frame.size.height)];
     UIImageView *tutorialIMageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                                    0.0,

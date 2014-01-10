@@ -152,6 +152,24 @@
             </objects>
             <point key="canvasLocation" x="1397" y="1132"/>
         </scene>
+        <!--Social Activity View Controller-->
+        <scene sceneID="t7z-Gq-9ZP">
+            <objects>
+                <viewController storyboardIdentifier="SocialActivity" id="m0P-Ve-Got" customClass="SocialActivityViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ZK6-Jw-I1h"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ck6-FS-Spl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xAP-6F-IRU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Akc-O8-W5E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1397" y="1817"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="RRh-ix-rdw">
             <objects>

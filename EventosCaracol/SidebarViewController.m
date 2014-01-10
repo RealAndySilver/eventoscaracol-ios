@@ -52,11 +52,22 @@
                                                  name:@"FacebookLogin"
                                                object:nil];
     
-    //Store the info for the aditional buttons of the slide menu table view
+   /* //Store the info for the aditional buttons of the slide menu table view
     if ([self getDictionaryWithName:@"user"][@"_id"])
-        self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
+    {
+        BOOL isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+        BOOL isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+        BOOL isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+        
+        if (isFacebookTagActive || isInstagramActive || isTwitterTagActive)
+        {
+            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial", @"Actividad en Redes"];
+        }
+        else
+            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
+    }
     else
-        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
+        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];*/
 
     
     ///////////////////////////////////////////////////////////////
@@ -305,10 +316,29 @@
 
             }
             
-            else
+            else if (indexPath.row - [self.menuArray count] == 1)
             {
                 TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
                 [self presentViewController:tutorialVC animated:YES completion:nil];
+            }
+            
+            else
+            {
+                UITabBarController *tabBarController = [[UITabBarController alloc] init];
+                tabBarController.delegate = self;
+                
+                BOOL isFacebookTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+                BOOL isTwitterTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+                BOOL isInstagramTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+                
+                NSMutableArray *tabBarViewControllersArray = [self createTabBarViewControllersForFacebook:isFacebookTagActivated
+                                                                                                  twitter:isTwitterTagActivated
+                                                                                                instagram:isInstagramTagActive];
+                
+                [tabBarController setViewControllers:tabBarViewControllersArray];
+                tabBarController.tabBar.barTintColor = [UIColor darkGrayColor];
+                tabBarController.selectedIndex = 0;                
+                [revealViewController setFrontViewController:tabBarController animated:YES];
             }
         }
     }
@@ -317,6 +347,46 @@
 }
 
 #pragma mark - Custom Methods
+
+-(NSMutableArray *)createTabBarViewControllersForFacebook:(BOOL)facebook twitter:(BOOL)twitter instagram:(BOOL)instagram
+{
+    //This method create the view controllers for the social activity section.
+    //depending on the boolean values passed as parameters.
+    
+    NSMutableArray *tabBarViewControllers = [[NSMutableArray alloc] init];
+    
+    if (facebook)
+    {
+        SocialActivityViewController *facebookVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SocialActivity"];
+        [facebookVC.tabBarItem initWithTitle:@"Facebook" image:nil tag:1];
+        [tabBarViewControllers addObject:facebookVC];
+    }
+    
+    if (twitter)
+    {
+        SocialActivityViewController *twitterVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SocialActivity"];
+        NSString *twitterURLString = [self getDictionaryWithName:@"master"][@"app"][@"twitter_url"];
+        NSString *hashtag = [self getDictionaryWithName:@"master"][@"app"][@"twitter_tag"];
+        twitterURLString = [twitterURLString stringByAppendingString:hashtag];
+        twitterURLString = [twitterURLString stringByReplacingOccurrencesOfString:@"#" withString:@"%23"];
+        twitterVC.hashtagURLString = twitterURLString;
+        [twitterVC.tabBarItem initWithTitle:@"Twitter" image:nil tag:2];
+        [tabBarViewControllers addObject:twitterVC];
+    }
+    
+    if (instagram)
+    {
+        SocialActivityViewController *instagramVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SocialActivity"];
+        NSString *instagramURLString = [self getDictionaryWithName:@"master"][@"app"][@"instagram_url"];
+        NSString *hasthtag = [self getDictionaryWithName:@"master"][@"app"][@"instagram_tag"];
+        instagramURLString = [instagramURLString stringByAppendingString:hasthtag];
+        instagramVC.hashtagURLString = instagramURLString;
+        [instagramVC.tabBarItem initWithTitle:@"Instagram" image:nil tag:3];
+        [tabBarViewControllers addObject:instagramVC];
+    }
+    
+    return tabBarViewControllers;
+}
 
 -(NSString *)getFormattedItemDate:(NSDictionary *)item
 {
@@ -408,7 +478,16 @@
     NSDictionary *dic = [[NSDictionary alloc] init];
     [self setDictionary:dic withName:@"user"];
     
-    self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
+    BOOL isFacebookTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+    BOOL isTwitterTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+    BOOL isInstagramTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+    
+    if (isFacebookTagActivated || isTwitterTagActivated || isInstagramTagActive)
+        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial", @"Actividad en Redes"];
+    else
+        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
+
+    
     [self.tableView reloadData];
     [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeCheckmark hidesAfter:5 show:YES];
     
@@ -422,7 +501,14 @@
 
 -(void)FacebookLoginNotificationReceived:(NSNotification *)notification
 {
-    self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
+    BOOL isFacebookTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+    BOOL isTwitterTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+    BOOL isInstagramTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+    
+    if (isFacebookTagActivated || isTwitterTagActivated || isInstagramTagActive)
+        self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial", @"Actividad en Redes"];
+    else
+        self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
     [self.tableView reloadData];
 }
 
@@ -560,9 +646,39 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 -(void)updateDataFromServer
 {
+    BOOL isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+    BOOL isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+    BOOL isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+    
     //Array that holds all the menu objects to display in the table view(like artists, news, locations, etc)
     //self.menuArray = [self.fileSaver getDictionary:@"master"][@"menu"];
     self.menuArray = [self getDictionaryWithName:@"master"][@"menu"];
+    
+    //Store the info for the aditional buttons of the slide menu table view
+    if ([self getDictionaryWithName:@"user"][@"_id"])
+    {
+        if (isFacebookTagActive || isInstagramActive || isTwitterTagActive)
+        {
+            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial", @"Actividad en Redes"];
+            NSLog(@"Facebook esta abierto y hay actividad en redes");
+        }
+        else
+        {
+            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
+            NSLog(@"Facebook está abierto y no hay actividad en redes");
+        }
+    }
+    else if (isFacebookTagActive || isInstagramActive || isTwitterTagActive)
+    {
+        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial", @"Actividad en Redes"];
+        NSLog(@"Facebook está cerrado y hay actividad en redes");
+    }
+    else
+    {
+        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
+        NSLog(@"Facebook está cerrado y no hay actividad en redes");
+    }
+
     
     //Array that holds of the objects of type artist, events, news and locations. we will use this array later when the
     //user make a search in the search bar. the results of that search will be filtered from this array.
@@ -581,10 +697,12 @@ shouldReloadTableForSearchString:(NSString *)searchString
     //[self.spinner startAnimating];
     //FileSaver *file=[[FileSaver alloc]init];
     
+    int random = rand()%1000;
+    NSString *parameters = [NSString stringWithFormat:@"%@/%d", [self getDictionaryWithName:@"app_id"][@"app_id"], random];
     //Load the info from the server asynchronously
     dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
     dispatch_async(infoLoader, ^(){
-        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
+        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:parameters];
     });
 }
 

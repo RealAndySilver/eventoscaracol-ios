@@ -52,6 +52,7 @@
 		8B9AF8E51858C2FE000DE122 /* Forward.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF8E41858C2FE000DE122 /* Forward.png */; };
 		8B9AF8E81858C3E5000DE122 /* Back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF8E61858C3E5000DE122 /* Back@2x.png */; };
 		8B9AF8E91858C3E5000DE122 /* Forward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B9AF8E71858C3E5000DE122 /* Forward@2x.png */; };
+		8B9E2173188059570016C484 /* SocialActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E2172188059570016C484 /* SocialActivityViewController.m */; };
 		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
 		8BA59699185128C400B6E7D0 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA59698185128C400B6E7D0 /* WebViewController.m */; };
@@ -181,6 +182,8 @@
 		8B9AF8E41858C2FE000DE122 /* Forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Forward.png; path = Resources/Images/Forward.png; sourceTree = "<group>"; };
 		8B9AF8E61858C3E5000DE122 /* Back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Back@2x.png"; path = "Resources/Images/Back@2x.png"; sourceTree = "<group>"; };
 		8B9AF8E71858C3E5000DE122 /* Forward@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Forward@2x.png"; path = "Resources/Images/Forward@2x.png"; sourceTree = "<group>"; };
+		8B9E2171188059570016C484 /* SocialActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialActivityViewController.h; sourceTree = "<group>"; };
+		8B9E2172188059570016C484 /* SocialActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialActivityViewController.m; sourceTree = "<group>"; };
 		8BA11EBD183BDAA0003616AB /* LoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
 		8BA11EBE183BDAA0003616AB /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
 		8BA11EC0183BDB5D003616AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -382,6 +385,7 @@
 				8BA59698185128C400B6E7D0 /* WebViewController.m */,
 				8BBDE6BB1846422100BEAD74 /* MapViewController.h */,
 				8BBDE6BC1846422100BEAD74 /* MapViewController.m */,
+				8B9E21741880595D0016C484 /* SocialNetworksVC's */,
 				8BA9C3B21843A20800876AA5 /* SlideMenu */,
 				8BEFF81F18400A1A004A5C6E /* Custom Cells */,
 				8BCD7D41183FB8ED00849D8A /* Views */,
@@ -454,6 +458,15 @@
 			);
 			name = Fonts;
 			path = Resources/Fonts;
+			sourceTree = "<group>";
+		};
+		8B9E21741880595D0016C484 /* SocialNetworksVC's */ = {
+			isa = PBXGroup;
+			children = (
+				8B9E2171188059570016C484 /* SocialActivityViewController.h */,
+				8B9E2172188059570016C484 /* SocialActivityViewController.m */,
+			);
+			name = "SocialNetworksVC's";
 			sourceTree = "<group>";
 		};
 		8BA9C3B21843A20800876AA5 /* SlideMenu */ = {
@@ -759,6 +772,7 @@
 				8BEFF81E183FEEE1004A5C6E /* DestacadosCollectionViewCell.m in Sources */,
 				8BA9C3B11843A20100876AA5 /* SWRevealViewController.m in Sources */,
 				8BCD7D40183FB8DC00849D8A /* DestacadosViewController.m in Sources */,
+				8B9E2173188059570016C484 /* SocialActivityViewController.m in Sources */,
 				8BBE1241184CDFAA00D90BE5 /* NSString+Trim.m in Sources */,
 				8BBE1246184CDFAA00D90BE5 /* MBAlertViewItem.m in Sources */,
 				8BFFF27D183FA82000009526 /* PopUpView.m in Sources */,
