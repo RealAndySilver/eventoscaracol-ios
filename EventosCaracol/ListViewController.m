@@ -104,8 +104,13 @@
     ///////////////////////////////////////////////////////////////////
     //Create two buttons to filter the events list by date and by location
     //this buttons will not be displayed when the user is on the locations list.
-    if (!self.locationList)
+    if (self.listWithGeneralTypeObjects)
+        NSLog(@"YES");
+    else
+        NSLog(@"NO");
+    if (!self.locationList && !self.listWithGeneralTypeObjects)
     {
+        NSLog(@"Si creé los botones de filtrado");
         self.filterByDayButton = [[UIButton alloc]
                                        initWithFrame:CGRectMake(0,
                                                                 self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
@@ -144,6 +149,7 @@
     
     else
     {
+        NSLog(@"No creé los botones de filtrado");
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,
                                                                        self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
                                                                        self.view.frame.size.width,
@@ -278,111 +284,137 @@
     }
     
     NSLog(@"%@", self.isFavoritedArray[indexPath.row]);
-
-    [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:favoritedImage];
-    [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellShare.png"]];
     
-    eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                        reuseIdentifier:cellIdentifier
-                                    containingTableView:tableView
-                                    leftUtilityButtons:leftButtons
-                                    rightUtilityButtons:nil];
+    if (![self.tempMenuArray[indexPath.row][@"type"] isEqualToString:@"general"])
+    {
+        [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:favoritedImage];
+        [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellShare.png"]];
         
+        eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                           reuseIdentifier:cellIdentifier
+                                       containingTableView:tableView
+                                        leftUtilityButtons:leftButtons
+                                       rightUtilityButtons:nil];
+    }
+    
+    else
+        eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                           reuseIdentifier:cellIdentifier
+                                       containingTableView:tableView
+                                        leftUtilityButtons:nil
+                                       rightUtilityButtons:nil];
+
     eventCell.delegate = self;
     
-    /////////////////////////////////////////////////////////////////////
-    //Create the subviews that will contain the cell.
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 100.0, 75.0)];
-    imageView.clipsToBounds = YES;
-    imageView.contentMode = UIViewContentModeScaleAspectFill;
-    imageView.backgroundColor = [UIColor clearColor];
-    
-  
-    [imageView setImageWithURL:self.tempMenuArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
-    
-    [eventCell.contentView addSubview:imageView];
-    
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
-                                                                   0.0,
-                                                                   self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10),
-                                                                   40.0)];
-    nameLabel.textAlignment = NSTextAlignmentLeft;
-    nameLabel.numberOfLines = 2;
-    nameLabel.text = self.tempMenuArray[indexPath.row][@"name"];
-    nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
-    [eventCell.contentView addSubview:nameLabel];
-    
-    ///////////////////////////////////////////////////////////////////////////////
-    //Get the item location name
-    self.itemLocationName = [[NSString alloc] init];
-    //First check if we are in a list of locations items. if not, search for the
-    //location_id of the item to display it's location in the cell
-    if (!self.locationList)
+    if (!self.listWithGeneralTypeObjects)
     {
-        //First we see if the item has a location associated.
-        if ([self.tempMenuArray[indexPath.row][@"location_id"] length] > 0)
+        /////////////////////////////////////////////////////////////////////
+        //Create the subviews that will contain the cell.
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 100.0, 75.0)];
+        imageView.clipsToBounds = YES;
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        imageView.backgroundColor = [UIColor clearColor];
+        
+        
+        [imageView setImageWithURL:self.tempMenuArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+        
+        [eventCell.contentView addSubview:imageView];
+        
+        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
+                                                                       0.0,
+                                                                       self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10),
+                                                                       40.0)];
+        nameLabel.textAlignment = NSTextAlignmentLeft;
+        nameLabel.numberOfLines = 2;
+        nameLabel.text = self.tempMenuArray[indexPath.row][@"name"];
+        nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        [eventCell.contentView addSubview:nameLabel];
+        
+        ///////////////////////////////////////////////////////////////////////////////
+        //Get the item location name
+        self.itemLocationName = [[NSString alloc] init];
+        //First check if we are in a list of locations items. if not, search for the
+        //location_id of the item to display it's location in the cell
+        if (!self.locationList)
         {
-            //Location id exist.
-            NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
-            for (int i = 0; i < [locationsArray count]; i++)
+            //First we see if the item has a location associated.
+            if ([self.tempMenuArray[indexPath.row][@"location_id"] length] > 0)
             {
-                if ([self.tempMenuArray[indexPath.row][@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                //Location id exist.
+                NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+                for (int i = 0; i < [locationsArray count]; i++)
                 {
-                    self.itemLocationName = locationsArray[i][@"name"];
-                    break;
+                    if ([self.tempMenuArray[indexPath.row][@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
+                    {
+                        self.itemLocationName = locationsArray[i][@"name"];
+                        break;
+                    }
                 }
+            }
+            
+            else
+            {
+                self.itemLocationName = @"No hay locación asignada";
             }
         }
         
+        //if we are in a list of location items, search for the short detail description
+        //of the item to display it in the cell.
         else
         {
-            self.itemLocationName = @"No hay locación asignada";
+            self.itemLocationName = self.tempMenuArray[indexPath.row][@"short_detail"];
+        }
+        
+        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                              40.0,
+                                                                              self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                              20.0)];
+        
+        descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocationName];
+        NSLog(@"locacion del item: %@", descriptionLabel.text);
+        descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+        descriptionLabel.textColor = [UIColor lightGrayColor];
+        [eventCell.contentView addSubview:descriptionLabel];
+        
+        /////////////////////////////////////////////////////////////////////////////////////
+        //If we are not in the localist list view, display a label with the time of the event.
+        //the location list view don't contain a label for this.
+        //Esto hay que modificarlo para que solo me muestre el label de la fecha del evento cuando
+        //el item es de tipo evento.!!!!!!!!!!!
+        if (!self.locationList)
+        {
+            UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                                descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                                40.0)];
+            eventTimeLabel.numberOfLines = 0;
+            if ([self.tempMenuArray[indexPath.row][@"type"] isEqualToString:@"eventos"])
+            {
+                self.finalEventTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
+                eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.finalEventTime];
+            }
+            else
+            {
+                eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.tempMenuArray[indexPath.row][@"short_detail"]];
+            }
+            eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+            eventTimeLabel.textColor = [UIColor lightGrayColor];
+            [eventCell.contentView addSubview:eventTimeLabel];
+            
         }
     }
     
-    //if we are in a list of location items, search for the short detail description
-    //of the item to display it in the cell.
     else
     {
-        self.itemLocationName = self.tempMenuArray[indexPath.row][@"short_detail"];
+        UILabel *generalTypeObjectLabel = [[UILabel alloc] initWithFrame:CGRectMake(30.0,
+                                                                                    25.0,
+                                                                                    eventCell.contentView.frame.size.width - 40.0,
+                                                                                    40.0)];
+        generalTypeObjectLabel.numberOfLines = 2;
+        generalTypeObjectLabel.text = self.tempMenuArray[indexPath.row][@"name"];
+        generalTypeObjectLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        [eventCell.contentView addSubview:generalTypeObjectLabel];
     }
     
-    UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
-                                                                          40.0,
-                                                                          self.view.frame.size.width - nameLabel.frame.origin.x,
-                                                                          20.0)];
-    
-    descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocationName];
-    NSLog(@"locacion del item: %@", descriptionLabel.text);
-    descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
-    descriptionLabel.textColor = [UIColor lightGrayColor];
-    [eventCell.contentView addSubview:descriptionLabel];
-    
-    /////////////////////////////////////////////////////////////////////////////////////
-    //If we are not in the localist list view, display a label with the time of the event.
-    //the location list view don't contain a label for this.
-    //Esto hay que modificarlo para que solo me muestre el label de la fecha del evento cuando
-    //el item es de tipo evento.!!!!!!!!!!!
-    if (!self.locationList)
-    {
-        UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
-                                                                            40.0)];
-        eventTimeLabel.numberOfLines = 0;
-        if ([self.tempMenuArray[indexPath.row][@"type"] isEqualToString:@"eventos"])
-        {
-            self.finalEventTime = [self getFormattedItemDate:self.tempMenuArray[indexPath.row]];
-            eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.finalEventTime];
-        }
-        else
-        {
-            eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.tempMenuArray[indexPath.row][@"short_detail"]];
-        }
-        eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
-        eventTimeLabel.textColor = [UIColor lightGrayColor];
-        [eventCell.contentView addSubview:eventTimeLabel];
-   
-    }
     return eventCell;
 }
 
@@ -396,6 +428,15 @@
     {
         if ([self.tempMenuArray[indexPath.row][@"open_inside"] isEqualToString:@"no"])
         {
+            if ([self.tempMenuArray[indexPath.row][@"type"] isEqualToString:@"general"])
+            {
+                GeneralInfoDetailViewController *generalInfoDetailVC = [self.storyboard instantiateViewControllerWithIdentifier:@"GeneralInfoDetail"];
+                generalInfoDetailVC.mainTitle = self.tempMenuArray[indexPath.row][@"name"];
+                generalInfoDetailVC.detailText = self.tempMenuArray[indexPath.row][@"detail"];
+                [self.navigationController pushViewController:generalInfoDetailVC animated:YES];
+                return;
+            }
+            
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.objectInfo = self.tempMenuArray[indexPath.row];
             detailsVC.objectLocation = [self getItemLocationName:self.tempMenuArray[indexPath.row]];
@@ -612,7 +653,7 @@
     if (![self getDictionaryWithName:@"user"][@"_id"])
     {
         [[[UIAlertView alloc] initWithTitle:nil
-                                    message:@"Ops! Debes iniciar sesión con Facebook para poder asignar favoritos."
+                                    message:@"¡Oops! Debes iniciar sesión con Facebook para poder asignar favoritos."
                                    delegate:self
                           cancelButtonTitle:@"Ok"
                           otherButtonTitles:@"Iniciar Sesión", nil] show];
@@ -720,7 +761,11 @@
         NSLog(@"SMS");
         if (![MFMessageComposeViewController canSendText])
         {
-            NSLog(@"No se pueden enviar mensajes");
+            [[[UIAlertView alloc] initWithTitle:nil
+                                       message:@"Tu dispositivo no está configurado para enviar mensajes."
+                                      delegate:self
+                             cancelButtonTitle:@"Ok"
+                              otherButtonTitles:nil] show];
         }
         
         else
@@ -1115,7 +1160,7 @@
     [MBHUDView dismissCurrentHUD];
     
     [[[UIAlertView alloc] initWithTitle:nil
-                               message:@"En este momento no hay conexión a internet. Para asiganr favoritos debes tener conexion a internet"
+                               message:@"No hay conexión a internet. Por favor revisa que tu dispositivo esté conectado a internet."
                               delegate:self
                      cancelButtonTitle:@"Ok"
                      otherButtonTitles:nil] show];

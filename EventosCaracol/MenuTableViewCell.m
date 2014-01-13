@@ -31,7 +31,8 @@
                                                                                30.0,
                                                                                30.0)];
         self.menuItemImageView.backgroundColor = [UIColor clearColor];
-        [self.menuItemLabel setContentMode:UIViewContentModeScaleAspectFit];
+        self.menuItemImageView.clipsToBounds = YES;
+        [self.menuItemImageView setContentMode:UIViewContentModeScaleAspectFill];
         [self.contentView addSubview:self.menuItemImageView];
     }
     return self;

@@ -369,7 +369,7 @@
         else
         {
             [[[UIAlertView alloc] initWithTitle:nil
-                                       message:@"Oops!, debes iniciar sesión con Facebook para poder visualizar tus favoritos"
+                                       message:@"¡Oops!, debes iniciar sesión con Facebook para poder visualizar tus favoritos"
                                       delegate:self
                              cancelButtonTitle:@"Ok"
                              otherButtonTitles:@"Iniciar Sesión", nil] show];
@@ -391,7 +391,11 @@
         
         else
         {
-            NSLog(@"Hubo error borrando el item");
+            [[[UIAlertView alloc]initWithTitle:nil
+                                      message:@"Hubo un error intentando eliminar tu favorito. Por favor intenta de nuevo. "
+                                     delegate:self
+                            cancelButtonTitle:@"Ok"
+                             otherButtonTitles:nil] show];
         }
         NSLog(@"%@", dictionary);
     }
@@ -401,7 +405,7 @@
 {
     [MBHUDView dismissCurrentHUD];
     [[[UIAlertView alloc] initWithTitle:nil
-                               message:@"No hay conexión a internet"
+                               message:@"No hay conexión a internet. Revisa que tu dispositivo esté conectado a internet."
                               delegate:self
                      cancelButtonTitle:@"Ok"
                      otherButtonTitles:nil] show];

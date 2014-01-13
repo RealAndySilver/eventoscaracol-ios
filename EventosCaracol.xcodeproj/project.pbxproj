@@ -59,6 +59,13 @@
 		8BA758CA1857578B0057A2EE /* SwipCellFavoriteActive.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA758C91857578B0057A2EE /* SwipCellFavoriteActive.png */; };
 		8BA9C3B11843A20100876AA5 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */; };
 		8BA9C3B51843A60700876AA5 /* SidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B41843A60700876AA5 /* SidebarViewController.m */; };
+		8BB2499818842E9600FC6EA4 /* FacebookTabIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB2499618842E9600FC6EA4 /* FacebookTabIcon.png */; };
+		8BB2499918842E9600FC6EA4 /* FacebookTabIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB2499718842E9600FC6EA4 /* FacebookTabIcon@2x.png */; };
+		8BB2499D1884318A00FC6EA4 /* TwitterTabIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB2499B1884318A00FC6EA4 /* TwitterTabIcon.png */; };
+		8BB2499E1884318A00FC6EA4 /* TwitterTabIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB2499C1884318A00FC6EA4 /* TwitterTabIcon@2x.png */; };
+		8BB249A21884327F00FC6EA4 /* InstagramTabIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB249A01884327F00FC6EA4 /* InstagramTabIcon.png */; };
+		8BB249A31884327F00FC6EA4 /* InstagramTabIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BB249A11884327F00FC6EA4 /* InstagramTabIcon@2x.png */; };
+		8BB249A61884608700FC6EA4 /* GeneralInfoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB249A51884608700FC6EA4 /* GeneralInfoDetailViewController.m */; };
 		8BB37E071848FA6C00274848 /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB37E061848FA6C00274848 /* TutorialViewController.m */; };
 		8BB37E091848FA9700274848 /* CaracolPrueba.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E081848FA9700274848 /* CaracolPrueba.jpg */; };
 		8BB37E4F18492FBC00274848 /* CaracolPrueba2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8BB37E4E18492FBC00274848 /* CaracolPrueba2.jpg */; };
@@ -195,6 +202,14 @@
 		8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		8BA9C3B31843A60700876AA5 /* SidebarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidebarViewController.h; sourceTree = "<group>"; };
 		8BA9C3B41843A60700876AA5 /* SidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarViewController.m; sourceTree = "<group>"; };
+		8BB2499618842E9600FC6EA4 /* FacebookTabIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FacebookTabIcon.png; path = Resources/Images/TabBarIcons/FacebookTabIcon.png; sourceTree = "<group>"; };
+		8BB2499718842E9600FC6EA4 /* FacebookTabIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FacebookTabIcon@2x.png"; path = "Resources/Images/TabBarIcons/FacebookTabIcon@2x.png"; sourceTree = "<group>"; };
+		8BB2499B1884318A00FC6EA4 /* TwitterTabIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TwitterTabIcon.png; path = Resources/Images/TabBarIcons/TwitterTabIcon.png; sourceTree = "<group>"; };
+		8BB2499C1884318A00FC6EA4 /* TwitterTabIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "TwitterTabIcon@2x.png"; path = "Resources/Images/TabBarIcons/TwitterTabIcon@2x.png"; sourceTree = "<group>"; };
+		8BB249A01884327F00FC6EA4 /* InstagramTabIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = InstagramTabIcon.png; path = Resources/Images/TabBarIcons/InstagramTabIcon.png; sourceTree = "<group>"; };
+		8BB249A11884327F00FC6EA4 /* InstagramTabIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "InstagramTabIcon@2x.png"; path = "Resources/Images/TabBarIcons/InstagramTabIcon@2x.png"; sourceTree = "<group>"; };
+		8BB249A41884608700FC6EA4 /* GeneralInfoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralInfoDetailViewController.h; sourceTree = "<group>"; };
+		8BB249A51884608700FC6EA4 /* GeneralInfoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralInfoDetailViewController.m; sourceTree = "<group>"; };
 		8BB37E051848FA6C00274848 /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialViewController.h; sourceTree = "<group>"; };
 		8BB37E061848FA6C00274848 /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialViewController.m; sourceTree = "<group>"; };
 		8BB37E081848FA9700274848 /* CaracolPrueba.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = CaracolPrueba.jpg; path = Resources/Images/CaracolPrueba.jpg; sourceTree = "<group>"; };
@@ -381,6 +396,8 @@
 				8B2C518818561AD200A373A8 /* FavoriteListViewController.m */,
 				8B2D0042183D64920007D502 /* DetailsViewController.h */,
 				8B2D0043183D64920007D502 /* DetailsViewController.m */,
+				8BB249A41884608700FC6EA4 /* GeneralInfoDetailViewController.h */,
+				8BB249A51884608700FC6EA4 /* GeneralInfoDetailViewController.m */,
 				8BA59697185128C400B6E7D0 /* WebViewController.h */,
 				8BA59698185128C400B6E7D0 /* WebViewController.m */,
 				8BBDE6BB1846422100BEAD74 /* MapViewController.h */,
@@ -480,6 +497,19 @@
 			name = SlideMenu;
 			sourceTree = "<group>";
 		};
+		8BB2499A18842E9B00FC6EA4 /* TabBar Icons */ = {
+			isa = PBXGroup;
+			children = (
+				8BB249A01884327F00FC6EA4 /* InstagramTabIcon.png */,
+				8BB249A11884327F00FC6EA4 /* InstagramTabIcon@2x.png */,
+				8BB2499B1884318A00FC6EA4 /* TwitterTabIcon.png */,
+				8BB2499C1884318A00FC6EA4 /* TwitterTabIcon@2x.png */,
+				8BB2499618842E9600FC6EA4 /* FacebookTabIcon.png */,
+				8BB2499718842E9600FC6EA4 /* FacebookTabIcon@2x.png */,
+			);
+			name = "TabBar Icons";
+			sourceTree = "<group>";
+		};
 		8BBE121B184CDFAA00D90BE5 /* MBAlertView */ = {
 			isa = PBXGroup;
 			children = (
@@ -569,6 +599,7 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8BB2499A18842E9B00FC6EA4 /* TabBar Icons */,
 				8BEC632D18621FC200552ED9 /* DismissPickerButtonImage.png */,
 				8BEA46CA185F43BC00E775FF /* Facebook.png */,
 				8B1B1236185BBA18007383CA /* Pattern.png */,
@@ -721,7 +752,9 @@
 				A08E87791855106B00C5E960 /* LoadingiPad.png in Resources */,
 				8B3BC98618526D9300CAD92E /* Loading.png in Resources */,
 				8BF0E32B185246BD0048D32D /* SwipCellFavorite.png in Resources */,
+				8BB2499E1884318A00FC6EA4 /* TwitterTabIcon@2x.png in Resources */,
 				8B9AF8E81858C3E5000DE122 /* Back@2x.png in Resources */,
+				8BB2499818842E9600FC6EA4 /* FacebookTabIcon.png in Resources */,
 				8B9AF8E31858C1F7000DE122 /* Back.png in Resources */,
 				8BD09F59184F81E900BA45FC /* CorazonGris.png in Resources */,
 				8B3BC98F18528A0000CAD92E /* CorazonApagado.png in Resources */,
@@ -729,7 +762,10 @@
 				8B3BC98C185282E100CAD92E /* FondoMenu.png in Resources */,
 				8BF0E32D1852471A0048D32D /* SwipCellShare.png in Resources */,
 				8BF0E329185244360048D32D /* BorrarRojo.png in Resources */,
+				8BB249A21884327F00FC6EA4 /* InstagramTabIcon.png in Resources */,
+				8BB249A31884327F00FC6EA4 /* InstagramTabIcon@2x.png in Resources */,
 				8BB37E531849357900274848 /* CaracolPrueba4.png in Resources */,
+				8BB2499918842E9600FC6EA4 /* FacebookTabIcon@2x.png in Resources */,
 				8BB464D01847F5CB0000A7FE /* BorrarPrueba.png in Resources */,
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */,
@@ -743,6 +779,7 @@
 				8B1B122E185B6326007383CA /* BarraBusqueda.png in Resources */,
 				8B1B1234185B7038007383CA /* Montserrat-Bold.ttf in Resources */,
 				8BCD7D3C183FB20500849D8A /* CorazonPrueba.png in Resources */,
+				8BB2499D1884318A00FC6EA4 /* TwitterTabIcon.png in Resources */,
 				8BD09F5B184F846300BA45FC /* BorrarGris.png in Resources */,
 				8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */,
 				8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */,
@@ -784,6 +821,7 @@
 				8BBE1243184CDFAA00D90BE5 /* UIView+Alert.m in Sources */,
 				8BBE1245184CDFAA00D90BE5 /* MBAlertViewButton.m in Sources */,
 				8B2D0031183D1BBB0007D502 /* ListViewController.m in Sources */,
+				8BB249A61884608700FC6EA4 /* GeneralInfoDetailViewController.m in Sources */,
 				8BBE1242184CDFAA00D90BE5 /* UIFont+Alert.m in Sources */,
 				8BBE1249184CDFAA00D90BE5 /* MBFlatAlertAbstract.m in Sources */,
 				8BBE124E184CDFAA00D90BE5 /* MBSpinningCircle.m in Sources */,

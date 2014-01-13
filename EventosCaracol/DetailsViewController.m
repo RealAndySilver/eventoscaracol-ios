@@ -210,15 +210,7 @@
     
     [self.scrollView addSubview:objectName];
     
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    /*UILabel *eventLocationLabel = [[UILabel alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
-                                                                            objectName.frame.origin.y + objectName.frame.size.height,
-                                                                            self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
-                                                                            self.view.frame.size.height/28.4)];
-    //eventLocationLabel.text = @"Plaza Cervantes";
-    eventLocationLabel.text = [NSString stringWithFormat:@"📍%@", self.objectLocation];
-    eventLocationLabel.textColor = [UIColor lightGrayColor];*/
-    
+    /////////////////////////////
     UIButton *eventLocationButton = [[UIButton alloc] initWithFrame:CGRectMake(20.0 + self.favoriteButton.frame.size.width,
                                                                                objectName.frame.origin.y + objectName.frame.size.height,
                                                                                self.view.frame.size.width - (20.0 + self.favoriteButton.frame.size.width + 20) - 20,
@@ -485,9 +477,8 @@
 {
     [MBHUDView dismissCurrentHUD];
     
-    NSLog(@"error con el servidor");
     [[[UIAlertView alloc] initWithTitle:nil
-                               message:@"No hay conexión."
+                               message:@"No hay conexión a internet. Revisa que tu dispositivo esté conectado a internet."
                               delegate:self
                      cancelButtonTitle:@"Ok"
                      otherButtonTitles:nil] show];

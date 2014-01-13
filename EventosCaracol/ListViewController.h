@@ -9,6 +9,7 @@
 #import <MessageUI/MessageUI.h>
 #import <UIKit/UIKit.h>
 #import "SWTableViewCell.h"
+#import "GeneralInfoDetailViewController.h"
 #import "ServerCommunicator.h"
 #import "SWRevealViewController.h"
 #import "DetailsViewController.h"
@@ -27,6 +28,7 @@
 @property (strong, nonatomic) NSString *navigationBarTitle;
 @property (strong, nonatomic) NSMutableArray *menuItemsArray; //Of NSDictionary
 @property (nonatomic) BOOL locationList;
+@property (nonatomic) BOOL listWithGeneralTypeObjects;
 @property (strong, nonatomic) NSString *menuID;
 @property (strong, nonatomic) NSString *objectType;
 @end

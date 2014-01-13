@@ -349,7 +349,11 @@
             detailsVC.objectInfo = array[index];
             self.itemLocationName = [self getItemLocation:array[index]];
             NSString *itemDate = [self getFormattedItemDate:array[index]];
-            detailsVC.objectTime = itemDate;
+            
+            if ([array[index][@"type"] isEqualToString:@"eventos"])
+                detailsVC.objectTime = itemDate;
+            else
+                detailsVC.objectTime = array[index][@"short_detail"];
             detailsVC.objectLocation = self.itemLocationName;
             detailsVC.navigationBarTitle = array[index][@"name"];
             [self.navigationController pushViewController:detailsVC animated:YES];
@@ -386,7 +390,12 @@
         detailsVC.objectInfo = array[index];
         self.itemLocationName = [self getItemLocation:array[index]];
         NSString *itemDate = [self getFormattedItemDate:array[index]];
-        detailsVC.objectTime = itemDate;
+        
+        if ([array[index][@"type"] isEqualToString:@"eventos"])
+            detailsVC.objectTime = itemDate;
+        else
+            detailsVC.objectTime = array[index][@"short_detail"];
+
         detailsVC.objectLocation = self.itemLocationName;
         detailsVC.navigationBarTitle = array[index][@"name"];
         [self.navigationController pushViewController:detailsVC animated:YES];

@@ -120,7 +120,7 @@
                                                                NSLog(@"No hay conexión %ld",(long)error.code);
                                                                [appDelegate decrementNetworkActivity];
                                                                [MBHUDView dismissCurrentHUD];
-                                                               [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                               [MBHUDView hudWithBody:@"No hay conexión. " type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                                            }
                                                        }
                                                    }];
@@ -132,7 +132,7 @@
                                                   NSLog(@"No hay conexión %ld",(long)error.code);
                                                   [appDelegate decrementNetworkActivity];
                                                   [MBHUDView dismissCurrentHUD];
-                                                  [MBHUDView hudWithBody:@"Error de conexión" type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
+                                                  [MBHUDView hudWithBody:@"No hay conexión." type:MBAlertViewHUDTypeExclamationMark hidesAfter:3 show:YES];
                                               }
                                               else if (error.code==2){
                                                   NSLog(@"no autorizado error %ld",(long)error.code);

@@ -19,7 +19,8 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
 #import "SocialActivityViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate, UITabBarControllerDelegate>
+@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate, UITabBarControllerDelegate, MFMailComposeViewControllerDelegate>
 
 @end

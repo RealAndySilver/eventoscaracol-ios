@@ -182,7 +182,23 @@
         else
         {
             cell.menuItemLabel.text = self.aditionalMenuItemsArray[indexPath.row-[self.menuArray count]];
-            cell.menuItemImageView.image = [UIImage imageNamed:@"Facebook.png"];
+            
+            BOOL isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+            BOOL isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+            BOOL isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+
+            if (isFacebookTagActive || isInstagramActive || isTwitterTagActive) {
+                if (indexPath.row - [self.menuArray count] == 3)
+                    cell.menuItemImageView.image = [UIImage imageNamed:@"Facebook.png"];
+                else
+                    cell.menuItemImageView.image = nil;
+            } else {
+                if (indexPath.row - [self.menuArray count] == 2)
+                    cell.menuItemImageView.image = [UIImage imageNamed:@"Facebook.png"];
+                else
+                    cell.menuItemImageView.image = nil;
+            }
+            
         }
     }
     return cell;
@@ -209,11 +225,28 @@
             [self presentViewController:navigationController animated:YES completion:nil];
         }
         
+        else if ([self.searchResults[indexPath.row][@"type"] isEqualToString:@"general"])
+        {
+            GeneralInfoDetailViewController *generalInfoDetailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"GeneralInfoDetail"];
+            generalInfoDetailsVC.mainTitle = self.searchResults[indexPath.row][@"name"];
+            generalInfoDetailsVC.detailText = self.searchResults[indexPath.row][@"detail"];
+            generalInfoDetailsVC.viewControllerWasPresentedFromASearch = YES;
+            generalInfoDetailsVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:generalInfoDetailsVC];
+            navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+            navigationController.navigationBar.tintColor = [UIColor whiteColor];
+            [self presentViewController:navigationController animated:YES completion:nil];
+        }
+        
         else
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
             detailsVC.navigationBarTitle = self.searchResults[indexPath.row][@"name"];
-            detailsVC.objectTime = [self getFormattedItemDate:self.searchResults[indexPath.row]];
+            if ([self.searchResults[indexPath.row][@"type"] isEqualToString:@"eventos"])
+                detailsVC.objectTime = [self getFormattedItemDate:self.searchResults[indexPath.row]];
+            else
+                detailsVC.objectTime = self.searchResults[indexPath.row][@"short_detail"];
+            
             detailsVC.objectLocation = [self getItemLocation:self.searchResults[indexPath.row]];
             detailsVC.objectInfo = self.searchResults[indexPath.row];
             detailsVC.presentViewControllerFromSearchBar = YES;
@@ -252,6 +285,9 @@
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"noticias"])
                 [self presentListViewControllerWithObjectsOfType:@"noticias" selectedRow:indexPath.row];
+            
+            else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"general"])
+                [self presentListViewControllerWithObjectsOfType:@"general" selectedRow:indexPath.row];
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"favoritos"])
             {
@@ -296,7 +332,65 @@
         
         else
         {
+            BOOL isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+            BOOL isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+            BOOL isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+            
+            //Menu Tutorial
             if (indexPath.row - [self.menuArray count] == 0)
+            {
+                TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
+                [self presentViewController:tutorialVC animated:YES completion:nil];
+            }
+            
+            //Menú Reportar un Problema
+            else if (indexPath.row - [self.menuArray count] == 1)
+            {
+                //Check if the device can send emails
+                if ([MFMailComposeViewController canSendMail])
+                {
+                    //Create a MFMailComposeViewController to open up the email window
+                    MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
+                    mailComposeVC.mailComposeDelegate = self;
+                    [mailComposeVC setSubject:@"Reporte de problema App 'EuroCine 2014'"];
+                    [mailComposeVC setToRecipients:@[@"diefer_91@hotmail.com"]];
+                    [self presentViewController:mailComposeVC animated:YES completion:nil];
+                }
+                
+                //Notify the user that the device can't send emails
+                else
+                {
+                    [[[UIAlertView alloc] initWithTitle:nil
+                                                message:@"¡Oops!, tu dispositivo no está configurado para enviar emails."
+                                               delegate:self
+                                      cancelButtonTitle:@"Ok"
+                                      otherButtonTitles:nil] show];
+                }
+            }
+            
+            //Menú Actividad en Redes
+            else if (indexPath.row - [self.menuArray count] == 2 && (isTwitterTagActive || isFacebookTagActive || isInstagramActive))
+            {
+                UITabBarController *tabBarController = [[UITabBarController alloc] init];
+                tabBarController.delegate = self;
+                
+                BOOL isFacebookTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+                BOOL isTwitterTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+                BOOL isInstagramTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+                
+                NSMutableArray *tabBarViewControllersArray = [self createTabBarViewControllersForFacebook:isFacebookTagActivated
+                                                                                                  twitter:isTwitterTagActivated
+                                                                                                instagram:isInstagramTagActive];
+                
+                [tabBarController setViewControllers:tabBarViewControllersArray];
+                tabBarController.tabBar.barTintColor = [UIColor darkGrayColor];
+                tabBarController.tabBar.tintColor = [UIColor whiteColor];
+                tabBarController.selectedIndex = 0;
+                [revealViewController setFrontViewController:tabBarController animated:YES];
+            }
+            
+            //Menú Login
+            else
             {
                 if (![self getDictionaryWithName:@"user"][@"_id"])
                 {
@@ -313,32 +407,6 @@
                                    destructiveButtonTitle:@"Cerrar Sesión"
                                         otherButtonTitles:nil]showInView:self.view];
                 }
-
-            }
-            
-            else if (indexPath.row - [self.menuArray count] == 1)
-            {
-                TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
-                [self presentViewController:tutorialVC animated:YES completion:nil];
-            }
-            
-            else
-            {
-                UITabBarController *tabBarController = [[UITabBarController alloc] init];
-                tabBarController.delegate = self;
-                
-                BOOL isFacebookTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
-                BOOL isTwitterTagActivated = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
-                BOOL isInstagramTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
-                
-                NSMutableArray *tabBarViewControllersArray = [self createTabBarViewControllersForFacebook:isFacebookTagActivated
-                                                                                                  twitter:isTwitterTagActivated
-                                                                                                instagram:isInstagramTagActive];
-                
-                [tabBarController setViewControllers:tabBarViewControllersArray];
-                tabBarController.tabBar.barTintColor = [UIColor darkGrayColor];
-                tabBarController.selectedIndex = 0;                
-                [revealViewController setFrontViewController:tabBarController animated:YES];
             }
         }
     }
@@ -358,7 +426,11 @@
     if (facebook)
     {
         SocialActivityViewController *facebookVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SocialActivity"];
-        [facebookVC.tabBarItem initWithTitle:@"Facebook" image:nil tag:1];
+        NSString *facebookURLString = [self getDictionaryWithName:@"master"][@"app"][@"facebook_url"];
+        NSString *hashtag = [self getDictionaryWithName:@"master"][@"app"][@"facebook_tag"];
+        facebookURLString = [facebookURLString stringByAppendingString:hashtag];
+        facebookVC.hashtagURLString = facebookURLString;
+        [facebookVC.tabBarItem initWithTitle:@"Facebook" image:[UIImage imageNamed:@"FacebookTabIcon.png"] tag:1];
         [tabBarViewControllers addObject:facebookVC];
     }
     
@@ -370,7 +442,7 @@
         twitterURLString = [twitterURLString stringByAppendingString:hashtag];
         twitterURLString = [twitterURLString stringByReplacingOccurrencesOfString:@"#" withString:@"%23"];
         twitterVC.hashtagURLString = twitterURLString;
-        [twitterVC.tabBarItem initWithTitle:@"Twitter" image:nil tag:2];
+        [twitterVC.tabBarItem initWithTitle:@"Twitter" image:[UIImage imageNamed:@"TwitterTabIcon.png"] tag:2];
         [tabBarViewControllers addObject:twitterVC];
     }
     
@@ -381,7 +453,7 @@
         NSString *hasthtag = [self getDictionaryWithName:@"master"][@"app"][@"instagram_tag"];
         instagramURLString = [instagramURLString stringByAppendingString:hasthtag];
         instagramVC.hashtagURLString = instagramURLString;
-        [instagramVC.tabBarItem initWithTitle:@"Instagram" image:nil tag:3];
+        [instagramVC.tabBarItem initWithTitle:@"Instagram" image:[UIImage imageNamed:@"InstagramTabIcon.png"] tag:3];
         [tabBarViewControllers addObject:instagramVC];
     }
     
@@ -483,10 +555,9 @@
     BOOL isInstagramTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
     
     if (isFacebookTagActivated || isTwitterTagActivated || isInstagramTagActive)
-        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial", @"Actividad en Redes"];
+        self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un Problema", @"Actividad en Redes", @"Iniciar Sesión"];
     else
-        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
-
+        self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un Problema", @"Iniciar Sesión"];
     
     [self.tableView reloadData];
     [MBHUDView hudWithBody:nil type:MBAlertViewHUDTypeCheckmark hidesAfter:5 show:YES];
@@ -506,9 +577,9 @@
     BOOL isInstagramTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
     
     if (isFacebookTagActivated || isTwitterTagActivated || isInstagramTagActive)
-        self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial", @"Actividad en Redes"];
+        self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un Problema", @"Actividad en Redes", @"Cerrar Sesión"];
     else
-        self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
+        self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un Problema", @"Cerrar Sesión"];
     [self.tableView reloadData];
 }
 
@@ -518,7 +589,6 @@
     
     ListViewController *listVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventsList"];
     NSArray *tempArray = [self getDictionaryWithName:@"master"][objectType];
-    NSLog(@"numero de %@: %d", objectType, [tempArray count]);
     NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
     NSString *menuID = self.menuArray[row][@"_id"];
     for (int i = 0; i < [tempArray count]; i++)
@@ -534,6 +604,12 @@
     //are we handling.
     listVC.menuID = menuID;
     listVC.objectType = objectType;
+    
+    if ([objectType isEqualToString:@"general"]) {
+        NSLog(@"Estamos en un listado de tipo general");
+        listVC.listWithGeneralTypeObjects = YES;
+    }
+    
     listVC.navigationBarTitle = self.menuArray[row][@"name"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
     navigationController.navigationBar.translucent = YES;
@@ -558,6 +634,13 @@ shouldReloadTableForSearchString:(NSString *)searchString
                                                      selectedScopeButtonIndex]]];
     
     return YES;
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -659,23 +742,23 @@ shouldReloadTableForSearchString:(NSString *)searchString
     {
         if (isFacebookTagActive || isInstagramActive || isTwitterTagActive)
         {
-            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial", @"Actividad en Redes"];
+            self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un Problema",@"Actividad en Redes", @"Cerrar Sesión"];
             NSLog(@"Facebook esta abierto y hay actividad en redes");
         }
         else
         {
-            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
+            self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un Problema", @"Cerrar Sesión"];
             NSLog(@"Facebook está abierto y no hay actividad en redes");
         }
     }
     else if (isFacebookTagActive || isInstagramActive || isTwitterTagActive)
     {
-        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial", @"Actividad en Redes"];
+        self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un problema", @"Actividad en Redes", @"Iniciar Sesión"];
         NSLog(@"Facebook está cerrado y hay actividad en redes");
     }
     else
     {
-        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];
+        self.aditionalMenuItemsArray = @[@"Tutorial", @"Reportar un Problema", @"Iniciar Sesión"];
         NSLog(@"Facebook está cerrado y no hay actividad en redes");
     }
 
@@ -686,6 +769,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"noticias"]];
     [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"eventos"]];
     [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"locaciones"]];
+    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"general"]];
 }
 
 -(void)getAllInfoFromServer

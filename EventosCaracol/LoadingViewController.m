@@ -159,7 +159,7 @@
     else
     {
         [[[UIAlertView alloc] initWithTitle:nil
-                                   message:@"Hubo un error en la conexión. Revisa que estés conectad@ a internet."
+                                   message:@"Hubo un error en la conexión. Revisa que tu dispositivo esté conectado a internet e intenta nuevamente."
                                   delegate:self
                          cancelButtonTitle:@"Ok"
                          otherButtonTitles:nil] show];
