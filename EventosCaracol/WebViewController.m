@@ -20,6 +20,17 @@
 {
     [super viewDidLoad];
     
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
+                                                                    0.0,
+                                                                    100.0,
+                                                                    44.0)];
+    titleLabel.text = @"EuroCine 2014";
+    titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = titleLabel;
+    
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0]};

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MapViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate>
+@interface MapViewController : UIViewController <UIPickerViewDataSource, UIPickerViewDelegate, SWRevealViewControllerDelegate>
 @property (strong, nonatomic) NSString *navigationBarTitle;
 @property (strong, nonatomic) NSString *menuID;
 @property (strong, nonatomic) NSString *objectType;

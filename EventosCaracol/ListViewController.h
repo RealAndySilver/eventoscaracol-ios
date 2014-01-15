@@ -23,7 +23,7 @@
 #import "AppDelegate.h"
 #import "MBHUDView.h"
 
-@interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate>
+@interface ListViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, SWRevealViewControllerDelegate>
 
 @property (strong, nonatomic) NSString *navigationBarTitle;
 @property (strong, nonatomic) NSMutableArray *menuItemsArray; //Of NSDictionary

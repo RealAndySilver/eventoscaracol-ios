@@ -21,6 +21,7 @@
 @property (nonatomic) BOOL isPickerActivated;
 @property (strong, nonatomic) NSString *selectedLocationID;
 @property (strong, nonatomic) NSMutableArray *markers;
+@property (strong, nonatomic) UIView *blockTouchesView;
 @end
 
 @implementation MapViewController
@@ -28,7 +29,8 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.revealViewController.delegate = self;
+    self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
     self.markers = [[NSMutableArray alloc] init];
     
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
@@ -310,6 +312,20 @@
         return @"Todos los Lugares";
     else
         return [self getDictionaryWithName:@"master"][@"categorias"][row - 1][@"name"];
+}
+
+#pragma mark - SWRevealViewControllerDelegate
+
+-(void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
+{
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"Cerré el menú");
+        [self.blockTouchesView removeFromSuperview];
+    }
+    else if (position == FrontViewPositionRight) {
+        NSLog(@"Abrí el menú");
+        [self.view addSubview:self.blockTouchesView];
+    }
 }
 
 #pragma mark - FileSaver Stuff

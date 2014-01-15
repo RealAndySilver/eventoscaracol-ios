@@ -18,6 +18,9 @@
 {
     [super viewDidLoad];
     
+    //We have to check if the view controller was presented from a search
+    //that the user made in the search bar. if YES, create a barButtonItem
+    //to dismiss the view controller.
     if (self.viewControllerWasPresentedFromASearch)
     {
         UIBarButtonItem *dismissViewControllerBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"X"

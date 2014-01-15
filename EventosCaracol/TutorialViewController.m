@@ -50,11 +50,13 @@
     
     //////////////////////////////////////////////////////
     //Create a button to close the tutorial
-    UIButton *enterButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50,
+    UIButton *enterButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2,
                                                                        20.0,
-                                                                       100.0,
+                                                                       self.view.frame.size.width/2 - 20.0,
                                                                        50.0)];
     [enterButton setTitle:@"Cerrar" forState:UIControlStateNormal];
+    enterButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+    enterButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [enterButton addTarget:self
                     action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:enterButton];

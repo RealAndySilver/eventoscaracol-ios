@@ -35,6 +35,9 @@
 /*------text to share with the share button---------*/
 @property (strong, nonatomic) NSString *textToShare;
 
+/*---View to Block the touches when the side menu is open-----*/
+@property (strong, nonatomic) UIView *blockTouchesView;
+
 @end
 
 #define ROW_HEIGHT 95.0
@@ -57,6 +60,8 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    self.revealViewController.delegate = self;
+    self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
     self.tempMenuArray = [NSMutableArray arrayWithArray:self.menuItemsArray];
     
     //Add this view controller as an observer of the notification center. it will
@@ -1094,6 +1099,20 @@
     }
     
     self.tempMenuArray = tempMutableArray;
+}
+
+#pragma mark - SWRevealViewControllerDelegate
+
+-(void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
+{
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"Cerré el menú");
+        [self.blockTouchesView removeFromSuperview];
+    }
+    else if (position == FrontViewPositionRight) {
+        NSLog(@"Abrí el menú");
+        [self.view addSubview:self.blockTouchesView];
+    }
 }
 
 #pragma mark - Server

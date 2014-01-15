@@ -16,6 +16,6 @@
 #import "MBHUDView.h"
 #import "DetailsViewController.h"
 
-@interface FavoriteListViewController : UIViewController <ServerCommunicatorDelegate, UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate>
+@interface FavoriteListViewController : UIViewController <ServerCommunicatorDelegate, UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, SWRevealViewControllerDelegate>
 
 @end

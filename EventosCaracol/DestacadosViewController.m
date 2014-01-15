@@ -19,6 +19,7 @@
 @property (strong, nonatomic) NSTimer * timer;
 @property (nonatomic) NSInteger currentPage;
 @property (strong, nonatomic) NSString *itemLocationName;
+@property (strong, nonatomic) UIView *blockTouchesView;
 @end
 
 @implementation DestacadosViewController
@@ -28,6 +29,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    NSLog(@"Aparecí");
     self.currentPage = 1;
     
     //Create a timer that fires every five seconds. this timer is used to make
@@ -62,10 +64,28 @@
     [self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
 }
 
+/*-(void)openMenu:(id)button
+{
+    static BOOL viewIsInFront;
+    NSLog(@"Open Menu");
+    [self.revealViewController revealToggle:button];
+    
+    if (!viewIsInFront) {
+        self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
+        [self.view addSubview:self.blockTouchesView];
+        viewIsInFront = YES;
+    } else {
+        [self.blockTouchesView removeFromSuperview];
+        self.blockTouchesView = nil;
+        viewIsInFront = NO;
+    }
+}*/
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.revealViewController.delegate = self;
+    self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
     //Register as an observer of the appStartedFromNotification notification
     /*[[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(appStartedFromNotificationReceivedWithNotification:)
@@ -199,19 +219,6 @@
     [super didReceiveMemoryWarning];
     NSLog(@"recibí un aviso de memoria");
 }
-
-#pragma mark - Notification Handler
-
-/*-(void)appStartedFromNotificationReceivedWithNotification:(NSNotification *)notification
-{
-    NSDictionary *info = [notification userInfo];
-    [[[UIAlertView alloc] initWithTitle:nil
-                               message:@"La aplicacion empezó desde una notificación"
-                              delegate:self
-                     cancelButtonTitle:@"Ok"
-                      otherButtonTitles:nil] show];
-    NSLog(@"llegó la notificación");
-}*/
 
 #pragma mark - Custom Methods
 
@@ -520,6 +527,20 @@
     }
 }
 
+#pragma mark - SWRevealViewControllerDelegate
+
+-(void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
+{
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"Cerré el menú");
+        [self.blockTouchesView removeFromSuperview];
+    }
+    else if (position == FrontViewPositionRight) {
+        NSLog(@"Abrí el menú");
+        [self.view addSubview:self.blockTouchesView];
+    }
+}
+
 #pragma mark - MFMailComposeDelegate
 
 -(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
@@ -551,7 +572,7 @@
         {
             MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
             messageViewController.messageComposeDelegate = self;
-            [messageViewController setBody:@"¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"];
+            [messageViewController setBody:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"];
             //[messageViewController addAttachmentURL:<#(NSURL *)#> withAlternateFilename:<#(NSString *)#>]
             [self presentViewController:messageViewController animated:YES completion:nil];
             NSLog(@"presenté el viewcontroller");
@@ -564,7 +585,7 @@
         NSLog(@"Facebook");
         
         SLComposeViewController *facebookViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-        [facebookViewController setInitialText:@"Post de Prueba. ¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore."];
+        [facebookViewController setInitialText:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil"];
         [facebookViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
         [self presentViewController:facebookViewController animated:YES completion:nil];
     }
@@ -575,7 +596,7 @@
         NSLog(@"Twitter");
         
         SLComposeViewController *twitterViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [twitterViewController setInitialText:@"Post de Prueba. ¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore."];
+        [twitterViewController setInitialText:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil."];
         [twitterViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
         [self presentViewController:twitterViewController animated:YES completion:nil];
     }
@@ -585,8 +606,8 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"Te recomiendo la app 'BogoTaxi'"];
-        [mailComposeViewController setMessageBody:@"¿Ya conoces la aplicación BogoTaxi?, BogoTaxi es la mejor herramienta para medir tu trayectoria y calcular el costo a pagar en un Taxi para la ciudad de Bogotá. Disponible en el AppStore. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8" isHTML:NO];
+        [mailComposeViewController setSubject:@"Te recomiendo la app 'EuroCine 2014'"];
+        [mailComposeViewController setMessageBody:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8" isHTML:NO];
         
         mailComposeViewController.mailComposeDelegate = self;
         [self presentViewController:mailComposeViewController animated:YES completion:nil];

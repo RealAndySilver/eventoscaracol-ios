@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SWRevealViewController.h"
 
-@interface SocialActivityViewController : UIViewController <UIBarPositioningDelegate>
+@interface SocialActivityViewController : UIViewController <UIBarPositioningDelegate, UIWebViewDelegate>
 @property (strong, nonatomic) NSString *hashtagURLString;
 @property (strong, nonatomic) UIColor *bgColor;
 @end

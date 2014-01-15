@@ -52,24 +52,6 @@
                                                  name:@"FacebookLogin"
                                                object:nil];
     
-   /* //Store the info for the aditional buttons of the slide menu table view
-    if ([self getDictionaryWithName:@"user"][@"_id"])
-    {
-        BOOL isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
-        BOOL isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
-        BOOL isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
-        
-        if (isFacebookTagActive || isInstagramActive || isTwitterTagActive)
-        {
-            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial", @"Actividad en Redes"];
-        }
-        else
-            self.aditionalMenuItemsArray = @[@"Cerrar Sesión", @"Tutorial"];
-    }
-    else
-        self.aditionalMenuItemsArray = @[@"Iniciar Sesión", @"Tutorial"];*/
-
-    
     ///////////////////////////////////////////////////////////////
     //Create the image view
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
@@ -116,13 +98,14 @@
     [[UISearchBar appearance] setSearchFieldBackgroundImage:[UIImage imageNamed:@"BarraBusqueda.png"] forState:UIControlStateNormal];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
     [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
+    //self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor redColor];
     self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:13.0/255.0 green:36.0/255.0 blue:102.0/255.0 alpha:1.0];
     [self.searchDisplayController.searchResultsTableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     self.searchDisplayController.searchResultsTableView.rowHeight = 50.0;
     self.searchDisplayController.searchResultsTableView.frame = CGRectMake(0.0,
                                                                            self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height,
                                                                            self.view.frame.size.width,
-                                                                           self.view.frame.size.height - (self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height));
+                                                                           100 /*self.view.frame.size.height - (self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height)*/);
     
     self.searchDisplayController.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
@@ -142,9 +125,9 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-    {
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
         return [self.searchResults count];
+        NSLog(@"numero de items en la lista de resultados: %d", [self.searchResults count]);
     }
     
     else
@@ -353,7 +336,8 @@
                     MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
                     mailComposeVC.mailComposeDelegate = self;
                     [mailComposeVC setSubject:@"Reporte de problema App 'EuroCine 2014'"];
-                    [mailComposeVC setToRecipients:@[@"diefer_91@hotmail.com"]];
+                    NSString *contactEmail = [self getDictionaryWithName:@"master"][@"app"][@"contact_email"];
+                    [mailComposeVC setToRecipients:@[contactEmail]];
                     [self presentViewController:mailComposeVC animated:YES completion:nil];
                 }
                 
@@ -625,15 +609,43 @@
 }
 
 #pragma mark - UISearchDisplayController delegate methods
+
+//The following three methods are neccesary to resize correcly the searchResultsTableView
+//when the user search for something.
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller didHideSearchResultsTableView:(UITableView *)tableView {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+}
+
+-(void)keyboardWillHide {
+    UITableView *tableView = [[self searchDisplayController] searchResultsTableView];
+    [tableView setContentInset:UIEdgeInsetsZero];
+    [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+}
+
+/////////////////////////////////////////////////
+
 -(BOOL)searchDisplayController:(UISearchDisplayController *)controller
 shouldReloadTableForSearchString:(NSString *)searchString
 {
+    NSLog(@"debo actualizarme");
     [self filterContentForSearchText:searchString
                                scope:[[self.searchDisplayController.searchBar scopeButtonTitles]
                                       objectAtIndex:[self.searchDisplayController.searchBar
                                                      selectedScopeButtonIndex]]];
-    
     return YES;
+}
+
+-(void)searchDisplayController:(UISearchDisplayController *)controller didShowSearchResultsTableView:(UITableView *)tableView
+{
+    NSLog(@"Mostré los resultados de la búsqueda");
+    controller.searchResultsTableView.frame = CGRectMake(0.0,0.0,
+                                                                    self.view.frame.size.width - 55,
+                                                         self.view.frame.size.height - (self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height));
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate

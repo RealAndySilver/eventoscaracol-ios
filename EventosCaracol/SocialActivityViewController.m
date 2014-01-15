@@ -9,7 +9,7 @@
 #import "SocialActivityViewController.h"
 
 @interface SocialActivityViewController ()
-
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @end
 
 @implementation SocialActivityViewController
@@ -17,7 +17,6 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = self.bgColor;
     
     /////////////////////////////////////////////////////
     //Create the left navigation bar button to open the side bar menu
@@ -25,7 +24,6 @@
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self.revealViewController
                                                                          action:@selector(revealToggle:)];
-    //[self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     
     //Create a navigation bar to display the title and the
     //navigationbar button to open the slide menu
@@ -44,7 +42,7 @@
     UINavigationItem *navigationItem = [[UINavigationItem alloc] init];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
                                                                     0.0,
-                                                                    200.0,
+                                                                    150.0,
                                                                     44.0)];
     titleLabel.text = @"Actividad en Redes";
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
@@ -62,18 +60,53 @@
                                                                      navigationBar.frame.origin.y + navigationBar.frame.size.height,
                                                                      self.view.frame.size.width,
                                                                      self.view.frame.size.height - (navigationBar.frame.origin.y + navigationBar.frame.size.height) - 44.0)];
+    webView.delegate = self;
     
-    //NSURL *url = [NSURL URLWithString:@"http://searchinstagram.com/cocktails"];
-    //mobile.twitter.com/search/%23
+    //We have to add a spinner to our view to show the user that the page is loading.
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 20.0,
+                                                                                                 self.view.frame.size.height/2 - 20.0,
+                                                                                                 40.0,
+                                                                                                 40.0)];
+    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    [self.spinner startAnimating];
+    
+    //Create the url to be loaded by the webview
     NSURL *url = [NSURL URLWithString:self.hashtagURLString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     webView.scalesPageToFit = YES;
     [webView loadRequest:request];
+   
     [self.view addSubview:webView];
+    [self.view addSubview:self.spinner];
 }
 
--(UIBarPosition)positionForBar:(id<UIBarPositioning>)bar
+#pragma  mark - UIWebViewDelegate
+
+-(void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
 {
+    //We implement this delegate method to show the user that there
+    //was a problem loading the page
+    
+    [self.spinner stopAnimating];
+    self.spinner = nil;
+    [self.spinner removeFromSuperview];
+    
+    [[[UIAlertView alloc] initWithTitle:@"Error de Conexión."
+                               message:@"La página no se pudo cargar. Revisa que tu dispositivo esté conectado a internet y vuelve a intentarlo. " delegate:self
+                     cancelButtonTitle:@"Ok"
+                      otherButtonTitles:nil] show];
+}
+
+-(void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    [self.spinner stopAnimating];
+    self.spinner = nil;
+    [self.spinner removeFromSuperview];
+}
+
+#pragma mark - UIBarPositioningDelegate
+
+-(UIBarPosition)positionForBar:(id<UIBarPositioning>)bar{
     return UIBarPositionTopAttached;
 }
 

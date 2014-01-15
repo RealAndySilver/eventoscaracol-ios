@@ -180,7 +180,14 @@
 
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
+    NSLog(@"User info: %@", userInfo);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"notification" object:userInfo];
+    
+    [[[UIAlertView alloc] initWithTitle:nil
+                               message:userInfo[@"aps"][@"alert"]
+                              delegate:self
+                     cancelButtonTitle:@"Ok"
+                      otherButtonTitles:nil] show];
 }
 
 #pragma mark - NetworkActivityIndicator

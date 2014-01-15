@@ -16,6 +16,7 @@
 @property (nonatomic) BOOL serverInfoReceived;
 @property (strong, nonatomic) NSString *itemLocation;
 @property (strong, nonatomic) NSString *itemDate;
+@property (strong, nonatomic) UIView *blockTouchesView;
 @end
 
 @implementation FavoriteListViewController
@@ -33,7 +34,8 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.revealViewController.delegate = self;
+    self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
     //Add ourselfs as an observer for 'serverUpdateNeeded' notification.
     //Whent this notification is received, it means we have to update the favorite
     //items info from the server.
@@ -130,24 +132,27 @@
         
         ////////////////////////////////////////////////////////////////////
         //item date label
-        UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                            descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x,
-                                                                            40.0)];
-        eventTimeLabel.numberOfLines = 0;
-        
-        if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"eventos"])
+        if (![self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
         {
-            self.itemDate = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
-            eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
+            UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                                descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x,
+                                                                                40.0)];
+            eventTimeLabel.numberOfLines = 0;
+            
+            if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"eventos"])
+            {
+                self.itemDate = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
+                eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
+            }
+            else
+            {
+                eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.favoritedItems[indexPath.row][@"short_detail"]];
+            }
+            
+            eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+            eventTimeLabel.textColor = [UIColor lightGrayColor];
+            [cell.contentView addSubview:eventTimeLabel];
         }
-        else
-        {
-            eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.favoritedItems[indexPath.row][@"short_detail"]];
-        }
-
-        eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
-        eventTimeLabel.textColor = [UIColor lightGrayColor];
-        [cell.contentView addSubview:eventTimeLabel];
         
         return cell;
     }
@@ -241,6 +246,20 @@
             detailsVC.presentLocationObject = YES;
         
         [self.navigationController pushViewController:detailsVC animated:YES];
+    }
+}
+
+#pragma mark - SWRevealViewControllerDelegate
+
+-(void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
+{
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"Cerré el menú");
+        [self.blockTouchesView removeFromSuperview];
+    }
+    else if (position == FrontViewPositionRight) {
+        NSLog(@"Abrí el menú");
+        [self.view addSubview:self.blockTouchesView];
     }
 }
 
