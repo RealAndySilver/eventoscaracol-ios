@@ -53,7 +53,7 @@
 {
     //////////////////////////////////////////////////////////////////
     //Configure container view for the Dates picker.
-    self.containerDatesPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/2.5)];
+    self.containerDatesPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, 220.0)];
     self.containerDatesPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4];
     
     /////////////////////////////////////////////////////////////////

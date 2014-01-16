@@ -111,11 +111,9 @@
     }
     
     //...if we are not in the detail view of a location object.
-    else
-    {
+    else {
         //If the object doen's have a youtube url, create a scroll view to contain all the subviews.
-        if ([self.objectInfo[@"youtube_url"] isEqualToString:@""])
-        {
+        if ([self.objectInfo[@"youtube_url"] isEqualToString:@""]) {
             //Create the scroll view of the entire screen, because there is not map view.
             NSLog(@"no hay youtube");
             self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
@@ -124,8 +122,7 @@
                                                                              self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
         }
         //If the object has an URL to a youutube video, we have to create a webview to display it, and below it we create the scroll view.
-        else
-        {
+        else {
             NSLog(@"si hay youtube");
             UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
                                                                              self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
@@ -151,8 +148,14 @@
     mainImageView.backgroundColor = [UIColor cyanColor];
     mainImageView.clipsToBounds = YES;
     mainImageView.contentMode = UIViewContentModeScaleAspectFill;
-    [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
-                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //Ésta línea de código puede crashear en caso de que no haya nada en el arreglo "image_url"
+    if ([self.objectInfo[@"image_url"] count] > 0)
+        [mainImageView setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
+                      placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    else
+        mainImageView.image = [UIImage imageNamed:@"CaracolPrueba4.png"];
     
     self.scrollView.delegate = self;
     self.scrollView.alwaysBounceVertical = YES;
@@ -263,7 +266,10 @@
                                                                    eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height,
                                                                    self.view.frame.size.width - 40.0,
                                                                    10.0)];
-    dotsLabel.text = @"..................................................................";
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        dotsLabel.text = @"..................................................................";
+    else
+        dotsLabel.text = @"......................................................................................................................................................................................................";
     dotsLabel.textColor = [UIColor lightGrayColor];
     [self.scrollView addSubview:dotsLabel];
     
@@ -273,8 +279,8 @@
                                                              eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20,
                                                              self.view.frame.size.width - 40.0,
                                                              self.view.frame.size.height - (eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20) - 80)];
-    //description.text = self.objectInfo[@"detail"];
-    description.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";
+    description.text = self.objectInfo[@"detail"];
+    //description.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         description.font = [UIFont fontWithName:@"Montserrat-Regular" size:28.0];
@@ -496,8 +502,8 @@
         NSLog(@"SMS");
         if (![MFMessageComposeViewController canSendText])
         {
-            [[[UIAlertView alloc] initWithTitle:@"Error"
-                                       message:@"No se pueden enviar mensajes desde este dispositivo"
+            [[[UIAlertView alloc] initWithTitle:@"No se puede enviar SMS"
+                                       message:@"Tu dispositivo no está configurado para enviar mensajes"
                                       delegate:self
                              cancelButtonTitle:@"Ok"
                              otherButtonTitles:nil] show];

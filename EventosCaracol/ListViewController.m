@@ -18,6 +18,7 @@
 @property (nonatomic) NSUInteger rowIndex; //Used for detecting which row we have to update
                                             //when the user favorites an item.
 @property (nonatomic) BOOL isPickerActivated;
+@property (nonatomic) BOOL isPicker2Activated;
 @property (nonatomic) float offset;
 @property (nonatomic) BOOL isUpdating;
 @property (nonatomic) BOOL shouldUpdate;
@@ -168,10 +169,24 @@
     //Table View initialization and configuration
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.rowHeight = ROW_HEIGHT;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        self.tableView.rowHeight = ROW_HEIGHT;
+    else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        self.tableView.rowHeight = 170.0;
+    
     self.tableView.allowsSelection = YES;
     //self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
     [self setupPullDownToRefreshView];
+    
+    ////////////////////////////////////////////////////////////////////
+    //Configure container view for the Location Picker
+    self.containerLocationPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, 220)];
+    self.containerLocationPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
+    
+    //////////////////////////////////////////////////////////////////
+    //Configure container view for the Dates picker.
+    self.containerDatesPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, 220)];
+    self.containerDatesPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
     
     ///////////////////////////////////////////////////////////////////
     //Configure locationPickerView
@@ -194,18 +209,9 @@
     self.datePickerView.delegate = self;
     self.datePickerView.dataSource = self;
     
-    ////////////////////////////////////////////////////////////////////
-    //Configure container view for the Location Picker
-    self.containerLocationPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/2.5)];
-    self.containerLocationPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
+    ////////////////////////////////////////////////////////////////
     [self.containerLocationPickerView addSubview:self.locationPickerView];
-    
-    //////////////////////////////////////////////////////////////////
-    //Configure container view for the Dates picker.
-    self.containerDatesPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/2.5)];
-    self.containerDatesPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.9];
     [self.containerDatesPickerView addSubview:self.datePickerView];
-
     
     /////////////////////////////////////////////////////////////////
     //Create a button to dismiss the location picker view.
@@ -315,7 +321,7 @@
     {
         /////////////////////////////////////////////////////////////////////
         //Create the subviews that will contain the cell.
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 100.0, 75.0)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, self.view.frame.size.width/3.2, tableView.rowHeight -  20.0)];
         imageView.clipsToBounds = YES;
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.backgroundColor = [UIColor clearColor];
@@ -332,7 +338,10 @@
         nameLabel.textAlignment = NSTextAlignmentLeft;
         nameLabel.numberOfLines = 2;
         nameLabel.text = self.tempMenuArray[indexPath.row][@"name"];
-        nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
         [eventCell.contentView addSubview:nameLabel];
         
         ///////////////////////////////////////////////////////////////////////////////
@@ -370,14 +379,25 @@
             self.itemLocationName = self.tempMenuArray[indexPath.row][@"short_detail"];
         }
         
-        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
-                                                                              40.0,
-                                                                              self.view.frame.size.width - nameLabel.frame.origin.x,
-                                                                              20.0)];
+        UILabel *descriptionLabel;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                         40.0,
+                                                                         self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                         20.0)];
+            descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                         40.0,
+                                                                         self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                         40.0)];
+            descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+
+        }
+        
         
         descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocationName];
         NSLog(@"locacion del item: %@", descriptionLabel.text);
-        descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
         descriptionLabel.textColor = [UIColor lightGrayColor];
         [eventCell.contentView addSubview:descriptionLabel];
         
@@ -388,9 +408,19 @@
         //el item es de tipo evento.!!!!!!!!!!!
         if (!self.locationList)
         {
-            UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                                descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
-                                                                                40.0)];
+            UILabel *eventTimeLabel;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                           descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                           40.0)];
+                eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+            } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                           descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                           40.0)];
+                eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+            }
+            
             eventTimeLabel.numberOfLines = 0;
             if ([self.tempMenuArray[indexPath.row][@"type"] isEqualToString:@"eventos"])
             {
@@ -401,7 +431,6 @@
             {
                 eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.tempMenuArray[indexPath.row][@"short_detail"]];
             }
-            eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
             eventTimeLabel.textColor = [UIColor lightGrayColor];
             [eventCell.contentView addSubview:eventTimeLabel];
             
@@ -410,13 +439,22 @@
     
     else
     {
+        CGFloat labelPositionY;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            labelPositionY = 7.0;
+        else labelPositionY = 40.0;
+        
         UILabel *generalTypeObjectLabel = [[UILabel alloc] initWithFrame:CGRectMake(30.0,
-                                                                                    25.0,
-                                                                                    eventCell.contentView.frame.size.width - 40.0,
-                                                                                    40.0)];
+                                                                                    labelPositionY,
+                                                                                    self.view.frame.size.width - 40.0,
+                                                                                    80.0)];
         generalTypeObjectLabel.numberOfLines = 2;
         generalTypeObjectLabel.text = self.tempMenuArray[indexPath.row][@"name"];
-        generalTypeObjectLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            generalTypeObjectLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        else
+            generalTypeObjectLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
+        
         [eventCell.contentView addSubview:generalTypeObjectLabel];
     }
     
@@ -743,7 +781,7 @@
         self.textToShare = [self.tempMenuArray[objectRow][@"name"] stringByAppendingString:@" : "];
         self.textToShare = [self.textToShare stringByAppendingString:self.tempMenuArray[objectRow][@"short_detail"]];
         self.textToShare = [self.textToShare stringByAppendingString:@"\n Enviado desde la aplicación 'EuroCine 2014'"];
-        [[[UIActionSheet alloc] initWithTitle:@""
+        [[[UIActionSheet alloc] initWithTitle:nil
                                     delegate:self
                            cancelButtonTitle:@"Volver"
                       destructiveButtonTitle:nil
@@ -766,7 +804,7 @@
         NSLog(@"SMS");
         if (![MFMessageComposeViewController canSendText])
         {
-            [[[UIAlertView alloc] initWithTitle:nil
+            [[[UIAlertView alloc] initWithTitle:@"No se puede enviar SMS"
                                        message:@"Tu dispositivo no está configurado para enviar mensajes."
                                       delegate:self
                              cancelButtonTitle:@"Ok"
@@ -810,7 +848,8 @@
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
         [mailComposeViewController setSubject:@"¡EuroCine 2014!"];
         [mailComposeViewController setMessageBody:self.textToShare isHTML:NO];
-        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
         mailComposeViewController.mailComposeDelegate = self;
         [self presentViewController:mailComposeViewController animated:YES completion:nil];
     }
@@ -940,15 +979,147 @@
 
 -(void)showPickerView:(UIPickerView*)sender
 {
-    UIView *containerView = nil;
+    /*UIView *containerView = nil;
     if (sender.tag == 1)
         containerView = self.containerDatesPickerView;
     
     else if (sender.tag == 2)
-        containerView = self.containerLocationPickerView;
+        containerView = self.containerLocationPickerView;*/
+    UIView *containerView = self.containerDatesPickerView;
+    UIView *containerView2 = self.containerLocationPickerView;
+    BOOL picker1;
+    BOOL picker2;
+    if (sender.tag == 1)
+        picker1 = YES;
+    else if (sender.tag == 2)
+        picker2 = YES;
+    
+    if (picker1 == YES) {
+        if (!self.isPickerActivated) {
+            [self.view addSubview:containerView];
+            NSLog(@"me oprimi");
+            [UIView animateWithDuration:0.3
+                                  delay:0.0
+                                options: UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                                 
+                                 //Bring up the corresponding container view.
+                                 
+                                 containerView.transform = CGAffineTransformMakeTranslation(0.0, -containerView.frame.size.height);
+                                 
+                             }
+                             completion:^(BOOL finished){
+                             }
+             ];
+            
+            self.isPickerActivated = YES;
+            
+            if (self.isPicker2Activated)
+            {
+                [self.view addSubview:containerView2];
+                NSLog(@"me oprimi");
+                [UIView animateWithDuration:0.3
+                                      delay:0.0
+                                    options: UIViewAnimationOptionCurveEaseInOut
+                                 animations:^{
+                                     
+                                     //Bring up the corresponding container view.
+                                     
+                                     containerView2.transform = CGAffineTransformMakeTranslation(0.0, containerView2.frame.size.height);
+                                     
+                                 }
+                                 completion:^(BOOL finished){
+                                 }
+                 ];
+                
+                self.isPicker2Activated = NO;
+            }
+        }
         
-    //If pickerIsActivated = NO, create and animation to show the picker on screen.
-    if (!self.isPickerActivated)
+        else {
+            [self.view addSubview:containerView];
+            NSLog(@"me oprimi");
+            [UIView animateWithDuration:0.3
+                                  delay:0.0
+                                options: UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                                 
+                                 //Bring up the corresponding container view.
+                                 
+                                 containerView.transform = CGAffineTransformMakeTranslation(0.0, containerView.frame.size.height);
+                                 
+                             }
+                             completion:^(BOOL finished){
+                             }
+             ];
+            
+            self.isPickerActivated = NO;
+        }
+    }
+    
+    else if (picker2 == YES) {
+        if (!self.isPicker2Activated) {
+            [self.view addSubview:containerView2];
+            NSLog(@"me oprimi");
+            [UIView animateWithDuration:0.3
+                                  delay:0.0
+                                options: UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                                 
+                                 //Bring up the corresponding container view.
+                                 
+                                 containerView2.transform = CGAffineTransformMakeTranslation(0.0, -containerView2.frame.size.height);
+                                 
+                             }
+                             completion:^(BOOL finished){
+                             }
+             ];
+            
+            self.isPicker2Activated = YES;
+            
+            if (self.isPickerActivated) {
+                [self.view addSubview:containerView];
+                NSLog(@"me oprimi");
+                [UIView animateWithDuration:0.3
+                                      delay:0.0
+                                    options: UIViewAnimationOptionCurveEaseInOut
+                                 animations:^{
+                                     
+                                     //Bring up the corresponding container view.
+                                     
+                                     containerView.transform = CGAffineTransformMakeTranslation(0.0, containerView.frame.size.height);
+                                     
+                                 }
+                                 completion:^(BOOL finished){
+                                 }
+                 ];
+                
+                self.isPickerActivated = NO;
+            }
+        }
+        
+        else {
+            [self.view addSubview:containerView2];
+            NSLog(@"me oprimi");
+            [UIView animateWithDuration:0.3
+                                  delay:0.0
+                                options: UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                                 
+                                 //Bring up the corresponding container view.
+                                 
+                                 containerView2.transform = CGAffineTransformMakeTranslation(0.0, containerView2.frame.size.height);
+                                 
+                             }
+                             completion:^(BOOL finished){
+                             }
+             ];
+            
+            self.isPicker2Activated = NO;
+        }
+    }
+   /* //If pickerIsActivated = NO, create and animation to show the picker on screen.
+    if (!self.isPickerActivated && !self.isPicker2Activated);
     {
         [self.view addSubview:containerView];
         NSLog(@"me oprimi");
@@ -988,8 +1159,7 @@
          ];
         
         self.isPickerActivated = NO;
-
-    }
+    }*/
 }
 
 #pragma mark - UIScrollViewDelegate

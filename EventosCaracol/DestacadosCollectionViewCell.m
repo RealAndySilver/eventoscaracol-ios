@@ -35,9 +35,8 @@
         
         UIView *patternView = [[UIView alloc] initWithFrame:self.contentView.frame];
         UIImage *patternImage = [UIImage imageNamed:@"Pattern.png"];
+        patternImage = [MyUtilities imageWithName:patternImage ScaleToSize:CGSizeMake(1.0, self.frame.size.height)];
         patternView.backgroundColor = [UIColor colorWithPatternImage:patternImage];
-        
-        
         
         /*self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width/2 - 25.0,
                                                                                  self.contentView.frame.size.height/2 - 25.0,

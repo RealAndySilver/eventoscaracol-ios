@@ -62,7 +62,10 @@
     imageView.backgroundColor = [UIColor grayColor];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
+    else
+        imageView.image = [UIImage imageNamed:@"FondoMenuiPad.png"];
   
     [self.view addSubview:imageView];
     [self.view bringSubviewToFront:self.searchDisplayController.searchBar];
@@ -335,6 +338,8 @@
                     //Create a MFMailComposeViewController to open up the email window
                     MFMailComposeViewController *mailComposeVC = [[MFMailComposeViewController alloc] init];
                     mailComposeVC.mailComposeDelegate = self;
+                    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                        mailComposeVC.modalPresentationStyle = UIModalPresentationFormSheet;
                     [mailComposeVC setSubject:@"Reporte de problema App 'EuroCine 2014'"];
                     NSString *contactEmail = [self getDictionaryWithName:@"master"][@"app"][@"contact_email"];
                     [mailComposeVC setToRecipients:@[contactEmail]];

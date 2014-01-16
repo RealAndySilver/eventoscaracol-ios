@@ -35,6 +35,7 @@
 {
     [super viewDidLoad];
     self.revealViewController.delegate = self;
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
     //Add ourselfs as an observer for 'serverUpdateNeeded' notification.
     //Whent this notification is received, it means we have to update the favorite
@@ -58,7 +59,11 @@
                                                           style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.rowHeight = 95.0;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        self.tableView.rowHeight = 95.0;
+    else
+        self.tableView.rowHeight = 170.0;
+    
     self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, 0.0, 0.0, 0.0);
     [self.view addSubview:self.tableView];
     
@@ -98,7 +103,7 @@
         
         /////////////////////////////////////////////////////////////////////
         //Create the subviews that will contain the cell.
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, 100.0, 75.0)];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, self.view.frame.size.width/3.2, tableView.rowHeight - 20.0)];
         imageView.clipsToBounds = YES;
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         imageView.backgroundColor = [UIColor clearColor];
@@ -110,23 +115,36 @@
         
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
                                                                        0.0,
-                                                                       self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10) - 20,
+                                                                       self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10),
                                                                        40.0)];
+        nameLabel.textAlignment = NSTextAlignmentLeft;
         nameLabel.numberOfLines = 2;
         nameLabel.text = self.favoritedItems[indexPath.row][@"name"];
-        nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
         [cell.contentView addSubview:nameLabel];
         
         ////////////////////////////////////////////////////////////////////
         //Item location label
-        UILabel *descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
-                                                                              40.0,
-                                                                              self.view.frame.size.width - nameLabel.frame.origin.x,
-                                                                              20.0)];
-        
+        UILabel *descriptionLabel;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                         40.0,
+                                                                         self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                         20.0)];
+            descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                         40.0,
+                                                                         self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                         40.0)];
+            descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+            
+        }
         self.itemLocation = [self getItemLocation:self.favoritedItems[indexPath.row]];
         descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocation];
-        descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
         descriptionLabel.textColor = [UIColor lightGrayColor];
         [cell.contentView addSubview:descriptionLabel];
         
@@ -134,9 +152,18 @@
         //item date label
         if (![self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
         {
-            UILabel *eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                                descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x,
-                                                                                40.0)];
+            UILabel *eventTimeLabel;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                           descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                           40.0)];
+                eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+            } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                           descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                           40.0)];
+                eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+            }
             eventTimeLabel.numberOfLines = 0;
             
             if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"eventos"])
@@ -149,7 +176,6 @@
                 eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.favoritedItems[indexPath.row][@"short_detail"]];
             }
             
-            eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
             eventTimeLabel.textColor = [UIColor lightGrayColor];
             [cell.contentView addSubview:eventTimeLabel];
         }
@@ -164,15 +190,24 @@
         
         //If we have already received a response from the server but there are no favorite
         //items, show a message to the user.
-        if (self.serverInfoReceived)
-        {
-            UILabel *noFavoritesLabel = [[UILabel alloc] initWithFrame:CGRectMake(noFavoritesCell.contentView.frame.size.width/2 - 100,
-                                                                                  noFavoritesCell.contentView.frame.size.height/2,
-                                                                                  200,
-                                                                                  40)];
-            
+        if (self.serverInfoReceived) {
+            UILabel *noFavoritesLabel;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                noFavoritesLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 100.0,
+                                                                             noFavoritesCell.frame.size.height/2 + 7,
+                                                                             200,
+                                                                             40)];
+                noFavoritesLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+            }
+          
+            else {
+                noFavoritesLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 200.0,
+                                                                             50.0,
+                                                                             400.0,
+                                                                             80.0)];
+                noFavoritesLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
+            }
             noFavoritesLabel.text = @"NO TIENES FAVORITOS";
-            noFavoritesLabel.font = [UIFont fontWithName:@"Helvetica" size:15.0];
             noFavoritesLabel.textColor = [UIColor lightGrayColor];
             noFavoritesLabel.textAlignment = NSTextAlignmentCenter;
             [noFavoritesCell.contentView addSubview:noFavoritesLabel];

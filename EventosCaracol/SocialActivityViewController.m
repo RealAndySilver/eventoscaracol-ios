@@ -10,6 +10,8 @@
 
 @interface SocialActivityViewController ()
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) UIView *blockTouchesView;
+@property (strong, nonatomic) UIWebView *webView;
 @end
 
 @implementation SocialActivityViewController
@@ -17,13 +19,13 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
-    
     /////////////////////////////////////////////////////
     //Create the left navigation bar button to open the side bar menu
     UIBarButtonItem *sideBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self.revealViewController
                                                                          action:@selector(revealToggle:)];
+    //[self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     
     //Create a navigation bar to display the title and the
     //navigationbar button to open the slide menu
@@ -36,6 +38,13 @@
     navigationBar.tintColor = [UIColor whiteColor];
     navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     [self.view addSubview:navigationBar];
+    
+    //////////////////////////////
+    self.blockTouchesView = [[UIView alloc] initWithFrame:CGRectMake(0.0,
+                                                                     navigationBar.frame.origin.y + navigationBar.frame.size.height,
+                                                                     self.view.frame.size.width,
+                                                                     self.view.frame.size.height - (navigationBar.frame.origin.y + navigationBar.frame.size.height))];
+
     
     //Create a navigation item to create the title that will be
     //display in the navigation bar
@@ -54,13 +63,14 @@
     navigationItem.leftBarButtonItem = sideBarButtonItem;
     [navigationBar pushNavigationItem:navigationItem animated:NO];
     
+    
     ////////////////////////////////////////////////////////////
     //Create a web view to display the content
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
+    self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
                                                                      navigationBar.frame.origin.y + navigationBar.frame.size.height,
                                                                      self.view.frame.size.width,
                                                                      self.view.frame.size.height - (navigationBar.frame.origin.y + navigationBar.frame.size.height) - 44.0)];
-    webView.delegate = self;
+    self.webView.delegate = self;
     
     //We have to add a spinner to our view to show the user that the page is loading.
     self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 20.0,
@@ -73,11 +83,18 @@
     //Create the url to be loaded by the webview
     NSURL *url = [NSURL URLWithString:self.hashtagURLString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    webView.scalesPageToFit = YES;
-    [webView loadRequest:request];
+    self.webView.scalesPageToFit = YES;
+    [self.webView loadRequest:request];
    
-    [self.view addSubview:webView];
+    [self.view addSubview:self.webView];
     [self.view addSubview:self.spinner];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    self.revealViewController.delegate = self;
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 }
 
 #pragma  mark - UIWebViewDelegate
@@ -102,6 +119,20 @@
     [self.spinner stopAnimating];
     self.spinner = nil;
     [self.spinner removeFromSuperview];
+}
+
+#pragma mark - SWRevealViewControllerDelegate
+
+-(void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position
+{
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"Cerré el menú");
+        [self.blockTouchesView removeFromSuperview];
+    }
+    else if (position == FrontViewPositionRight) {
+        NSLog(@"Abrí el menú");
+        [self.webView addSubview:self.blockTouchesView];
+    }
 }
 
 #pragma mark - UIBarPositioningDelegate

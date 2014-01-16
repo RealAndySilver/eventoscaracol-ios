@@ -64,23 +64,6 @@
     [self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
 }
 
-/*-(void)openMenu:(id)button
-{
-    static BOOL viewIsInFront;
-    NSLog(@"Open Menu");
-    [self.revealViewController revealToggle:button];
-    
-    if (!viewIsInFront) {
-        self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
-        [self.view addSubview:self.blockTouchesView];
-        viewIsInFront = YES;
-    } else {
-        [self.blockTouchesView removeFromSuperview];
-        self.blockTouchesView = nil;
-        viewIsInFront = NO;
-    }
-}*/
-
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -224,7 +207,7 @@
 
 -(void)shareApp
 {
-    [[[UIActionSheet alloc] initWithTitle:@""
+    [[[UIActionSheet alloc] initWithTitle:nil
                                  delegate:self
                         cancelButtonTitle:@"Volver"
                    destructiveButtonTitle:nil
@@ -565,7 +548,11 @@
         NSLog(@"SMS");
         if (![MFMessageComposeViewController canSendText])
         {
-            NSLog(@"No se pueden enviar mensajes");
+            [[[UIAlertView alloc] initWithTitle:@"No se puede enviar SMS"
+                                       message:@"Tu dispositivo no está configurado para enviar mensajes."
+                                      delegate:self
+                             cancelButtonTitle:@"Ok"
+                              otherButtonTitles:nil] show];
         }
         
         else
@@ -608,7 +595,8 @@
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
         [mailComposeViewController setSubject:@"Te recomiendo la app 'EuroCine 2014'"];
         [mailComposeViewController setMessageBody:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8" isHTML:NO];
-        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
         mailComposeViewController.mailComposeDelegate = self;
         [self presentViewController:mailComposeViewController animated:YES completion:nil];
     }

@@ -12,11 +12,16 @@
 
 +(void)showPopUpViewOverView:(UIView*)view image:(UIImage *)image
 {
+    CGFloat margin;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        margin = 50.0;
+    else
+        margin = 200.0;
     
-    UIImageView *heartView = [[UIImageView alloc] initWithFrame:CGRectMake(50.0,
-                                                                 view.frame.size.height/2 - (view.frame.size.width-100)/2,
-                                                                 view.frame.size.width - 100 ,
-                                                                 view.frame.size.width - 100)];
+    UIImageView *heartView = [[UIImageView alloc] initWithFrame:CGRectMake(margin,
+                                                                 view.frame.size.height/2 - (view.frame.size.width-(margin*2))/2,
+                                                                 view.frame.size.width - margin*2 ,
+                                                                 view.frame.size.width - margin*2)];
     
     heartView.alpha = 0.0;
     if (!image)

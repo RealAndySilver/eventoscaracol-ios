@@ -12,6 +12,7 @@
 @property (strong, nonatomic) UIWebView *webView;
 @property (strong, nonatomic) UIBarButtonItem *backBarButtonItem;
 @property (strong, nonatomic) UIBarButtonItem *forwardBarButtonItem;
+@property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @end
 
 @implementation WebViewController
@@ -35,6 +36,19 @@
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:144.0/255.0 green:192.0/255.0 blue:58.0/255.0 alpha:1.0]};
     
+    ////////////////////////////////////////////////
+    //Create the spinner
+    self.spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 20.0,
+                                                                             10.0,
+                                                                             40.0,
+                                                                             40.0)];
+    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    self.spinner.color = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    [self.spinner startAnimating];
+    
+    UIBarButtonItem *spinnerBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.spinner];
+    self.navigationItem.rightBarButtonItem = spinnerBarButton;
+    
     //Create a webView to display the URL content.
     self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
                                                                      self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
@@ -46,6 +60,7 @@
     [self.webView loadRequest:urlRequest];
     self.webView.delegate = self;
     [self.view addSubview:self.webView];
+    [self.view addSubview:self.spinner];
     
     /////////////////////////////////////////////////////////////////
     //Create a UIToolbar that will contain the back and forward buttons
@@ -91,8 +106,15 @@
 
 #pragma mark - UIWebVieDelegate
 
+-(void)webViewDidStartLoad:(UIWebView *)webView
+{
+    [self.spinner startAnimating];
+}
+
 -(void)webViewDidFinishLoad:(UIWebView *)webView
 {
+    [self.spinner stopAnimating];
+    
     if (![self.webView canGoBack])
         self.backBarButtonItem.tintColor = [UIColor grayColor];
     else
