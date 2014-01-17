@@ -92,7 +92,14 @@
         SWTableViewCell *cell = (SWTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"FavoriteCell"];
         
         NSMutableArray *rightButton = [[NSMutableArray alloc] init];
-        [rightButton sw_addUtilityButtonWithColor:[UIColor redColor] icon:[UIImage imageNamed:@"SwipeCellErase.png"]];
+        
+        UIImage *eraseImage;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            eraseImage = [UIImage imageNamed:@"SwipeCellErase.png"];
+        else
+            eraseImage = [UIImage imageNamed:@"SwipeCellEraseiPad.png"];
+        
+        [rightButton sw_addUtilityButtonWithColor:[UIColor redColor] icon:eraseImage];
         
         cell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:@"FavoriteCell"

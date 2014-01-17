@@ -98,6 +98,14 @@
 		8BBE124E184CDFAA00D90BE5 /* MBSpinningCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BBE123C184CDFAA00D90BE5 /* MBSpinningCircle.m */; };
 		8BBE124F184CDFAA00D90BE5 /* MBAlertAbstract.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BBE123E184CDFAA00D90BE5 /* MBAlertAbstract.m */; };
 		8BBE1296184D309900D90BE5 /* updateArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BBE1295184D309900D90BE5 /* updateArrow.png */; };
+		8BC88E8318897D0900854F97 /* FondoMenuiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E8218897D0900854F97 /* FondoMenuiPad.png */; };
+		8BC88E851889921600854F97 /* SwipeCellFavoriteiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E841889921600854F97 /* SwipeCellFavoriteiPad.png */; };
+		8BC88E87188992FB00854F97 /* SwipCellFavoriteActiveiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E86188992FB00854F97 /* SwipCellFavoriteActiveiPad.png */; };
+		8BC88E891889945100854F97 /* SwipCellShareiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E881889945100854F97 /* SwipCellShareiPad.png */; };
+		8BC88E8C188999DF00854F97 /* SwipeCellEraseiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E8A188999DE00854F97 /* SwipeCellEraseiPad.png */; };
+		8BC88E8D188999DF00854F97 /* SwipeCellEraseiPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E8B188999DF00854F97 /* SwipeCellEraseiPad@2x.png */; };
+		8BC88EE61889DBED00854F97 /* LogoEurocine.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88EE41889DBED00854F97 /* LogoEurocine.png */; };
+		8BC88EE71889DBED00854F97 /* LogoEurocine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88EE51889DBED00854F97 /* LogoEurocine@2x.png */; };
 		8BCD7D40183FB8DC00849D8A /* DestacadosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */; };
 		8BEA46CB185F43BC00E775FF /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BEA46CA185F43BC00E775FF /* Facebook.png */; };
 		8BEC632E18621FC200552ED9 /* DismissPickerButtonImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BEC632D18621FC200552ED9 /* DismissPickerButtonImage.png */; };
@@ -256,6 +264,14 @@
 		8BBE123E184CDFAA00D90BE5 /* MBAlertAbstract.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBAlertAbstract.m; sourceTree = "<group>"; };
 		8BBE1240184CDFAA00D90BE5 /* MBAlertViewSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBAlertViewSubclass.h; sourceTree = "<group>"; };
 		8BBE1295184D309900D90BE5 /* updateArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = updateArrow.png; path = Resources/Images/updateArrow.png; sourceTree = "<group>"; };
+		8BC88E8218897D0900854F97 /* FondoMenuiPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FondoMenuiPad.png; path = Resources/Images/FondoMenuiPad.png; sourceTree = "<group>"; };
+		8BC88E841889921600854F97 /* SwipeCellFavoriteiPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipeCellFavoriteiPad.png; path = Resources/Images/SwipeCellFavoriteiPad.png; sourceTree = "<group>"; };
+		8BC88E86188992FB00854F97 /* SwipCellFavoriteActiveiPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipCellFavoriteActiveiPad.png; path = Resources/Images/SwipCellFavoriteActiveiPad.png; sourceTree = "<group>"; };
+		8BC88E881889945100854F97 /* SwipCellShareiPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipCellShareiPad.png; path = Resources/Images/SwipCellShareiPad.png; sourceTree = "<group>"; };
+		8BC88E8A188999DE00854F97 /* SwipeCellEraseiPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipeCellEraseiPad.png; path = Resources/Images/SwipeCellEraseiPad.png; sourceTree = "<group>"; };
+		8BC88E8B188999DF00854F97 /* SwipeCellEraseiPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SwipeCellEraseiPad@2x.png"; path = "Resources/Images/SwipeCellEraseiPad@2x.png"; sourceTree = "<group>"; };
+		8BC88EE41889DBED00854F97 /* LogoEurocine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LogoEurocine.png; path = Resources/Images/LogoEurocine.png; sourceTree = "<group>"; };
+		8BC88EE51889DBED00854F97 /* LogoEurocine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LogoEurocine@2x.png"; path = "Resources/Images/LogoEurocine@2x.png"; sourceTree = "<group>"; };
 		8BCD7D3E183FB8DC00849D8A /* DestacadosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DestacadosViewController.h; sourceTree = "<group>"; };
 		8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DestacadosViewController.m; sourceTree = "<group>"; };
 		8BEA46CA185F43BC00E775FF /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Facebook.png; path = Resources/Images/Facebook.png; sourceTree = "<group>"; };
@@ -598,7 +614,15 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8BC88EE41889DBED00854F97 /* LogoEurocine.png */,
+				8BC88EE51889DBED00854F97 /* LogoEurocine@2x.png */,
+				8BC88E8A188999DE00854F97 /* SwipeCellEraseiPad.png */,
+				8BC88E8B188999DF00854F97 /* SwipeCellEraseiPad@2x.png */,
+				8BC88E881889945100854F97 /* SwipCellShareiPad.png */,
+				8BC88E86188992FB00854F97 /* SwipCellFavoriteActiveiPad.png */,
+				8BC88E841889921600854F97 /* SwipeCellFavoriteiPad.png */,
 				8B9977A718882D7F000F0266 /* FondoMenuiPad@2x.png */,
+				8BC88E8218897D0900854F97 /* FondoMenuiPad.png */,
 				8BB2499A18842E9B00FC6EA4 /* TabBar Icons */,
 				8BEC632D18621FC200552ED9 /* DismissPickerButtonImage.png */,
 				8BEA46CA185F43BC00E775FF /* Facebook.png */,
@@ -742,12 +766,15 @@
 				8BB2499E1884318A00FC6EA4 /* TwitterTabIcon@2x.png in Resources */,
 				8B9AF8E81858C3E5000DE122 /* Back@2x.png in Resources */,
 				8BB2499818842E9600FC6EA4 /* FacebookTabIcon.png in Resources */,
+				8BC88E8D188999DF00854F97 /* SwipeCellEraseiPad@2x.png in Resources */,
 				8B9AF8E31858C1F7000DE122 /* Back.png in Resources */,
 				8B9977A818882D7F000F0266 /* FondoMenuiPad@2x.png in Resources */,
 				8B3BC98F18528A0000CAD92E /* CorazonApagado.png in Resources */,
 				8BEA46CB185F43BC00E775FF /* Facebook.png in Resources */,
+				8BC88EE71889DBED00854F97 /* LogoEurocine@2x.png in Resources */,
 				8B3BC98C185282E100CAD92E /* FondoMenu.png in Resources */,
 				8BF0E32D1852471A0048D32D /* SwipCellShare.png in Resources */,
+				8BC88E8318897D0900854F97 /* FondoMenuiPad.png in Resources */,
 				8BF0E329185244360048D32D /* BorrarRojo.png in Resources */,
 				8BB249A21884327F00FC6EA4 /* InstagramTabIcon.png in Resources */,
 				8BB249A31884327F00FC6EA4 /* InstagramTabIcon@2x.png in Resources */,
@@ -756,16 +783,21 @@
 				75EE5569183BBFE900C52654 /* Images.xcassets in Resources */,
 				8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */,
 				8B2C518B185632BC00A373A8 /* SwipeCellErase.png in Resources */,
+				8BC88E891889945100854F97 /* SwipCellShareiPad.png in Resources */,
+				8BC88EE61889DBED00854F97 /* LogoEurocine.png in Resources */,
 				A08A39281853DC9200E2A6C8 /* GoogleMaps.bundle in Resources */,
 				8B1B1237185BBA18007383CA /* Pattern.png in Resources */,
 				A08A392C1853FBAC00E2A6C8 /* FondoBarraBusqueda.png in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				8BA758CA1857578B0057A2EE /* SwipCellFavoriteActive.png in Resources */,
+				8BC88E851889921600854F97 /* SwipeCellFavoriteiPad.png in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
 				8B1B122E185B6326007383CA /* BarraBusqueda.png in Resources */,
 				8B1B1234185B7038007383CA /* Montserrat-Bold.ttf in Resources */,
 				8BB2499D1884318A00FC6EA4 /* TwitterTabIcon.png in Resources */,
+				8BC88E87188992FB00854F97 /* SwipCellFavoriteActiveiPad.png in Resources */,
 				8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */,
+				8BC88E8C188999DF00854F97 /* SwipeCellEraseiPad.png in Resources */,
 				8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */,
 				8B9977AA18883CCB000F0266 /* LoadingiPad@2x.png in Resources */,
 				8BEC632E18621FC200552ED9 /* DismissPickerButtonImage.png in Resources */,

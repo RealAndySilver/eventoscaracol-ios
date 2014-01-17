@@ -29,7 +29,11 @@
 
 -(void)setupPullDownToRefreshView
 {
-    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 40.0, -50.0, 20.0, 40.0)];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 40.0, -50.0, 20.0, 40.0)];
+    else
+        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(120.0, -50.0, 20.0, 40.0)];
+    
     self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
     //[self.tableView addSubview:self.updateLabel];
     [self.tableView addSubview:self.updateImageView];
@@ -44,7 +48,7 @@
 {
     NSLog(@"me cargué");
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:36.0/255.0 blue:103.0/255.0 alpha:1.0];
     [self updateDataFromServer];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -56,16 +60,16 @@
     //Create the image view
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
-                                                                           self.view.frame.size.width,
-                                                                           self.view.frame.size.height)];
+                                                                           320.0,
+                                                                           188.0)];
     imageView.userInteractionEnabled = YES;
-    imageView.backgroundColor = [UIColor grayColor];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    imageView.image = [UIImage imageNamed:@"LogoEurocine.png"];
+    /*if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
     else
-        imageView.image = [UIImage imageNamed:@"FondoMenuiPad.png"];
+        imageView.image = [UIImage imageNamed:@"FondoMenuiPad.png"];*/
   
     [self.view addSubview:imageView];
     [self.view bringSubviewToFront:self.searchDisplayController.searchBar];
@@ -94,15 +98,13 @@
     //'Pull down to refresh' views
     [self setupPullDownToRefreshView];
     
-    self.view.backgroundColor = [UIColor whiteColor];
-    
     ////////////////////////////////////////////////////////////////////////////////
     //searchDisplayController configuration.
     [[UISearchBar appearance] setSearchFieldBackgroundImage:[UIImage imageNamed:@"BarraBusqueda.png"] forState:UIControlStateNormal];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
     [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
     //self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor redColor];
-    self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:13.0/255.0 green:36.0/255.0 blue:102.0/255.0 alpha:1.0];
+    self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:36.0/255.0 blue:103.0/255.0 alpha:1.0];
     [self.searchDisplayController.searchResultsTableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     self.searchDisplayController.searchResultsTableView.rowHeight = 50.0;
     self.searchDisplayController.searchResultsTableView.frame = CGRectMake(0.0,
@@ -619,14 +621,42 @@
 //when the user search for something.
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller didHideSearchResultsTableView:(UITableView *)tableView {
+    NSLog(@"oculté el searchresultstableview");
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidChangeFrameNotification object:nil];
 }
 
 - (void)searchDisplayController:(UISearchDisplayController *)controller willShowSearchResultsTableView:(UITableView *)tableView {
+    NSLog(@"se mostrará el searchresultstableview");
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserverForName:UIKeyboardDidChangeFrameNotification
+     object:nil
+     queue:[NSOperationQueue mainQueue]
+     usingBlock:^(NSNotification * notification)
+     {
+         CGRect keyboardEndFrame =
+         [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+         
+         CGRect screenRect = [[UIScreen mainScreen] bounds];
+         
+         if (CGRectIntersectsRect(keyboardEndFrame, screenRect))
+         {
+             // Keyboard is visible
+             NSLog(@"el teclado está visible");
+         }
+         else
+         {
+             // Keyboard is hidden
+             NSLog(@"El teclado estña oculto");
+             [self keyboardWillHide];
+         }
+     }];
 }
 
 -(void)keyboardWillHide {
+    NSLog(@"keyboard will hide");
     UITableView *tableView = [[self searchDisplayController] searchResultsTableView];
     [tableView setContentInset:UIEdgeInsetsZero];
     [tableView setScrollIndicatorInsets:UIEdgeInsetsZero];

@@ -103,7 +103,7 @@
 {
     //We implement this delegate method to show the user that there
     //was a problem loading the page
-    
+    NSLog(@"Fallo la carga de la página");
     [self.spinner stopAnimating];
     self.spinner = nil;
     [self.spinner removeFromSuperview];

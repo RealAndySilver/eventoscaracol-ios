@@ -116,11 +116,18 @@
         NSLog(@"NO");
     if (!self.locationList && !self.listWithGeneralTypeObjects)
     {
+        UIView *grayRectangle = [[UIView alloc] initWithFrame:CGRectMake(0.0,
+                                                                         self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                         self.view.frame.size.width,
+                                                                         44.0)];
+        grayRectangle.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0];
+        [self.view addSubview:grayRectangle];
+        
         NSLog(@"Si creé los botones de filtrado");
         self.filterByDayButton = [[UIButton alloc]
-                                       initWithFrame:CGRectMake(0,
+                                       initWithFrame:CGRectMake(self.view.frame.size.width/4 - 80.0,
                                                                 self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                                self.view.frame.size.width/2,
+                                                                160,
                                                                 44.0)];
         
         //We need to set the button tag of filterByDayButton and filterByLocationButton to show the correct picker
@@ -136,9 +143,9 @@
         
         //Filter by location button
         self.filterByLocationButton = [[UIButton alloc]
-                                            initWithFrame:CGRectMake(self.view.frame.size.width/2,
+                                            initWithFrame:CGRectMake(self.view.frame.size.width/2 + self.view.frame.size.width/4 - 80.0,
                                                                      self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                                     self.view.frame.size.width/2,
+                                                                     160,
                                                                      44.0)];
         self.filterByLocationButton.tag = 2;
         
@@ -282,16 +289,30 @@
         favoriteItemsArray = [self getDictionaryWithName:@"user"][@"favorited_atoms"];
     
     UIImage *favoritedImage;
+    UIImage *shareImage;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+        shareImage = [UIImage imageNamed:@"SwipCellShare.png"];
+    else
+        shareImage = [UIImage imageNamed:@"SwipCellShareiPad.png"];
+    
     if ([favoriteItemsArray containsObject:self.tempMenuArray[indexPath.row][@"_id"]])
     {
         [self.isFavoritedArray addObject:@1];
-        favoritedImage = [UIImage imageNamed:@"SwipCellFavoriteActive.png"];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            favoritedImage = [UIImage imageNamed:@"SwipCellFavoriteActive.png"];
+        }
+        else {
+            favoritedImage = [UIImage imageNamed:@"SwipCellFavoriteActiveiPad.png"];
+        }
     }
     
     else
     {
         [self.isFavoritedArray addObject:@0];
-        favoritedImage = [UIImage imageNamed:@"SwipCellFavorite.png"];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            favoritedImage = [UIImage imageNamed:@"SwipCellFavorite.png"];
+        else
+            favoritedImage = [UIImage imageNamed:@"SwipeCellFavoriteiPad.png"];
     }
     
     NSLog(@"%@", self.isFavoritedArray[indexPath.row]);
@@ -299,7 +320,7 @@
     if (![self.tempMenuArray[indexPath.row][@"type"] isEqualToString:@"general"])
     {
         [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:favoritedImage];
-        [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:[UIImage imageNamed:@"SwipCellShare.png"]];
+        [leftButtons sw_addUtilityButtonWithColor:[UIColor clearColor] icon:shareImage];
         
         eventCell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                            reuseIdentifier:cellIdentifier

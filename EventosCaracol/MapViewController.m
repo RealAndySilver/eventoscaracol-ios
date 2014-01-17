@@ -144,11 +144,19 @@
 
 -(void)createFilterButtons
 {
+    /////////////////////////////
+    UIView *grayView = [[UIView alloc] initWithFrame:CGRectMake(0.0,
+                                                               self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                               self.view.frame.size.width,
+                                                                44.0)];
+    grayView.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0];
+    [self.view addSubview:grayView];
+    
     /////////////////////////////////////////////////////////////////////////
     //Create two buttons, one for sorting the places, and other to see the places in a list.
-    self.sortPlacesButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0,
+    self.sortPlacesButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/4 - 80.0,
                                                                             self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                                            self.view.frame.size.width/2,
+                                                                            160.0,
                                                                             44.0)];
     
     [self.sortPlacesButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
@@ -158,9 +166,9 @@
     [self.sortPlacesButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.sortPlacesButton];
     
-    UIButton *viewPlacesInListButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2,
+    UIButton *viewPlacesInListButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 + self.view.frame.size.width/4 - 80.0,
                                                                                   self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                                                  self.view.frame.size.width/2,
+                                                                                  160.0,
                                                                                   44.0)];
     [viewPlacesInListButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
     viewPlacesInListButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];

@@ -129,7 +129,14 @@
                                                                              self.view.frame.size.width - 10,
                                                                              self.view.frame.size.height/3.0)];
             [webView.scrollView setScrollEnabled:NO];
-            NSString *embebedHTML = self.objectInfo[@"youtube_url"];
+            NSString *youtubeID = self.objectInfo[@"youtube_url"];
+            NSString *embebedHTML;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                embebedHTML = [NSString stringWithFormat:@"<iframe width=\"310\" height=\"190\" src=\"//www.youtube.com/embed/%@\" frameborder=\"0\" allowfullscreen></iframe>", youtubeID];
+            } else {
+                embebedHTML = [NSString stringWithFormat:@"<iframe width=\"750\" height=\"340\" src=\"//www.youtube.com/embed/%@\" frameborder=\"0\" allowfullscreen></iframe>", youtubeID];
+            }
+            
             NSString *formattedHTML = [NSString stringWithFormat:@"<meta name=\"viewport\", content=\"width=device-width\", user-scalable=no>%@",[embebedHTML stringByReplacingOccurrencesOfString:@"//" withString:@"http://"]];
             [webView loadHTMLString:formattedHTML baseURL:nil];
             [self.view addSubview:webView];
@@ -182,7 +189,7 @@
     {
         NSLog(@"el objeto está favoriteado oís");
         //self.favoriteButton.backgroundColor = [UIColor purpleColor];
-        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
         self.isFavorited = YES;
     }
     
@@ -191,7 +198,7 @@
     {
         NSLog(@"el objeto no está favoriteado oís");
         self.isFavorited = NO;
-        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
         //self.favoriteButton.backgroundColor = [UIColor grayColor];
     }
     
@@ -429,9 +436,9 @@
 -(void)updateFavoritedButton
 {
     if (self.isFavorited)
-        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
     else
-        [self.favoriteButton setBackgroundImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
+        [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
 }
 
 -(void)showFavoriteAnimationWithImage:(UIImage *)image
