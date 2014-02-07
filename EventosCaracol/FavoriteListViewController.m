@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSString *itemLocation;
 @property (strong, nonatomic) NSString *itemDate;
 @property (strong, nonatomic) UIView *blockTouchesView;
+@property (strong, nonatomic) UIButton *sideBarButton;
 @end
 
 @implementation FavoriteListViewController
@@ -29,6 +30,19 @@
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    
+    //////////////////////////////////////////////////////
+    //Create the back button of the NavigationBar. When pressed, this button
+    //display the slide menu.
+    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 34.0, 34.0)];
+    [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
+    [self.navigationController.navigationBar addSubview:self.sideBarButton];
+}
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.sideBarButton removeFromSuperview];
 }
 
 -(void)viewDidLoad
@@ -46,11 +60,11 @@
                                                object:nil];
     
     SWRevealViewController *revealViewController = [self revealViewController];
-    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
+    /*UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                                style:UIBarButtonItemStylePlain
                                                                               target:revealViewController
                                                                               action:@selector(revealToggle:)];
-    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
+    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;*/
     self.navigationItem.title = @"Favoritos";
     
     //////////////////////////////////////////////////////////////////////
@@ -306,6 +320,10 @@
 }
 
 #pragma mark - Custom Methods
+
+-(void)showSideBarMenu:(id)sender {
+    [self.revealViewController revealToggle:sender];
+}
 
 -(NSString *)getFormattedItemDate:(NSDictionary *)item
 {

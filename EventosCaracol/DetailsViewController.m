@@ -13,9 +13,15 @@
 @property (nonatomic) BOOL isFavorited;
 @property (strong, nonatomic) UIButton *favoriteButton;
 @property (strong, nonatomic) UILabel *favoriteCountLabel;
+@property (strong, nonatomic) UIButton *shareButton;
 @end
 
 @implementation DetailsViewController
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.shareButton removeFromSuperview];
+}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -23,6 +29,15 @@
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0]};
+    
+    //ShareButton
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width - 40.0, 5.0, 35.0, 35.0)];
+    [self.shareButton addTarget:self action:@selector(shareEvent) forControlEvents:UIControlEventTouchUpInside];
+    [self.shareButton setBackgroundImage:[UIImage imageNamed:@"ShareIcon.png"] forState:UIControlStateNormal];
+    [self.navigationController.navigationBar addSubview:self.shareButton];
+    
+    //Banner view
+    [BannerView showBannerOverView:self.view withImage:nil];
 }
 
 -(void)viewDidLoad
@@ -37,11 +52,10 @@
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
                                                                     0.0,
-                                                                    200.0,
+                                                                    150.0,
                                                                     44.0)];
     titleLabel.text = self.navigationBarTitle;
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
-    titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
@@ -51,12 +65,12 @@
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0]};
 
     //Create the UIBarButtonItem to share the event.
-    UIBarButtonItem *shareBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ShareIcon.png"]
+    /*UIBarButtonItem *shareBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ShareIcon.png"]
                                                                            style:UIBarButtonItemStylePlain
                                                                           target:self
                                                                           action:@selector(shareEvent)];
     
-    self.navigationItem.rightBarButtonItem = shareBarButtonItem;
+    self.navigationItem.rightBarButtonItem = shareBarButtonItem;*/
     
     //If this controller was presented from a search bar table view selection, create a UIBarButtomItem to dismiss it.
     if (self.presentViewControllerFromSearchBar)
@@ -74,12 +88,20 @@
     //If we are in the detail view of a location object
     if (self.presentLocationObject)
     {
+        //////////////////////////////////////////////////////////////////////
+        //Create the scroll view to make all the content scrollable. The scroll view will be below the map view.
+        //The mapview is always static, it's not in the scroll view.
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
+                                                                         self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                         self.view.frame.size.width,
+                                                                         self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
+        
         GMSCameraPosition *cameraPosition = [GMSCameraPosition cameraWithLatitude:[self.objectInfo[@"lat"] doubleValue]
                                                                         longitude:[self.objectInfo[@"lon"] doubleValue]
                                                                              zoom:12.0];
         
         GMSMapView *mapView = [GMSMapView mapWithFrame:CGRectMake(0.0,
-                                                                  self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 0.0,
+                                                                  0.0,
                                                                   self.view.frame.size.width ,
                                                                   (self.view.frame.size.height/2 - 20) -(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 20.0))
                                                 camera:cameraPosition];
@@ -91,20 +113,10 @@
         GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(markerLatitude, markerLongitude)];
         marker.title = self.objectInfo[@"name"];
         marker.map = mapView;
-        [self.view addSubview:mapView];
-        
-        //////////////////////////////////////////////////////////////////////
-        //Create the scroll view to make all the content scrollable. The scroll view will be below the map view.
-        //The mapview is always static, it's not in the scroll view.
-        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
-                                                                                  mapView.frame.origin.y + mapView.frame.size.height + 10,
-                                                                                  self.view.frame.size.width,
-                                                                                  self.view.frame.size.height - (mapView.frame.origin.y + mapView.frame.size.height + 10))];
-        
-        
+        [self.scrollView addSubview:mapView];
         
         mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
-                                                                      0.0,
+                                                                      mapView.frame.origin.y + mapView.frame.size.height + 10.0,
                                                                       self.view.frame.size.width,
                                                                       self.view.frame.size.height/2.5)];
         
@@ -112,20 +124,28 @@
     
     //...if we are not in the detail view of a location object.
     else {
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
+                                                                         self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                         self.view.frame.size.width,
+                                                                         self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
         //If the object doen's have a youtube url, create a scroll view to contain all the subviews.
         if ([self.objectInfo[@"youtube_url"] isEqualToString:@""]) {
+            mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                          0.0,
+                                                                          self.view.frame.size.width,
+                                                                          self.view.frame.size.height/2.5)];
             //Create the scroll view of the entire screen, because there is not map view.
             NSLog(@"no hay youtube");
-            self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
+            /*self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
                                                                              self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
                                                                              self.view.frame.size.width,
-                                                                             self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
+                                                                             self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];*/
         }
         //If the object has an URL to a youutube video, we have to create a webview to display it, and below it we create the scroll view.
         else {
             NSLog(@"si hay youtube");
             UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
-                                                                             self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                             0.0,
                                                                              self.view.frame.size.width - 10,
                                                                              self.view.frame.size.height/3.0)];
             [webView.scrollView setScrollEnabled:NO];
@@ -139,17 +159,18 @@
             
             NSString *formattedHTML = [NSString stringWithFormat:@"<meta name=\"viewport\", content=\"width=device-width\", user-scalable=no>%@",[embebedHTML stringByReplacingOccurrencesOfString:@"//" withString:@"http://"]];
             [webView loadHTMLString:formattedHTML baseURL:nil];
-            [self.view addSubview:webView];
-            
-            self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,webView.frame.origin.y + webView.frame.size.height + 10,
+            //[self.view addSubview:webView];
+            [self.scrollView addSubview:webView];
+            mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                          webView.frame.origin.y + webView.frame.size.height + 10.0,
+                                                                          self.view.frame.size.width,
+                                                                          self.view.frame.size.height/2.5)];
+            /*self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,webView.frame.origin.y + webView.frame.size.height + 10,
                                                                              self.view.frame.size.width,
-                                                                             self.view.frame.size.height - (                                                                           webView.frame.origin.y + webView.frame.size.height))];
+                                                                             self.view.frame.size.height - (                                                                           webView.frame.origin.y + webView.frame.size.height))];*/
         }
         
-        mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
-                                                                      0.0,
-                                                                      self.view.frame.size.width,
-                                                                      self.view.frame.size.height/2.5)];
+        
     }
     
     mainImageView.backgroundColor = [UIColor cyanColor];
@@ -279,14 +300,22 @@
         dotsLabel.text = @"......................................................................................................................................................................................................";
     dotsLabel.textColor = [UIColor lightGrayColor];
     [self.scrollView addSubview:dotsLabel];
-    
     ///////////////////////////////////////////////////////////////////////////////////////////
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:self.objectInfo[@"detail"]];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        [string setAttributes:@{NSFontAttributeName: [UIFont fontWithName:@"Montserrat-Regular" size:15.0]} range:NSMakeRange(0.0, [string length])];
+    } else {
+        [string setAttributes:@{NSFontAttributeName: [UIFont fontWithName:@"Montserrat-Regular" size:28.0]} range:NSMakeRange(0.0, [string length])];
+    }
+    CGFloat height = [self textViewHeightForAttributedText:string andWidth:self.view.frame.size.width - 40.0];
+    NSLog(@"altura adecuada: %f", height);
     UITextView *description = [[UITextView alloc]
                                     initWithFrame:CGRectMake(20.0,
                                                              eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20,
                                                              self.view.frame.size.width - 40.0,
-                                                             self.view.frame.size.height - (eventTimeLabel.frame.origin.y + eventTimeLabel.frame.size.height + 20) - 80)];
+                                                             height)];
     description.text = self.objectInfo[@"detail"];
+    NSLog(@"posicion del textview: %@", NSStringFromCGRect(description.frame));
     //description.text = @"Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non haben";
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -300,6 +329,16 @@
     description.editable = NO;
     [self.scrollView addSubview:description];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, description.frame.origin.y + description.frame.size.height + 20);
+}
+
+#pragma mark - Custom Methods
+
+- (CGFloat)textViewHeightForAttributedText:(NSAttributedString *)text andWidth:(CGFloat)width
+{
+    UITextView *textView = [[UITextView alloc] init];
+    [textView setAttributedText:text];
+    CGSize size = [textView sizeThatFits:CGSizeMake(width, FLT_MAX)];
+    return size.height;
 }
 
 #pragma mark - Actions

@@ -103,6 +103,7 @@
     [[UISearchBar appearance] setSearchFieldBackgroundImage:[UIImage imageNamed:@"BarraBusqueda.png"] forState:UIControlStateNormal];
     [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
     [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UIButton appearanceWhenContainedIn:[UISearchBar class], nil] setTitle:@"Cancelar" forState:UIControlStateNormal];
     //self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor redColor];
     self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:36.0/255.0 blue:103.0/255.0 alpha:1.0];
     [self.searchDisplayController.searchResultsTableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];

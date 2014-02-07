@@ -12,38 +12,51 @@
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) UIView *blockTouchesView;
 @property (strong, nonatomic) UIWebView *webView;
+@property (strong, nonatomic) UIButton *sideBarButton;
+@property (strong, nonatomic) UINavigationBar *navigationBar;
 @end
 
 @implementation SocialActivityViewController
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    //////////////////////////////////////////////////////
+    //Create the back button of the NavigationBar. When pressed, this button
+    //display the slide menu.
+    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 35.0, 35.0)];
+    [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
+    [self.navigationBar addSubview:self.sideBarButton];
+}
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     /////////////////////////////////////////////////////
     //Create the left navigation bar button to open the side bar menu
-    UIBarButtonItem *sideBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
+    /*UIBarButtonItem *sideBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self.revealViewController
-                                                                         action:@selector(revealToggle:)];
+                                                                         action:@selector(revealToggle:)];*/
     //[self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     
     //Create a navigation bar to display the title and the
     //navigationbar button to open the slide menu
-    UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0.0,
+    self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0.0,
                                                                                        20.0,
                                                                                        self.view.frame.size.width,
                                                                                        44.0)];
-    navigationBar.delegate = self;
-    navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    navigationBar.tintColor = [UIColor whiteColor];
-    navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
-    [self.view addSubview:navigationBar];
+    self.navigationBar.delegate = self;
+    self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    self.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    [self.view addSubview:self.navigationBar];
     
     //////////////////////////////
     self.blockTouchesView = [[UIView alloc] initWithFrame:CGRectMake(0.0,
-                                                                     navigationBar.frame.origin.y + navigationBar.frame.size.height,
+                                                                     self.navigationBar.frame.origin.y + self.navigationBar.frame.size.height,
                                                                      self.view.frame.size.width,
-                                                                     self.view.frame.size.height - (navigationBar.frame.origin.y + navigationBar.frame.size.height))];
+                                                                     self.view.frame.size.height - (self.navigationBar.frame.origin.y + self.navigationBar.frame.size.height))];
 
     
     //Create a navigation item to create the title that will be
@@ -60,16 +73,16 @@
     titleLabel.textAlignment = NSTextAlignmentCenter;
     
     navigationItem.titleView = titleLabel;
-    navigationItem.leftBarButtonItem = sideBarButtonItem;
-    [navigationBar pushNavigationItem:navigationItem animated:NO];
+    //navigationItem.leftBarButtonItem = sideBarButtonItem;
+    [self.navigationBar pushNavigationItem:navigationItem animated:NO];
     
     
     ////////////////////////////////////////////////////////////
     //Create a web view to display the content
     self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
-                                                                     navigationBar.frame.origin.y + navigationBar.frame.size.height,
+                                                                     self.navigationBar.frame.origin.y + self.navigationBar.frame.size.height,
                                                                      self.view.frame.size.width,
-                                                                     self.view.frame.size.height - (navigationBar.frame.origin.y + navigationBar.frame.size.height) - 44.0)];
+                                                                     self.view.frame.size.height - (self.navigationBar.frame.origin.y + self.navigationBar.frame.size.height) - 44.0)];
     self.webView.delegate = self;
     
     //We have to add a spinner to our view to show the user that the page is loading.
@@ -95,6 +108,12 @@
     [super viewDidAppear:animated];
     self.revealViewController.delegate = self;
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+}
+
+#pragma mark - Actions
+
+-(void)showSideBarMenu:(id)sender {
+    [self.revealViewController revealToggle:sender];
 }
 
 #pragma  mark - UIWebViewDelegate

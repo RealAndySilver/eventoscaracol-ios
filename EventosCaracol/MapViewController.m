@@ -22,9 +22,28 @@
 @property (strong, nonatomic) NSString *selectedLocationID;
 @property (strong, nonatomic) NSMutableArray *markers;
 @property (strong, nonatomic) UIView *blockTouchesView;
+@property (strong, nonatomic) UIButton *sideBarButton;
 @end
 
 @implementation MapViewController
+
+-(void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.sideBarButton removeFromSuperview];
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    //////////////////////////////////////////////////////
+    //Create the back button of the NavigationBar. When pressed, this button
+    //display the slide menu.
+    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 34.0, 34.0)];
+    [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
+    [self.navigationController.navigationBar addSubview:self.sideBarButton];
+
+}
 
 -(void)viewDidLoad
 {
@@ -41,11 +60,11 @@
     [self createFilterButtons];
     [self createPickerView];
     
-    UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
+    /*UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                                style:UIBarButtonItemStylePlain
                                                                               target:self.revealViewController
                                                                               action:@selector(revealToggle:)];
-    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
+    self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;*/
     self.navigationItem.title = self.navigationBarTitle;
 }
 
@@ -190,6 +209,10 @@
 }
 
 #pragma mark - Custom Methods
+
+-(void)showSideBarMenu:(id)sender {
+    [self.revealViewController revealToggle:sender];
+}
 
 -(void)showPickerView:(UIPickerView*)sender
 {

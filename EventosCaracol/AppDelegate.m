@@ -8,7 +8,9 @@
 
 #import "AppDelegate.h"
 
-@interface AppDelegate()
+@interface AppDelegate(){
+    UIView *statusBarBackgroundView;
+}
 @property (nonatomic, readwrite) int networkActivityCounter;
 @property (nonatomic, readwrite) int badgeNumberCounter;
 @property (strong, nonatomic) NSDictionary *itemInfo;
@@ -16,10 +18,47 @@
 
 @implementation AppDelegate
 
+-(void)notificationReceived:(NSNotification *)notification {
+    NSDictionary *info = [notification userInfo];
+    CGFloat alpha = [info[@"PanningProgress"] floatValue];
+    NSLog(@"alpha: %f", alpha);
+    statusBarBackgroundView.alpha = alpha;
+}
+
+-(void)statusBarMustBeTransparentNotificationReceived:(NSNotification *)notification {
+    NSLog(@"status bar must be transparent notification received");
+    [UIView animateWithDuration:0.1
+                     animations:^(){
+                         statusBarBackgroundView.alpha = 0.0;
+                     }];
+}
+
+-(void)statusBarMustBeOpaqueNotificationReceived:(NSNotification *)notification {
+    NSLog(@"Status bar must be opaque");
+    [UIView animateWithDuration:0.1
+                     animations:^(){
+                         statusBarBackgroundView.alpha = 1.0;
+                     }];
+}
+
 #pragma mark - Application LifeCycle
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationReceived:) name:@"PanningNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarMustBeTransparentNotificationReceived:) name:@"StatusBarMustBeTransparentNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarMustBeOpaqueNotificationReceived:)
+                                                 name:@"StatusBarMustBeOpaqueNotification" object:nil];
+    // Window framing changes condition for iOS7 or greater
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        statusBarBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.window.frame.size.width, 20)];//statusBarBackgroundView is normal uiview
+        //statusBarBackgroundView.backgroundColor = [UIColor blackColor];
+        statusBarBackgroundView.backgroundColor = [UIColor colorWithRed:53.0/255.0 green:98.0/255.0 blue:209.0/255.0 alpha:1.0];
+        statusBarBackgroundView.alpha = 0.0;
+        [self.window addSubview:statusBarBackgroundView];
+        //self.window.bounds = CGRectMake(0, 20, self.window.frame.size.width, self.window.frame.size.height);
+    }
+
     // Override point for customization after application launch.
     sleep(2);
     [GMSServices provideAPIKey:@"AIzaSyC8pPYE33R1zoeR1GuOMrThOw3nwJrgXtE"];
@@ -65,7 +104,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     [[NSNotificationCenter defaultCenter] postNotificationName:@"foreground" object:nil];
 }
@@ -77,6 +116,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [self.window bringSubviewToFront:statusBarBackgroundView];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     application.applicationIconBadgeNumber = 0;
     self.badgeNumberCounter = 0;

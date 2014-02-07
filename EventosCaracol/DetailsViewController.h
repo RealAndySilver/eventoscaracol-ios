@@ -16,6 +16,7 @@
 #import "FileSaver.h"
 #import "LoginViewController.h"
 #import "MBHUDView.h"
+#import "BannerView.h"
 
 @interface DetailsViewController : UIViewController <ServerCommunicatorDelegate, UIAlertViewDelegate>
 @property (strong, nonatomic) NSDictionary *objectInfo;

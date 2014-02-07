@@ -20,6 +20,8 @@
 @property (nonatomic) NSInteger currentPage;
 @property (strong, nonatomic) NSString *itemLocationName;
 @property (strong, nonatomic) UIView *blockTouchesView;
+@property (strong, nonatomic) UIButton *sideBarButton;
+@property (strong, nonatomic) UIButton *shareButton;
 @end
 
 @implementation DestacadosViewController
@@ -47,6 +49,20 @@
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    
+    //////////////////////////////////////////////////////
+    //Create the back button of the NavigationBar. When pressed, this button
+    //display the slide menu.
+    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 35.0, 35.0)];
+    [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
+    [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
+    [self.navigationController.navigationBar addSubview:self.sideBarButton];
+    
+    //ShareButton
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width - 40.0, 5.0, 35.0, 35.0)];
+    [self.shareButton addTarget:self action:@selector(shareApp) forControlEvents:UIControlEventTouchUpInside];
+    [self.shareButton setBackgroundImage:[UIImage imageNamed:@"ShareIconWhite.png"] forState:UIControlStateNormal];
+    [self.navigationController.navigationBar addSubview:self.shareButton];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -56,6 +72,9 @@
     //Stop the timer.
     [self.timer invalidate];
     self.timer = nil;
+    
+    [self.sideBarButton removeFromSuperview];
+    [self.shareButton removeFromSuperview];
 }
 
 -(void)viewDidDisappear:(BOOL)animated
@@ -83,23 +102,20 @@
                                                                            action:nil];
 
     
-    //////////////////////////////////////////////////////
-    //Create the back button of the NavigationBar. When pressed, this button
-    //display the slide menu.
-    UIBarButtonItem *sideBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
+    /*UIBarButtonItem *sideBarButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                       style:UIBarButtonItemStylePlain
                                                                      target:self.revealViewController
-                                                                     action:@selector(revealToggle:)];
+                                                                     action:@selector(revealToggle:)];*/
     
     //Create a NavigationBar button to share the app.
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ShareIcon.png"]
+    /*UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ShareIcon.png"]
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
-                                                                   action:@selector(shareApp)];
+                                                                   action:@selector(shareApp)];*/
     
     //Add the buttons to the NavigationBar.
-    self.navigationItem.rightBarButtonItem = shareButton;
-    self.navigationItem.leftBarButtonItem = sideBarButton;
+    //self.navigationItem.rightBarButtonItem = shareButton;
+    //self.navigationItem.leftBarButtonItem = sideBarButton;
     
     //Add a pan gesture to the view, that allows the user to display the slide
     //menu by panning on screen.
@@ -204,6 +220,11 @@
 }
 
 #pragma mark - Custom Methods
+
+-(void)showSideBarMenu:(id)sender {
+    NSLog(@"me oprimiste vé");
+    [self.revealViewController revealToggle:sender];
+}
 
 -(void)shareApp
 {
@@ -517,11 +538,38 @@
     if (position == FrontViewPositionLeft) {
         NSLog(@"Cerré el menú");
         [self.blockTouchesView removeFromSuperview];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                      target:self
+                                                    selector:@selector(slideShowSpecialItems)
+                                                    userInfo:nil
+                                                     repeats:YES];
+        
     }
     else if (position == FrontViewPositionRight) {
         NSLog(@"Abrí el menú");
         [self.view addSubview:self.blockTouchesView];
+        [self.timer invalidate];
     }
+}
+
+-(void)revealController:(SWRevealViewController *)revealController animateToPosition:(FrontViewPosition)position {
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"me animé a la pantalla principal");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil];
+    } else {
+        NSLog(@"Me animé al menú");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeOpaqueNotification" object:nil];
+    }
+    
+}
+
+-(void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position {
+    NSLog(@"me moveré");
+}
+
+-(void)revealController:(SWRevealViewController *)revealController panGestureMovedToLocation:(CGFloat)location progress:(CGFloat)progress {
+    //NSLog(@"moviendooo: %f", progress);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PanningNotification" object:nil userInfo:@{@"PanningProgress": @(progress)}];
 }
 
 #pragma mark - MFMailComposeDelegate

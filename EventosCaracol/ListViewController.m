@@ -39,6 +39,8 @@
 /*---View to Block the touches when the side menu is open-----*/
 @property (strong, nonatomic) UIView *blockTouchesView;
 
+@property (strong, nonatomic) UIButton *sideBarButton;
+
 @end
 
 #define ROW_HEIGHT 95.0
@@ -56,6 +58,16 @@
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    
+    //////////////////////////////////////////////////////
+    //Create the back button of the NavigationBar. When pressed, this button
+    //display the slide menu.
+    if (!self.locationList) {
+        self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 34.0, 34.0)];
+        [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
+        [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
+        [self.navigationController.navigationBar addSubview:self.sideBarButton];
+    }
 }
 
 -(void)viewDidLoad
@@ -80,11 +92,11 @@
     
     if (!self.locationList)
     {
-        UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
+        /*UIBarButtonItem *slideMenuBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"SidebarIcon.png"]
                                                                                    style:UIBarButtonItemStylePlain
                                                                                   target:self.revealViewController
                                                                                   action:@selector(revealToggle:)];
-        self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;
+        self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;*/
         [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     }
     
@@ -220,19 +232,32 @@
     [self.containerLocationPickerView addSubview:self.locationPickerView];
     [self.containerDatesPickerView addSubview:self.datePickerView];
     
+    //BLue bar in top of the picker view
+    UIView *blueBar = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.containerDatesPickerView.frame.size.width, 44.0)];
+    blueBar.backgroundColor = [[UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0] colorWithAlphaComponent:0.8];
+    [self.containerDatesPickerView addSubview:blueBar];
+    
+    UIView *blueBar2 = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.containerLocationPickerView.frame.size.width, 44.0)];
+    blueBar2.backgroundColor = [[UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0] colorWithAlphaComponent:0.8];
+    [self.containerLocationPickerView addSubview:blueBar2];
+    
     /////////////////////////////////////////////////////////////////
     //Create a button to dismiss the location picker view.
-    UIButton *dismissLocationPickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerLocationPickerView.frame.size.width - 40.0, self.containerLocationPickerView.frame.size.height - 40.0, 40.0, 40.0)];
+    UIButton *dismissLocationPickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerLocationPickerView.frame.size.width - 40.0, 0.0, 44.0, 44.0)];
     dismissLocationPickerButton.tag = 2;
     dismissLocationPickerButton.backgroundColor = [UIColor clearColor];
-    [dismissLocationPickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
+    //[dismissLocationPickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
+    [dismissLocationPickerButton setTitle:@"Ok" forState:UIControlStateNormal];
+    dismissLocationPickerButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     [dismissLocationPickerButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.containerLocationPickerView addSubview:dismissLocationPickerButton];
     
     /////////////////////////////////////////////////////////////////
-    UIButton *dismissDatePickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerDatesPickerView.frame.size.width - 40.0,self.containerDatesPickerView.frame.size.height - 40.0, 40.0, 40.0)];
+    UIButton *dismissDatePickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerDatesPickerView.frame.size.width - 40.0, 0.0, 44.0, 44.0)];
     dismissDatePickerButton.tag = 1;
-    [dismissDatePickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
+    //[dismissDatePickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
+    [dismissDatePickerButton setTitle:@"Ok" forState:UIControlStateNormal];
+    dismissDatePickerButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     dismissDatePickerButton.backgroundColor = [UIColor clearColor];
     [dismissDatePickerButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.containerDatesPickerView addSubview:dismissDatePickerButton];
@@ -256,6 +281,9 @@
     //We have to set isPickerActivated to NO, so when the user come back to this view and press any of the buttons to
     //show the picker, it will animate.
     self.isPickerActivated = NO;
+    
+    //Remove the slie menu button from the navigation bar
+    [self.sideBarButton removeFromSuperview];
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDataSource
@@ -558,6 +586,11 @@
 }
 
 #pragma mark - Custom methods
+
+-(void)showSideBarMenu:(id)sender {
+    NSLog(@"me oprimiste vé");
+    [self.revealViewController revealToggle:sender];
+}
 
 -(NSString *)getItemLocationName:(NSDictionary *)item
 {
