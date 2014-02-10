@@ -29,13 +29,18 @@
 
 -(void)setupPullDownToRefreshView
 {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 40.0, -50.0, 20.0, 40.0)];
-    else
-        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(120.0, -50.0, 20.0, 40.0)];
-    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(30.0, -47.0, 10.0, 20.0)];
+        self.updateLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 100.0, -53.0, 200.0, 30.0)];
+        self.updateLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    } else {
+        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(30.0, -47.0, 10.0, 20.0)];
+        self.updateLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, -53.0, 200.0, 30.0)];
+        self.updateLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    }
+    self.updateLabel.textColor = [UIColor whiteColor];
     self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
-    //[self.tableView addSubview:self.updateLabel];
+    [self.tableView addSubview:self.updateLabel];
     [self.tableView addSubview:self.updateImageView];
 }
 
@@ -697,8 +702,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
     self.offset = self.tableView.contentOffset.y;
     self.offset *= -1;
     if (self.offset > 0 && self.offset < 60) {
-        /*if(!self.isUpdating)
-            self.updateLabel.text = @"Hala para actualizar...";*/
+        if(!self.isUpdating)
+            self.updateLabel.text = @"Hala para actualizar...";
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationBeginsFromCurrentState:YES];
@@ -708,8 +713,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
         self.shouldUpdate = NO;
     }
     if (self.offset >= 60) {
-        /*if(!self.isUpdating)
-            self.updateLabel.text = @"Suelta para actualizar...";*/
+          if(!self.isUpdating)
+            self.updateLabel.text = @"Suelta para actualizar...";
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationBeginsFromCurrentState:YES];
@@ -746,7 +751,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     self.updateImageView.hidden = YES;
     [self.spinner startAnimating];
     [self.tableView addSubview:self.spinner];
-    //self.updateLabel.text = @"Actualizando...";
+    self.updateLabel.text = @"Actualizando...";
     self.isUpdating = YES;
     
     id appDelegate = [UIApplication sharedApplication].delegate;

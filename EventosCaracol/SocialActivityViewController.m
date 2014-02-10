@@ -154,6 +154,26 @@
     }
 }
 
+-(void)revealController:(SWRevealViewController *)revealController animateToPosition:(FrontViewPosition)position {
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"me animé a la pantalla principal");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil];
+    } else {
+        NSLog(@"Me animé al menú");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeOpaqueNotification" object:nil];
+    }
+    
+}
+
+-(void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position {
+    NSLog(@"me moveré");
+}
+
+-(void)revealController:(SWRevealViewController *)revealController panGestureMovedToLocation:(CGFloat)location progress:(CGFloat)progress {
+    //NSLog(@"moviendooo: %f", progress);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PanningNotification" object:nil userInfo:@{@"PanningProgress": @(progress)}];
+}
+
 #pragma mark - UIBarPositioningDelegate
 
 -(UIBarPosition)positionForBar:(id<UIBarPositioning>)bar{

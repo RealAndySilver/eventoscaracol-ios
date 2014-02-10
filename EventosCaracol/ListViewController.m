@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIView *containerLocationPickerView;
 @property (strong, nonatomic) UIView *containerDatesPickerView;
 @property (strong, nonatomic) UIImageView *updateImageView;
+@property (strong, nonatomic) UILabel *updateLabel;
 @property (nonatomic) NSUInteger rowIndex; //Used for detecting which row we have to update
                                             //when the user favorites an item.
 @property (nonatomic) BOOL isPickerActivated;
@@ -165,7 +166,7 @@
         [self.filterByLocationButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
         self.filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
         [self.filterByLocationButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self.filterByLocationButton setTitle:@"Todas las locaciones" forState:UIControlStateNormal];
+        [self.filterByLocationButton setTitle:@"Todas los lugares" forState:UIControlStateNormal];
         [self.view addSubview:self.filterByLocationButton];
         
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.filterByLocationButton.frame.origin.y + self.filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (self.filterByLocationButton.frame.origin.y + self.filterByLocationButton.frame.size.height)) style:UITableViewStylePlain];
@@ -247,7 +248,7 @@
     dismissLocationPickerButton.tag = 2;
     dismissLocationPickerButton.backgroundColor = [UIColor clearColor];
     //[dismissLocationPickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
-    [dismissLocationPickerButton setTitle:@"Ok" forState:UIControlStateNormal];
+    [dismissLocationPickerButton setTitle:@"OK" forState:UIControlStateNormal];
     dismissLocationPickerButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     [dismissLocationPickerButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.containerLocationPickerView addSubview:dismissLocationPickerButton];
@@ -256,7 +257,7 @@
     UIButton *dismissDatePickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerDatesPickerView.frame.size.width - 40.0, 0.0, 44.0, 44.0)];
     dismissDatePickerButton.tag = 1;
     //[dismissDatePickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
-    [dismissDatePickerButton setTitle:@"Ok" forState:UIControlStateNormal];
+    [dismissDatePickerButton setTitle:@"OK" forState:UIControlStateNormal];
     dismissDatePickerButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
     dismissDatePickerButton.backgroundColor = [UIColor clearColor];
     [dismissDatePickerButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
@@ -670,8 +671,19 @@
 
 -(void)setupPullDownToRefreshView
 {
-    self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 10, -50.0, 20.0, 40.0)];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(30.0, -40.0, 10.0, 20.0)];
+        self.updateLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 100.0, -45.0, 200.0, 30.0)];
+        self.updateLabel.textColor = [UIColor lightGrayColor];
+        self.updateLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    } else {
+        self.updateImageView = [[UIImageView alloc] initWithFrame:CGRectMake(250.0, -40.0, 10.0, 20.0)];
+        self.updateLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 100.0, -45.0, 200.0, 30.0)];
+        self.updateLabel.textColor = [UIColor lightGrayColor];
+        self.updateLabel.font = [UIFont boldSystemFontOfSize:12.0];
+    }
     self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
+    [self.tableView addSubview:self.updateLabel];
     [self.tableView addSubview:self.updateImageView];
 }
 
@@ -1223,8 +1235,8 @@
     self.offset = self.tableView.contentOffset.y;
     self.offset *= -1;
     if (self.offset > 0 && self.offset < 60) {
-        /*if(!self.isUpdating)
-         self.updateLabel.text = @"Hala para actualizar...";*/
+         if(!self.isUpdating)
+         self.updateLabel.text = @"Desliza hacia abajo para actualizar...";
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationBeginsFromCurrentState:YES];
@@ -1234,8 +1246,8 @@
         self.shouldUpdate = NO;
     }
     if (self.offset >= 60) {
-        /*if(!self.isUpdating)
-         self.updateLabel.text = @"Suelta para actualizar...";*/
+         if(!self.isUpdating)
+         self.updateLabel.text = @"Suelta para actualizar...";
         
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationBeginsFromCurrentState:YES];
@@ -1283,7 +1295,7 @@
     self.updateImageView.hidden = YES;
     [self.spinner startAnimating];
     [self.tableView addSubview:self.spinner];
-    //self.updateLabel.text = @"Actualizando...";
+    self.updateLabel.text = @"Actualizando...";
     self.isUpdating = YES;
     
     id appDelegate = [UIApplication sharedApplication].delegate;
@@ -1337,6 +1349,26 @@
         NSLog(@"Abrí el menú");
         [self.view addSubview:self.blockTouchesView];
     }
+}
+
+-(void)revealController:(SWRevealViewController *)revealController animateToPosition:(FrontViewPosition)position {
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"me animé a la pantalla principal");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil];
+    } else {
+        NSLog(@"Me animé al menú");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeOpaqueNotification" object:nil];
+    }
+    
+}
+
+-(void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position {
+    NSLog(@"me moveré");
+}
+
+-(void)revealController:(SWRevealViewController *)revealController panGestureMovedToLocation:(CGFloat)location progress:(CGFloat)progress {
+    //NSLog(@"moviendooo: %f", progress);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PanningNotification" object:nil userInfo:@{@"PanningProgress": @(progress)}];
 }
 
 #pragma mark - Server

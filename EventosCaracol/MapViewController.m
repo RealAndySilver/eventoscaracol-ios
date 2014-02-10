@@ -70,12 +70,12 @@
 
 -(void)createPickerView
 {
-    //////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////
     //Configure container view for the Dates picker.
     self.containerDatesPickerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height, self.view.frame.size.width, 220.0)];
     self.containerDatesPickerView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4];
     
-    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
     //Configure datePickerView
     self.datePickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0,
                                                                          0.0,
@@ -86,12 +86,17 @@
     self.datePickerView.dataSource = self;
     [self.containerDatesPickerView addSubview:self.datePickerView];
     
-    /////////////////////////////////////////////////////////////////
+    UIView *blueBarView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.containerDatesPickerView.frame.size.width, 44.0)];
+    blueBarView.backgroundColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:0.8];
+    [self.containerDatesPickerView addSubview:blueBarView];
+    
+    ////////////////////////////////////////////////////////////////////////
     //Create a button to dismiss the location picker view.
-    UIButton *dismissLocationPickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerDatesPickerView.frame.size.width - 40.0, self.containerDatesPickerView.frame.size.height - 40.0, 40.0, 40.0)];
+    UIButton *dismissLocationPickerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.containerDatesPickerView.frame.size.width - 44.0, 0.0, 44.0, 44.0)];
     dismissLocationPickerButton.tag = 1;
     dismissLocationPickerButton.backgroundColor = [UIColor clearColor];
-    [dismissLocationPickerButton setImage:[UIImage imageNamed:@"DismissPickerButtonImage.png"] forState:UIControlStateNormal];
+    [dismissLocationPickerButton setTitle:@"OK" forState:UIControlStateNormal];
+    dismissLocationPickerButton.titleLabel.font = [UIFont boldSystemFontOfSize:12.0];
     [dismissLocationPickerButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.containerDatesPickerView addSubview:dismissLocationPickerButton];
     [self.view addSubview:self.containerDatesPickerView];
@@ -357,6 +362,26 @@
         NSLog(@"Abrí el menú");
         [self.view addSubview:self.blockTouchesView];
     }
+}
+
+-(void)revealController:(SWRevealViewController *)revealController animateToPosition:(FrontViewPosition)position {
+    if (position == FrontViewPositionLeft) {
+        NSLog(@"me animé a la pantalla principal");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil];
+    } else {
+        NSLog(@"Me animé al menú");
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeOpaqueNotification" object:nil];
+    }
+    
+}
+
+-(void)revealController:(SWRevealViewController *)revealController willMoveToPosition:(FrontViewPosition)position {
+    NSLog(@"me moveré");
+}
+
+-(void)revealController:(SWRevealViewController *)revealController panGestureMovedToLocation:(CGFloat)location progress:(CGFloat)progress {
+    //NSLog(@"moviendooo: %f", progress);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PanningNotification" object:nil userInfo:@{@"PanningProgress": @(progress)}];
 }
 
 #pragma mark - FileSaver Stuff

@@ -28,6 +28,11 @@
 	<string>Carnaval de Barranquilla</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Montserrat-Regular.ttf</string>
+	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>Main_iPhone</string>
 	<key>UIMainStoryboardFile~ipad</key>
@@ -46,10 +51,10 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>UIAppFonts</key>
+	<key>CFBundleLocalizations</key>
 	<array>
-		<string>Montserrat-Bold.ttf</string>
-		<string>Montserrat-Regular.ttf</string>
+		<string>en</string>
+		<string>Spanish</string>
 	</array>
 </dict>
 </plist>
