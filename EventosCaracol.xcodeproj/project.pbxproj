@@ -29,7 +29,6 @@
 		8B1B1235185B7038007383CA /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B1B1233185B7038007383CA /* Montserrat-Regular.ttf */; };
 		8B1B1237185BBA18007383CA /* Pattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B1B1236185BBA18007383CA /* Pattern.png */; };
 		8B1ED2531844E30E00312DCE /* MenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */; };
-		8B1ED25A18454F4D00312DCE /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1ED25918454F4D00312DCE /* SDWebImage.framework */; };
 		8B1ED25C18454F7100312DCE /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B1ED25B18454F7100312DCE /* ImageIO.framework */; };
 		8B2C518918561AD200A373A8 /* FavoriteListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2C518818561AD200A373A8 /* FavoriteListViewController.m */; };
 		8B2C518B185632BC00A373A8 /* SwipeCellErase.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B2C518A185632BC00A373A8 /* SwipeCellErase.png */; };
@@ -125,6 +124,7 @@
 		A08A392A1853F3ED00E2A6C8 /* BotonTodosLosSitios.png in Resources */ = {isa = PBXBuildFile; fileRef = A08A39291853F3ED00E2A6C8 /* BotonTodosLosSitios.png */; };
 		A08A392C1853FBAC00E2A6C8 /* FondoBarraBusqueda.png in Resources */ = {isa = PBXBuildFile; fileRef = A08A392B1853FBAC00E2A6C8 /* FondoBarraBusqueda.png */; };
 		A08E87791855106B00C5E960 /* LoadingiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = A08E87781855106B00C5E960 /* LoadingiPad.png */; };
+		A0AA504718D0E83000BE735B /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0AA504618D0E83000BE735B /* SDWebImage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,7 +167,6 @@
 		8B1B1236185BBA18007383CA /* Pattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Pattern.png; path = Resources/Images/Pattern.png; sourceTree = "<group>"; };
 		8B1ED2511844E30E00312DCE /* MenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuTableViewCell.h; sourceTree = "<group>"; };
 		8B1ED2521844E30E00312DCE /* MenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuTableViewCell.m; sourceTree = "<group>"; };
-		8B1ED25918454F4D00312DCE /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = "<group>"; };
 		8B1ED25B18454F7100312DCE /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		8B2C518718561AD200A373A8 /* FavoriteListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FavoriteListViewController.h; sourceTree = "<group>"; };
 		8B2C518818561AD200A373A8 /* FavoriteListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FavoriteListViewController.m; sourceTree = "<group>"; };
@@ -299,6 +298,7 @@
 		A08A39291853F3ED00E2A6C8 /* BotonTodosLosSitios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BotonTodosLosSitios.png; path = Resources/Images/BotonTodosLosSitios.png; sourceTree = "<group>"; };
 		A08A392B1853FBAC00E2A6C8 /* FondoBarraBusqueda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FondoBarraBusqueda.png; path = Resources/Images/FondoBarraBusqueda.png; sourceTree = "<group>"; };
 		A08E87781855106B00C5E960 /* LoadingiPad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LoadingiPad.png; path = Resources/Images/LoadingiPad.png; sourceTree = "<group>"; };
+		A0AA504618D0E83000BE735B /* SDWebImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -306,6 +306,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0AA504718D0E83000BE735B /* SDWebImage.framework in Frameworks */,
 				A08A39261853DC3600E2A6C8 /* GoogleMaps.framework in Frameworks */,
 				8BBDE6BA184641B100BEAD74 /* SystemConfiguration.framework in Frameworks */,
 				8BBDE6B8184641AB00BEAD74 /* QuartzCore.framework in Frameworks */,
@@ -323,7 +324,6 @@
 				8B2D003F183D447C0007D502 /* Social.framework in Frameworks */,
 				75EE5550183BBFE900C52654 /* CoreGraphics.framework in Frameworks */,
 				8B8BFC8D183BFE5A003552EC /* FacebookSDK.framework in Frameworks */,
-				8B1ED25A18454F4D00312DCE /* SDWebImage.framework in Frameworks */,
 				75EE5552183BBFE900C52654 /* UIKit.framework in Frameworks */,
 				75EE554E183BBFE900C52654 /* Foundation.framework in Frameworks */,
 			);
@@ -364,6 +364,7 @@
 		75EE554C183BBFE900C52654 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A0AA504618D0E83000BE735B /* SDWebImage.framework */,
 				8BBDE6B9184641B100BEAD74 /* SystemConfiguration.framework */,
 				8BBDE6B7184641AB00BEAD74 /* QuartzCore.framework */,
 				8BBDE6B5184641A700BEAD74 /* OpenGLES.framework */,
@@ -378,7 +379,6 @@
 				8BBDE6A51846415F00BEAD74 /* AVFoundation.framework */,
 				8BBDE6A11846412B00BEAD74 /* GoogleMaps.framework */,
 				8B1ED25B18454F7100312DCE /* ImageIO.framework */,
-				8B1ED25918454F4D00312DCE /* SDWebImage.framework */,
 				8B2D0040183D44A90007D502 /* MessageUI.framework */,
 				8B2D003E183D447C0007D502 /* Social.framework */,
 				8B8BFC8C183BFE5A003552EC /* FacebookSDK.framework */,
@@ -741,6 +741,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = iAmStudio;
 				TargetAttributes = {
+					75EE5549183BBFE900C52654 = {
+						DevelopmentTeam = 4U39LJL48R;
+					};
 					75EE556D183BBFE900C52654 = {
 						TestTargetID = 75EE5549183BBFE900C52654;
 					};
@@ -1018,12 +1021,13 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/developer/eventoscaracol,
 					/Users/diegovidal/Documents/Diego/WorkProjects/Caracol/Aplicacion,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
@@ -1044,10 +1048,12 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/developer/eventoscaracol,
 					/Users/diegovidal/Documents/Diego/WorkProjects/Caracol/Aplicacion,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
@@ -1144,12 +1150,13 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: iAm Studio S.A.S. (4U39LJL48R)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: iAm Studio S.A.S. (4U39LJL48R)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/developer/eventoscaracol,
 					/Users/diegovidal/Documents/Diego/WorkProjects/Caracol/Aplicacion,
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
@@ -1157,7 +1164,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "CC36560F-0C35-41ED-8DD9-8D92C996247D";
+				PROVISIONING_PROFILE = "424A1E57-4D29-454D-B2C8-43B630666E47";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;

@@ -13,4 +13,9 @@
 @property (strong, nonatomic) NSString *menuID;
 @property (strong, nonatomic) NSString *objectType;
 @property (strong, nonatomic) NSArray *locationsArray;
+@property (strong, nonatomic) NSString *filter1ID;
+@property (strong, nonatomic) NSString *filter2ID;
+@property (strong, nonatomic) NSString *filter1Name;
+@property (strong, nonatomic) NSString *filter2Name;
+@property (assign, nonatomic) NSUInteger numberOfFilters;
 @end

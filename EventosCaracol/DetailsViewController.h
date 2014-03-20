@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "ServerCommunicator.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import <MessageUI/MessageUI.h>
 #import "PopUpView.h"
 #import <Social/Social.h>
@@ -17,6 +16,7 @@
 #import "LoginViewController.h"
 #import "MBHUDView.h"
 #import "BannerView.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface DetailsViewController : UIViewController <ServerCommunicatorDelegate, UIAlertViewDelegate>
 @property (strong, nonatomic) NSDictionary *objectInfo;

@@ -42,11 +42,53 @@
 
 @property (strong, nonatomic) UIButton *sideBarButton;
 
+/*------items to display in the pickers----------------------*/
+@property (strong, nonatomic) NSMutableArray *itemsOfPicker1Arrray;
+@property (strong, nonatomic) NSMutableArray *itemsOfPicker2Array;
+
 @end
 
 #define ROW_HEIGHT 95.0
 
 @implementation ListViewController
+
+#pragma mark - Lazy Instantiation 
+
+-(NSMutableArray *)itemsOfPicker1Arrray {
+    if (!_itemsOfPicker1Arrray) {
+        _itemsOfPicker1Arrray = [[NSMutableArray alloc] init];
+        
+        if ([self.filter1ID isEqualToString:@"1"]) {
+            _itemsOfPicker1Arrray = [self getDictionaryWithName:@"master"][@"locaciones"];
+        } else {
+            NSArray *categoriasHijoArray = [self getDictionaryWithName:@"master"][@"categorias_hijo"];
+            for (int i = 0; i < [categoriasHijoArray count]; i++) {
+                if ([categoriasHijoArray[i][@"categoryfather_id"] isEqualToString:self.filter1ID]) {
+                    [_itemsOfPicker1Arrray addObject:categoriasHijoArray[i]];
+                }
+            }
+        }
+    }
+    return _itemsOfPicker1Arrray;
+}
+
+-(NSMutableArray *)itemsOfPicker2Array {
+    if (!_itemsOfPicker2Array) {
+        _itemsOfPicker2Array = [[NSMutableArray alloc] init];
+        
+        if ([self.filter2ID isEqualToString:@"1"]) {
+            _itemsOfPicker2Array = [self getDictionaryWithName:@"master"][@"locaciones"];
+        } else {
+            NSArray *categoriasHijoArray = [self getDictionaryWithName:@"master"][@"categorias_hijo"];
+            for (int i = 0; i < [categoriasHijoArray count]; i++) {
+                if ([categoriasHijoArray[i][@"categoryfather_id"] isEqualToString:self.filter2ID]) {
+                    [_itemsOfPicker2Array addObject:categoriasHijoArray[i]];
+                }
+            }
+        }
+    }
+    return _itemsOfPicker2Array;
+}
 
 #pragma mark - View LifeCycle
 
@@ -127,7 +169,8 @@
         NSLog(@"YES");
     else
         NSLog(@"NO");
-    if (!self.locationList && !self.listWithGeneralTypeObjects)
+    NSLog(@"numero de filtros en la listaaaaa: %d", self.filtersNumber);
+    if (!self.locationList && !self.listWithGeneralTypeObjects && self.filtersNumber != 0)
     {
         UIView *grayRectangle = [[UIView alloc] initWithFrame:CGRectMake(0.0,
                                                                          self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
@@ -137,39 +180,43 @@
         [self.view addSubview:grayRectangle];
         
         NSLog(@"Si creé los botones de filtrado");
-        self.filterByDayButton = [[UIButton alloc]
-                                       initWithFrame:CGRectMake(self.view.frame.size.width/4 - 80.0,
-                                                                self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                                160,
-                                                                44.0)];
+        if (self.filter1Name) {
+            self.filterByDayButton = [[UIButton alloc]
+                                      initWithFrame:CGRectMake(self.view.frame.size.width/4 - 80.0,
+                                                               self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                               160,
+                                                               44.0)];
+            
+            //We need to set the button tag of filterByDayButton and filterByLocationButton to show the correct picker
+            //when the user touches one of these buttons.
+            self.filterByDayButton.tag = 1;
+            
+            [self.filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+            [self.filterByDayButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
+            [self.filterByDayButton setTitle:self.filter1Name forState:UIControlStateNormal];
+            self.filterByDayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+            [self.filterByDayButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+            [self.view addSubview:self.filterByDayButton];
+        }
         
-        //We need to set the button tag of filterByDayButton and filterByLocationButton to show the correct picker
-        //when the user touches one of these buttons.
-        self.filterByDayButton.tag = 1;
+        if (self.filter2Name) {
+            //Filter by location button
+            self.filterByLocationButton = [[UIButton alloc]
+                                           initWithFrame:CGRectMake(self.view.frame.size.width/2 + self.view.frame.size.width/4 - 80.0,
+                                                                    self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                    160,
+                                                                    44.0)];
+            self.filterByLocationButton.tag = 2;
+            
+            [self.filterByLocationButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
+            [self.filterByLocationButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
+            self.filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+            [self.filterByLocationButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+            [self.filterByLocationButton setTitle:self.filter2Name forState:UIControlStateNormal];
+            [self.view addSubview:self.filterByLocationButton];
+        }
         
-        [self.filterByDayButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
-        [self.filterByDayButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
-        [self.filterByDayButton setTitle:@"Todos los Paises" forState:UIControlStateNormal];
-        self.filterByDayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-        [self.filterByDayButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self.view addSubview:self.filterByDayButton];
-        
-        //Filter by location button
-        self.filterByLocationButton = [[UIButton alloc]
-                                            initWithFrame:CGRectMake(self.view.frame.size.width/2 + self.view.frame.size.width/4 - 80.0,
-                                                                     self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-                                                                     160,
-                                                                     44.0)];
-        self.filterByLocationButton.tag = 2;
-        
-        [self.filterByLocationButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
-        [self.filterByLocationButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
-        self.filterByLocationButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-        [self.filterByLocationButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-        [self.filterByLocationButton setTitle:@"Todas los lugares" forState:UIControlStateNormal];
-        [self.view addSubview:self.filterByLocationButton];
-        
-        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.filterByLocationButton.frame.origin.y + self.filterByLocationButton.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (self.filterByLocationButton.frame.origin.y + self.filterByLocationButton.frame.size.height)) style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 108, self.view.frame.size.width, self.view.frame.size.height - 108.0) style:UITableViewStylePlain];
         [self.view addSubview:self.tableView];
     }
     
@@ -944,13 +991,13 @@
         if (row == 0)
         {
             self.tempMenuArray = self.menuItemsArray;
-            [self.filterByDayButton setTitle:@"Todos los paises" forState:UIControlStateNormal];
+            [self.filterByDayButton setTitle:self.filter1Name forState:UIControlStateNormal];
             [self.tableView reloadData];
         }
         
         else
         {
-            NSDictionary *selectedCategory = [self getDictionaryWithName:@"master"][@"categorias"][row - 1];
+            /*NSDictionary *selectedCategory = [self getDictionaryWithName:@"master"][@"categorias"][row - 1];
             NSString *categoryID = selectedCategory[@"_id"];
             [self.filterByDayButton setTitle:selectedCategory[@"name"] forState:UIControlStateNormal];
             NSLog(@"Category id: %@", categoryID);
@@ -964,8 +1011,30 @@
             self.tempMenuArray = tempArray;
             NSLog(@"number of items: %d", [self.tempMenuArray count]);
             
+            [self.tableView reloadData];*/
+            NSDictionary *selectedSonCategoryDic = self.itemsOfPicker1Arrray[row - 1];
+            NSString *sonCategoryID = selectedSonCategoryDic[@"_id"];
+            NSLog(@"id del son category: %@", sonCategoryID);
+            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [self.menuItemsArray count]; i++) {
+                NSDictionary *item = [NSDictionary dictionaryWithDictionary:self.menuItemsArray[i]];
+                
+                if ([self.filter1ID isEqualToString:@"1"]) {
+                    if ([item[@"location_id"] isEqualToString:sonCategoryID]) {
+                        [tempArray addObject:item];
+                    }
+                    
+                } else {
+                    NSArray *categoriesOfItemArray = [NSArray arrayWithArray:item[@"category_list"]];
+                    for (int i = 0; i < [categoriesOfItemArray count]; i++) {
+                        if ([categoriesOfItemArray[i][@"categoryson_id"] isEqualToString:sonCategoryID]) {
+                            [tempArray addObject:item];
+                        }
+                    }
+                }
+            }
+            self.tempMenuArray = tempArray;
             [self.tableView reloadData];
-
         }
     }
     
@@ -974,13 +1043,13 @@
         if (row == 0)
         {
             self.tempMenuArray = self.menuItemsArray;
-            [self.filterByLocationButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
+            [self.filterByLocationButton setTitle:self.filter2Name forState:UIControlStateNormal];
             [self.tableView reloadData];
         }
         
         else
         {
-            NSDictionary *selectedLocation = [self getDictionaryWithName:@"master"][@"locaciones"][row - 1];
+            /*NSDictionary *selectedLocation = [self getDictionaryWithName:@"master"][@"locaciones"][row - 1];
             NSString *locationID = selectedLocation[@"_id"];
             [self.filterByLocationButton setTitle:selectedLocation[@"name"] forState:UIControlStateNormal];
             NSLog(@"location id: %@", locationID);
@@ -994,6 +1063,32 @@
             self.tempMenuArray = tempArray;
             NSLog(@"number of items: %d", [self.tempMenuArray count]);
             
+            [self.tableView reloadData];*/
+            
+            NSDictionary *selectedSonCategoryDic = self.itemsOfPicker2Array[row - 1];
+            NSString *sonCategoryID = selectedSonCategoryDic[@"_id"];
+            NSLog(@"id del item: %@", sonCategoryID);
+            NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+            for (int i = 0; i < [self.menuItemsArray count]; i++) {
+                NSDictionary *item = self.menuItemsArray[i];
+                
+                if ([self.filter2ID isEqualToString:@"1"]) {
+                    if ([item[@"location_id"] isEqualToString:sonCategoryID]) {
+                        [tempArray addObject:item];
+                    }
+                    
+                } else {
+                    NSArray *categoriesOfItemArray = item[@"category_list"];
+                    if (categoriesOfItemArray) {
+                        for (int i = 0; i < [categoriesOfItemArray count]; i++) {
+                            if ([categoriesOfItemArray[i][@"categoryson_id"] isEqualToString:sonCategoryID]) {
+                                [tempArray addObject:item];
+                            }
+                        }
+                    }
+                }
+            }
+            self.tempMenuArray = tempArray;
             [self.tableView reloadData];
         }
     }
@@ -1008,12 +1103,12 @@
 {
     if (pickerView.tag == 1)
     {
-        return [[self getDictionaryWithName:@"master"][@"categorias"] count] + 1;
+        return [self.itemsOfPicker1Arrray count] + 1;
     }
     
     else if (pickerView.tag == 2)
     {
-        return ([[self getDictionaryWithName:@"master"][@"locaciones"] count] + 1);
+        return [self.itemsOfPicker2Array count] + 1;
     }
     
     else return 0;
@@ -1024,21 +1119,23 @@
     if (pickerView.tag == 1)
     {
         if (row == 0)
-            return @"Todos los paises";
-        else
-            return [self getDictionaryWithName:@"master"][@"categorias"][row - 1][@"name"];
+            return @"Todos";
+        else {
+            return self.itemsOfPicker1Arrray[row - 1][@"name"];
+        }
     }
     
     else if (pickerView.tag == 2)
     {
         if (row == 0)
-            return @"Todos los lugares";
-        else
-            return [self getDictionaryWithName:@"master"][@"locaciones"][row - 1][@"name"];
+            return @"Todos";
+        else {
+            return self.itemsOfPicker2Array[row - 1][@"name"];
+        }
     }
     
     else
-        return @"";
+        return nil;
 }
 
 #pragma mark - Actions

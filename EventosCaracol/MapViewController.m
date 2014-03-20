@@ -23,9 +23,33 @@
 @property (strong, nonatomic) NSMutableArray *markers;
 @property (strong, nonatomic) UIView *blockTouchesView;
 @property (strong, nonatomic) UIButton *sideBarButton;
+
+@property (strong, nonatomic) NSMutableArray *itemsOfPicker1Array;
+
 @end
 
 @implementation MapViewController
+
+#pragma mark - Lazy Instantiation 
+
+-(NSMutableArray *)itemsOfPicker1Array {
+    if (!_itemsOfPicker1Array) {
+        _itemsOfPicker1Array = [[NSMutableArray alloc] init];
+        if ([self.filter1ID isEqualToString:@"1"]) {
+            _itemsOfPicker1Array = [self getDictionaryWithName:@"master"][@"locaciones"];
+        } else {
+            NSArray *categoriasHijoArray = [self getDictionaryWithName:@"master"][@"categorias_hijo"];
+            for (int i = 0; i < [categoriasHijoArray count]; i++) {
+                if ([categoriasHijoArray[i][@"categoryfather_id"] isEqualToString:self.filter1ID]) {
+                    [_itemsOfPicker1Array addObject:categoriasHijoArray[i]];
+                }
+            }
+        }
+    }
+    return _itemsOfPicker1Array;
+}
+
+#pragma mark - View Lifecycle
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -186,7 +210,7 @@
     [self.sortPlacesButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
     [self.sortPlacesButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     self.sortPlacesButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
-    [self.sortPlacesButton setTitle:@"Todos los sitios" forState:UIControlStateNormal];
+    [self.sortPlacesButton setTitle:self.filter1Name forState:UIControlStateNormal];
     [self.sortPlacesButton addTarget:self action:@selector(showPickerView:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.sortPlacesButton];
     
@@ -197,7 +221,7 @@
     [viewPlacesInListButton setBackgroundImage:[UIImage imageNamed:@"BotonTodosLosSitios.png"] forState:UIControlStateNormal];
     viewPlacesInListButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
     [viewPlacesInListButton setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-    [viewPlacesInListButton setTitle:@"Ver Listado" forState:UIControlStateNormal];
+    [viewPlacesInListButton setTitle:self.filter2Name forState:UIControlStateNormal];
     [viewPlacesInListButton addTarget:self action:@selector(goToListViewController) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:viewPlacesInListButton];
 }
@@ -316,9 +340,9 @@
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    if (row == 0)
+    /*if (row == 0)
     {
-        [self.sortPlacesButton setTitle:@"Todos los lugares" forState:UIControlStateNormal];
+        [self.sortPlacesButton setTitle:self.filter1Name forState:UIControlStateNormal];
         self.selectedLocationID = @"All";
     }
     else
@@ -329,7 +353,7 @@
     }
     
     [self.mapView clear];
-    [self setNewPlaces];
+    [self setNewPlaces];*/
 }
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -339,15 +363,18 @@
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return [[self getDictionaryWithName:@"master"][@"categorias"] count] + 1;
+    //return [[self getDictionaryWithName:@"master"][@"categorias"] count] + 1;
+    return [self.itemsOfPicker1Array count] + 1;
 }
 
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     if (row == 0)
-        return @"Todos los Lugares";
-    else
-        return [self getDictionaryWithName:@"master"][@"categorias"][row - 1][@"name"];
+        return @"Todos";
+    else {
+        //return [self getDictionaryWithName:@"master"][@"categorias"][row - 1][@"name"];
+        return self.itemsOfPicker1Array[row - 1][@"name"];
+    }
 }
 
 #pragma mark - SWRevealViewControllerDelegate

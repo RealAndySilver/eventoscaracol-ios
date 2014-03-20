@@ -305,6 +305,43 @@
                 MapViewController *mapVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Map"];
                 mapVC.navigationBarTitle = self.menuArray[indexPath.row][@"name"];
                 
+                //Filtro 1
+                mapVC.filter1ID = self.menuArray[indexPath.row][@"filter1"];
+                if ([mapVC.filter1ID isEqualToString:@"1"]) {
+                    mapVC.filter1Name = @"Locaciones";
+                } else if ([mapVC.filter1ID isEqualToString:@"0"]) {
+                    mapVC.filter1Name = nil;
+                } else if ([mapVC.filter1ID isEqualToString:@"2"]) {
+                    mapVC.filter1Name = @"Ver Listado";
+                } else {
+                    NSArray *categoriasPadreArray = [self getDictionaryWithName:@"master"][@"categorias_padre"];
+                    for (int i = 0; i < [categoriasPadreArray count]; i++) {
+                        if ([mapVC.filter1ID isEqualToString:categoriasPadreArray[i][@"_id"]]) {
+                            mapVC.filter1Name = categoriasPadreArray[i][@"name"];
+                            break;
+                        }
+                    }
+                }
+                
+                //Filtro 2
+                mapVC.filter2ID = self.menuArray[indexPath.row][@"filter2"];
+                if ([mapVC.filter2ID isEqualToString:@"1"]) {
+                    mapVC.filter2Name = @"Locaciones";
+                } else if ([mapVC.filter2ID isEqualToString:@"0"]) {
+                    mapVC.filter2Name = nil;
+                } else if ([mapVC.filter2ID isEqualToString:@"2"]) {
+                    mapVC.filter2Name = @"Ver Listado";
+                } else {
+                    NSArray *categoriasPadreArray = [self getDictionaryWithName:@"master"][@"categorias_padre"];
+                    for (int i = 0; i < [categoriasPadreArray count]; i++) {
+                        if ([mapVC.filter2ID isEqualToString:categoriasPadreArray[i][@"_id"]]) {
+                            mapVC.filter2Name = categoriasPadreArray[i][@"name"];
+                            break;
+                        }
+                    }
+                }
+                NSLog(@"nombre de los filtros del mapaaaaa: %@ y %@", mapVC.filter1Name, mapVC.filter2Name);
+                
                 NSArray *tempArray = [self getDictionaryWithName:@"master"][@"locaciones"];
                 NSLog(@"Numero de locaciones: %d", [tempArray count]);
                 NSMutableArray *tempMutableArray = [[NSMutableArray alloc] init];
@@ -596,6 +633,54 @@
     }
     listVC.menuItemsArray = tempMutableArray;
     
+    //Pass the category filters that must appear in the list view controller
+    NSString *filter1ID = self.menuArray[row][@"filter1"];
+    listVC.filter1ID = filter1ID;
+    if ([filter1ID isEqualToString:@"1"]) {
+        listVC.filter1Name = @"Locaciones";
+    } else if ([filter1ID isEqualToString:@"0"]) {
+        listVC.filter1Name = nil;
+    } else if ([filter1ID isEqualToString:@"2"]) {
+        listVC.filter1Name = @"Ver Locaciones";
+    } else {
+        NSArray *categoriasPadreArray = [self getDictionaryWithName:@"master"][@"categorias_padre"];
+        for (int i = 0; i < [categoriasPadreArray count]; i++) {
+            if ([filter1ID isEqualToString:categoriasPadreArray[i][@"_id"]]) {
+                listVC.filter1Name = categoriasPadreArray[i][@"name"];
+                break;
+            }
+        }
+    }
+    
+    NSString *filter2ID = self.menuArray[row][@"filter2"];
+    listVC.filter2ID = filter2ID;
+    if ([filter2ID isEqualToString:@"1"]) {
+        listVC.filter2Name = @"Locaciones";
+    } else if ([filter2ID isEqualToString:@"0"]) {
+        listVC.filter2Name = nil;
+    } else if ([filter2ID isEqualToString:@"2"]) {
+        listVC.filter2Name = @"Ver Locaciones";
+    } else {
+        NSArray *categoriasPadreArray = [self getDictionaryWithName:@"master"][@"categorias_padre"];
+        for (int i = 0; i < [categoriasPadreArray count]; i++) {
+            if ([filter2ID isEqualToString:categoriasPadreArray[i][@"_id"]]) {
+                listVC.filter2Name = categoriasPadreArray[i][@"name"];
+                break;
+            }
+        }
+    }
+    
+    if (listVC.filter1Name && listVC.filter2Name) {
+        NSLog(@"hay dos filtros");
+        listVC.filtersNumber = 2;
+    } else if ((listVC.filter1Name && !listVC.filter2Name) || (!listVC.filter1Name && listVC.filter2Name)) {
+        NSLog(@"solo hay un filtro");
+        listVC.filtersNumber = 1;
+    } else if (!listVC.filter1Name && !listVC.filter2Name) {
+        NSLog(@"no hay ningún filtro");
+        listVC.filtersNumber = 0;
+    }
+    NSLog(@"Los nombres de los filtros son: %@ y %@", listVC.filter1Name, listVC.filter2Name);
     //It's neccesary to pass the menuID string and the objectType (artist, event, news...) to ListViewController
     //Because when the user 'pull down to refresh' the list of objects we need to know what kind of objects
     //are we handling.
