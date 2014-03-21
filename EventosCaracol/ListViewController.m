@@ -98,7 +98,7 @@
     
     //We need to set this properties every time the view appears, because
     //there are more view controllers that change this properties.
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
@@ -106,7 +106,7 @@
     //Create the back button of the NavigationBar. When pressed, this button
     //display the slide menu.
     if (!self.locationList) {
-        self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 34.0, 34.0)];
+        self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 9.0, 30.0, 30.0)];
         [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
         [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
         [self.navigationController.navigationBar addSubview:self.sideBarButton];
@@ -157,7 +157,7 @@
     titleLabel.text = self.navigationBarTitle;
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textColor = [UIColor colorWithRed:133.0/255.0 green:101.0/255.0 blue:0.0 alpha:1.0];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     //self.navigationItem.title = self.navigationBarTitle;
@@ -237,7 +237,11 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        self.tableView.rowHeight = ROW_HEIGHT;
+        if (!self.listWithGeneralTypeObjects) {
+            self.tableView.rowHeight = ROW_HEIGHT;
+        } else {
+            self.tableView.rowHeight = 60.0;
+        }
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         self.tableView.rowHeight = 170.0;
     
@@ -282,11 +286,11 @@
     
     //BLue bar in top of the picker view
     UIView *blueBar = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.containerDatesPickerView.frame.size.width, 44.0)];
-    blueBar.backgroundColor = [[UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0] colorWithAlphaComponent:0.8];
+    blueBar.backgroundColor = [[UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0] colorWithAlphaComponent:0.8];
     [self.containerDatesPickerView addSubview:blueBar];
     
     UIView *blueBar2 = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.containerLocationPickerView.frame.size.width, 44.0)];
-    blueBar2.backgroundColor = [[UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0] colorWithAlphaComponent:0.8];
+    blueBar2.backgroundColor = [[UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0] colorWithAlphaComponent:0.8];
     [self.containerLocationPickerView addSubview:blueBar2];
     
     /////////////////////////////////////////////////////////////////
@@ -538,13 +542,13 @@
     {
         CGFloat labelPositionY;
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-            labelPositionY = 7.0;
+            labelPositionY = 0.0;
         else labelPositionY = 40.0;
         
         UILabel *generalTypeObjectLabel = [[UILabel alloc] initWithFrame:CGRectMake(30.0,
                                                                                     labelPositionY,
                                                                                     self.view.frame.size.width - 40.0,
-                                                                                    80.0)];
+                                                                                    60.0)];
         generalTypeObjectLabel.numberOfLines = 2;
         generalTypeObjectLabel.text = self.tempMenuArray[indexPath.row][@"name"];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -552,6 +556,7 @@
         else
             generalTypeObjectLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
         
+        eventCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [eventCell.contentView addSubview:generalTypeObjectLabel];
     }
     
@@ -891,9 +896,10 @@
     else if (index == 1)
     {
         NSUInteger objectRow = [self.tableView indexPathForCell:cell].row;
-        self.textToShare = [self.tempMenuArray[objectRow][@"name"] stringByAppendingString:@" : "];
+        self.textToShare = self.tempMenuArray[objectRow][@"social_message"];
+        /*self.textToShare = [self.tempMenuArray[objectRow][@"name"] stringByAppendingString:@" : "];
         self.textToShare = [self.textToShare stringByAppendingString:self.tempMenuArray[objectRow][@"short_detail"]];
-        self.textToShare = [self.textToShare stringByAppendingString:@"\n Enviado desde la aplicación 'EuroCine 2014'"];
+        self.textToShare = [self.textToShare stringByAppendingString:@"\n Enviado desde la aplicación 'EuroCine 2014'"];*/
         [[[UIActionSheet alloc] initWithTitle:nil
                                     delegate:self
                            cancelButtonTitle:@"Volver"

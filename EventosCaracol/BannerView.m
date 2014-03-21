@@ -11,8 +11,12 @@
 @implementation BannerView
 
 +(void)showBannerOverView:(UIView *)view withImage:(UIImage *)image {
-    UIView *banner = [[UIView alloc] initWithFrame:CGRectMake(0.0, view.frame.size.height - 44.0, view.frame.size.width, 44.0)];
+    UIView *banner = [[UIView alloc] initWithFrame:CGRectMake(0.0, view.frame.size.height - 45.0, view.frame.size.width, 45.0)];
     banner.backgroundColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    UIImageView *bannerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, banner.frame.size.width, banner.frame.size.height)];
+    bannerImageView.image = [UIImage imageNamed:@"Banner.png"];
+    [banner addSubview:bannerImageView];
+    
     [view addSubview:banner];
     
     [UIView animateWithDuration:3.0

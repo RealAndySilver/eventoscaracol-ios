@@ -39,7 +39,6 @@
 		8B2D003F183D447C0007D502 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2D003E183D447C0007D502 /* Social.framework */; };
 		8B2D0041183D44A90007D502 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B2D0040183D44A90007D502 /* MessageUI.framework */; };
 		8B2D0044183D64920007D502 /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B2D0043183D64920007D502 /* DetailsViewController.m */; };
-		8B3BC98618526D9300CAD92E /* Loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98518526D9300CAD92E /* Loading.png */; };
 		8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC987185278D300CAD92E /* SidebarIcon.png */; };
 		8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98918527AEF00CAD92E /* ShareIcon.png */; };
 		8B3BC98C185282E100CAD92E /* FondoMenu.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B3BC98B185282E100CAD92E /* FondoMenu.png */; };
@@ -56,6 +55,29 @@
 		8B9E2173188059570016C484 /* SocialActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E2172188059570016C484 /* SocialActivityViewController.m */; };
 		8BA11EBF183BDAA0003616AB /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EBE183BDAA0003616AB /* LoadingViewController.m */; };
 		8BA11EC2183BDB5D003616AB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA11EC1183BDB5D003616AB /* LoginViewController.m */; };
+		8BA5663418DB5419003840B4 /* HomeScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663218DB5419003840B4 /* HomeScreenBackground.png */; };
+		8BA5663518DB5419003840B4 /* HomeScreenBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663318DB5419003840B4 /* HomeScreenBackground@2x.png */; };
+		8BA5663818DB5663003840B4 /* BotonFacebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663618DB5663003840B4 /* BotonFacebook.png */; };
+		8BA5663918DB5663003840B4 /* BotonFacebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663718DB5663003840B4 /* BotonFacebook@2x.png */; };
+		8BA5663C18DB58A3003840B4 /* Loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663A18DB58A3003840B4 /* Loading.png */; };
+		8BA5663D18DB58A3003840B4 /* Loading@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663B18DB58A3003840B4 /* Loading@2x.png */; };
+		8BA5664018DB6492003840B4 /* Banner.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663E18DB6492003840B4 /* Banner.png */; };
+		8BA5664118DB6492003840B4 /* Banner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5663F18DB6492003840B4 /* Banner@2x.png */; };
+		8BA5664318DB66DA003840B4 /* FondoMenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664218DB66DA003840B4 /* FondoMenu@2x.png */; };
+		8BA5664518DB69EC003840B4 /* BarraBusqueda@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664418DB69EC003840B4 /* BarraBusqueda@2x.png */; };
+		8BA5665118DB83BA003840B4 /* ayudas_slide1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664718DB83BA003840B4 /* ayudas_slide1.png */; };
+		8BA5665218DB83BA003840B4 /* ayudas_slide1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664818DB83BA003840B4 /* ayudas_slide1@2x.png */; };
+		8BA5665318DB83BA003840B4 /* ayudas_slide2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664918DB83BA003840B4 /* ayudas_slide2.png */; };
+		8BA5665418DB83BA003840B4 /* ayudas_slide2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664A18DB83BA003840B4 /* ayudas_slide2@2x.png */; };
+		8BA5665518DB83BA003840B4 /* ayudas_slide3.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664B18DB83BA003840B4 /* ayudas_slide3.png */; };
+		8BA5665618DB83BA003840B4 /* ayudas_slide3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664C18DB83BA003840B4 /* ayudas_slide3@2x.png */; };
+		8BA5665718DB83BA003840B4 /* ayudas_slide4.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664D18DB83BA003840B4 /* ayudas_slide4.png */; };
+		8BA5665818DB83BA003840B4 /* ayudas_slide4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664E18DB83BA003840B4 /* ayudas_slide4@2x.png */; };
+		8BA5665918DB83BA003840B4 /* ayudas_slide5.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5664F18DB83BA003840B4 /* ayudas_slide5.png */; };
+		8BA5665A18DB83BA003840B4 /* ayudas_slide5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5665018DB83BA003840B4 /* ayudas_slide5@2x.png */; };
+		8BA5665D18DB92DD003840B4 /* LogoCaracolMini.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5665B18DB92DD003840B4 /* LogoCaracolMini.png */; };
+		8BA5665E18DB92DD003840B4 /* LogoCaracolMini@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5665C18DB92DD003840B4 /* LogoCaracolMini@2x.png */; };
+		8BA5666018DBA146003840B4 /* WhiteOpacityPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA5665F18DBA146003840B4 /* WhiteOpacityPattern.png */; };
 		8BA59699185128C400B6E7D0 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA59698185128C400B6E7D0 /* WebViewController.m */; };
 		8BA758CA1857578B0057A2EE /* SwipCellFavoriteActive.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BA758C91857578B0057A2EE /* SwipCellFavoriteActive.png */; };
 		8BA9C3B11843A20100876AA5 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BA9C3B01843A20100876AA5 /* SWRevealViewController.m */; };
@@ -183,7 +205,6 @@
 		8B2D0040183D44A90007D502 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		8B2D0042183D64920007D502 /* DetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
 		8B2D0043183D64920007D502 /* DetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
-		8B3BC98518526D9300CAD92E /* Loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Loading.png; path = Resources/Images/Loading.png; sourceTree = "<group>"; };
 		8B3BC987185278D300CAD92E /* SidebarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SidebarIcon.png; path = Resources/Images/SidebarIcon.png; sourceTree = "<group>"; };
 		8B3BC98918527AEF00CAD92E /* ShareIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ShareIcon.png; path = Resources/Images/ShareIcon.png; sourceTree = "<group>"; };
 		8B3BC98B185282E100CAD92E /* FondoMenu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = FondoMenu.png; path = Resources/Images/FondoMenu.png; sourceTree = "<group>"; };
@@ -204,6 +225,29 @@
 		8BA11EBE183BDAA0003616AB /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
 		8BA11EC0183BDB5D003616AB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		8BA11EC1183BDB5D003616AB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		8BA5663218DB5419003840B4 /* HomeScreenBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HomeScreenBackground.png; path = Resources/Images/HomeScreenBackground.png; sourceTree = "<group>"; };
+		8BA5663318DB5419003840B4 /* HomeScreenBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HomeScreenBackground@2x.png"; path = "Resources/Images/HomeScreenBackground@2x.png"; sourceTree = "<group>"; };
+		8BA5663618DB5663003840B4 /* BotonFacebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BotonFacebook.png; path = Resources/Images/BotonFacebook.png; sourceTree = "<group>"; };
+		8BA5663718DB5663003840B4 /* BotonFacebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BotonFacebook@2x.png"; path = "Resources/Images/BotonFacebook@2x.png"; sourceTree = "<group>"; };
+		8BA5663A18DB58A3003840B4 /* Loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Loading.png; path = Resources/Images/Loading.png; sourceTree = "<group>"; };
+		8BA5663B18DB58A3003840B4 /* Loading@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Loading@2x.png"; path = "Resources/Images/Loading@2x.png"; sourceTree = "<group>"; };
+		8BA5663E18DB6492003840B4 /* Banner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Banner.png; path = Resources/Images/Banner.png; sourceTree = "<group>"; };
+		8BA5663F18DB6492003840B4 /* Banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Banner@2x.png"; path = "Resources/Images/Banner@2x.png"; sourceTree = "<group>"; };
+		8BA5664218DB66DA003840B4 /* FondoMenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "FondoMenu@2x.png"; path = "Resources/Images/FondoMenu@2x.png"; sourceTree = "<group>"; };
+		8BA5664418DB69EC003840B4 /* BarraBusqueda@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "BarraBusqueda@2x.png"; path = "Resources/Images/BarraBusqueda@2x.png"; sourceTree = "<group>"; };
+		8BA5664718DB83BA003840B4 /* ayudas_slide1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ayudas_slide1.png; sourceTree = "<group>"; };
+		8BA5664818DB83BA003840B4 /* ayudas_slide1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ayudas_slide1@2x.png"; sourceTree = "<group>"; };
+		8BA5664918DB83BA003840B4 /* ayudas_slide2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ayudas_slide2.png; sourceTree = "<group>"; };
+		8BA5664A18DB83BA003840B4 /* ayudas_slide2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ayudas_slide2@2x.png"; sourceTree = "<group>"; };
+		8BA5664B18DB83BA003840B4 /* ayudas_slide3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ayudas_slide3.png; sourceTree = "<group>"; };
+		8BA5664C18DB83BA003840B4 /* ayudas_slide3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ayudas_slide3@2x.png"; sourceTree = "<group>"; };
+		8BA5664D18DB83BA003840B4 /* ayudas_slide4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ayudas_slide4.png; sourceTree = "<group>"; };
+		8BA5664E18DB83BA003840B4 /* ayudas_slide4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ayudas_slide4@2x.png"; sourceTree = "<group>"; };
+		8BA5664F18DB83BA003840B4 /* ayudas_slide5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ayudas_slide5.png; sourceTree = "<group>"; };
+		8BA5665018DB83BA003840B4 /* ayudas_slide5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ayudas_slide5@2x.png"; sourceTree = "<group>"; };
+		8BA5665B18DB92DD003840B4 /* LogoCaracolMini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LogoCaracolMini.png; path = Resources/Images/LogoCaracolMini.png; sourceTree = "<group>"; };
+		8BA5665C18DB92DD003840B4 /* LogoCaracolMini@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LogoCaracolMini@2x.png"; path = "Resources/Images/LogoCaracolMini@2x.png"; sourceTree = "<group>"; };
+		8BA5665F18DBA146003840B4 /* WhiteOpacityPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = WhiteOpacityPattern.png; path = Resources/Images/WhiteOpacityPattern.png; sourceTree = "<group>"; };
 		8BA59697185128C400B6E7D0 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		8BA59698185128C400B6E7D0 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		8BA758C91857578B0057A2EE /* SwipCellFavoriteActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SwipCellFavoriteActive.png; path = Resources/Images/SwipCellFavoriteActive.png; sourceTree = "<group>"; };
@@ -434,6 +478,7 @@
 		75EE5554183BBFE900C52654 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8BA5664618DB83BA003840B4 /* Tutorial */,
 				8B1B1231185B7038007383CA /* Fonts */,
 				8BCD7D3D183FB20D00849D8A /* Images */,
 				75EE5555183BBFE900C52654 /* EventosCaracol-Info.plist */,
@@ -510,6 +555,24 @@
 				8B9E2172188059570016C484 /* SocialActivityViewController.m */,
 			);
 			name = "SocialNetworksVC's";
+			sourceTree = "<group>";
+		};
+		8BA5664618DB83BA003840B4 /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+				8BA5664718DB83BA003840B4 /* ayudas_slide1.png */,
+				8BA5664818DB83BA003840B4 /* ayudas_slide1@2x.png */,
+				8BA5664918DB83BA003840B4 /* ayudas_slide2.png */,
+				8BA5664A18DB83BA003840B4 /* ayudas_slide2@2x.png */,
+				8BA5664B18DB83BA003840B4 /* ayudas_slide3.png */,
+				8BA5664C18DB83BA003840B4 /* ayudas_slide3@2x.png */,
+				8BA5664D18DB83BA003840B4 /* ayudas_slide4.png */,
+				8BA5664E18DB83BA003840B4 /* ayudas_slide4@2x.png */,
+				8BA5664F18DB83BA003840B4 /* ayudas_slide5.png */,
+				8BA5665018DB83BA003840B4 /* ayudas_slide5@2x.png */,
+			);
+			name = Tutorial;
+			path = Resources/Tutorial;
 			sourceTree = "<group>";
 		};
 		8BA9C3B21843A20800876AA5 /* SlideMenu */ = {
@@ -625,6 +688,17 @@
 		8BCD7D3D183FB20D00849D8A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				8BA5665F18DBA146003840B4 /* WhiteOpacityPattern.png */,
+				8BA5665B18DB92DD003840B4 /* LogoCaracolMini.png */,
+				8BA5665C18DB92DD003840B4 /* LogoCaracolMini@2x.png */,
+				8BA5663E18DB6492003840B4 /* Banner.png */,
+				8BA5663F18DB6492003840B4 /* Banner@2x.png */,
+				8BA5663A18DB58A3003840B4 /* Loading.png */,
+				8BA5663B18DB58A3003840B4 /* Loading@2x.png */,
+				8BA5663618DB5663003840B4 /* BotonFacebook.png */,
+				8BA5663718DB5663003840B4 /* BotonFacebook@2x.png */,
+				8BA5663218DB5419003840B4 /* HomeScreenBackground.png */,
+				8BA5663318DB5419003840B4 /* HomeScreenBackground@2x.png */,
 				8BC88EE41889DBED00854F97 /* LogoEurocine.png */,
 				8BC88EE51889DBED00854F97 /* LogoEurocine@2x.png */,
 				8BC88E8A188999DE00854F97 /* SwipeCellEraseiPad.png */,
@@ -640,6 +714,7 @@
 				8B1B1236185BBA18007383CA /* Pattern.png */,
 				8B1B122F185B646D007383CA /* BarraBusqueda2.png */,
 				8B1B122D185B6326007383CA /* BarraBusqueda.png */,
+				8BA5664418DB69EC003840B4 /* BarraBusqueda@2x.png */,
 				8B9AF8E21858C1F7000DE122 /* Back.png */,
 				8B9AF8E61858C3E5000DE122 /* Back@2x.png */,
 				8B9AF8E71858C3E5000DE122 /* Forward@2x.png */,
@@ -653,13 +728,13 @@
 				8B3BC98D18528A0000CAD92E /* CorazonApagado.png */,
 				8B3BC98E18528A0000CAD92E /* CorazonPrendido.png */,
 				8B3BC98B185282E100CAD92E /* FondoMenu.png */,
+				8BA5664218DB66DA003840B4 /* FondoMenu@2x.png */,
 				8B3BC98918527AEF00CAD92E /* ShareIcon.png */,
 				8BABAC0918A552010073F69F /* ShareIconWhite.png */,
 				8BABAC0A18A552010073F69F /* ShareIconWhite@2x.png */,
 				8BABAC0718A551510073F69F /* ShareIcon@2x.png */,
 				8B3BC987185278D300CAD92E /* SidebarIcon.png */,
 				8BABAC0518A54C990073F69F /* SidebarIcon@2x.png */,
-				8B3BC98518526D9300CAD92E /* Loading.png */,
 				8BF0E32C1852471A0048D32D /* SwipCellShare.png */,
 				8BF0E32A185246BD0048D32D /* SwipCellFavorite.png */,
 				8BF0E328185244360048D32D /* BorrarRojo.png */,
@@ -773,31 +848,46 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BA5665418DB83BA003840B4 /* ayudas_slide2@2x.png in Resources */,
 				8B1B1230185B646D007383CA /* BarraBusqueda2.png in Resources */,
 				75EE5564183BBFE900C52654 /* Main_iPad.storyboard in Resources */,
 				8BBE1296184D309900D90BE5 /* updateArrow.png in Resources */,
+				8BA5665818DB83BA003840B4 /* ayudas_slide4@2x.png in Resources */,
 				8BABAC0C18A552010073F69F /* ShareIconWhite@2x.png in Resources */,
+				8BA5663918DB5663003840B4 /* BotonFacebook@2x.png in Resources */,
 				8BF0E327185242580048D32D /* CorazonRojo.png in Resources */,
 				8B1B1235185B7038007383CA /* Montserrat-Regular.ttf in Resources */,
 				A08A392A1853F3ED00E2A6C8 /* BotonTodosLosSitios.png in Resources */,
 				8B9AF8E51858C2FE000DE122 /* Forward.png in Resources */,
 				A08E87791855106B00C5E960 /* LoadingiPad.png in Resources */,
-				8B3BC98618526D9300CAD92E /* Loading.png in Resources */,
 				8BF0E32B185246BD0048D32D /* SwipCellFavorite.png in Resources */,
 				8BB2499E1884318A00FC6EA4 /* TwitterTabIcon@2x.png in Resources */,
 				8B9AF8E81858C3E5000DE122 /* Back@2x.png in Resources */,
 				8BB2499818842E9600FC6EA4 /* FacebookTabIcon.png in Resources */,
+				8BA5666018DBA146003840B4 /* WhiteOpacityPattern.png in Resources */,
 				8BC88E8D188999DF00854F97 /* SwipeCellEraseiPad@2x.png in Resources */,
 				8B9AF8E31858C1F7000DE122 /* Back.png in Resources */,
+				8BA5665918DB83BA003840B4 /* ayudas_slide5.png in Resources */,
+				8BA5665D18DB92DD003840B4 /* LogoCaracolMini.png in Resources */,
+				8BA5664018DB6492003840B4 /* Banner.png in Resources */,
 				8B9977A818882D7F000F0266 /* FondoMenuiPad@2x.png in Resources */,
+				8BA5665A18DB83BA003840B4 /* ayudas_slide5@2x.png in Resources */,
+				8BA5663C18DB58A3003840B4 /* Loading.png in Resources */,
+				8BA5665318DB83BA003840B4 /* ayudas_slide2.png in Resources */,
 				8BABAC0618A54C990073F69F /* SidebarIcon@2x.png in Resources */,
 				8B3BC98F18528A0000CAD92E /* CorazonApagado.png in Resources */,
 				8BEA46CB185F43BC00E775FF /* Facebook.png in Resources */,
 				8BC88EE71889DBED00854F97 /* LogoEurocine@2x.png in Resources */,
+				8BA5665718DB83BA003840B4 /* ayudas_slide4.png in Resources */,
 				8B3BC98C185282E100CAD92E /* FondoMenu.png in Resources */,
 				8BF0E32D1852471A0048D32D /* SwipCellShare.png in Resources */,
+				8BA5665218DB83BA003840B4 /* ayudas_slide1@2x.png in Resources */,
 				8BC88E8318897D0900854F97 /* FondoMenuiPad.png in Resources */,
+				8BA5663818DB5663003840B4 /* BotonFacebook.png in Resources */,
+				8BA5664518DB69EC003840B4 /* BarraBusqueda@2x.png in Resources */,
 				8BF0E329185244360048D32D /* BorrarRojo.png in Resources */,
+				8BA5664118DB6492003840B4 /* Banner@2x.png in Resources */,
+				8BA5665E18DB92DD003840B4 /* LogoCaracolMini@2x.png in Resources */,
 				8BB249A21884327F00FC6EA4 /* InstagramTabIcon.png in Resources */,
 				8BB249A31884327F00FC6EA4 /* InstagramTabIcon@2x.png in Resources */,
 				8BB37E531849357900274848 /* CaracolPrueba4.png in Resources */,
@@ -806,17 +896,23 @@
 				8B3BC98A18527AEF00CAD92E /* ShareIcon.png in Resources */,
 				8B2C518B185632BC00A373A8 /* SwipeCellErase.png in Resources */,
 				8BABAC0818A551510073F69F /* ShareIcon@2x.png in Resources */,
+				8BA5663D18DB58A3003840B4 /* Loading@2x.png in Resources */,
 				8BC88E891889945100854F97 /* SwipCellShareiPad.png in Resources */,
+				8BA5665518DB83BA003840B4 /* ayudas_slide3.png in Resources */,
+				8BA5665118DB83BA003840B4 /* ayudas_slide1.png in Resources */,
 				8BC88EE61889DBED00854F97 /* LogoEurocine.png in Resources */,
 				A08A39281853DC9200E2A6C8 /* GoogleMaps.bundle in Resources */,
+				8BA5663418DB5419003840B4 /* HomeScreenBackground.png in Resources */,
 				8B1B1237185BBA18007383CA /* Pattern.png in Resources */,
 				A08A392C1853FBAC00E2A6C8 /* FondoBarraBusqueda.png in Resources */,
 				75EE5561183BBFE900C52654 /* Main_iPhone.storyboard in Resources */,
 				8BABAC0B18A552010073F69F /* ShareIconWhite.png in Resources */,
 				8BA758CA1857578B0057A2EE /* SwipCellFavoriteActive.png in Resources */,
+				8BA5664318DB66DA003840B4 /* FondoMenu@2x.png in Resources */,
 				8BC88E851889921600854F97 /* SwipeCellFavoriteiPad.png in Resources */,
 				75EE5558183BBFE900C52654 /* InfoPlist.strings in Resources */,
 				8B1B122E185B6326007383CA /* BarraBusqueda.png in Resources */,
+				8BA5663518DB5419003840B4 /* HomeScreenBackground@2x.png in Resources */,
 				8B1B1234185B7038007383CA /* Montserrat-Bold.ttf in Resources */,
 				8BB2499D1884318A00FC6EA4 /* TwitterTabIcon.png in Resources */,
 				8BC88E87188992FB00854F97 /* SwipCellFavoriteActiveiPad.png in Resources */,
@@ -826,6 +922,7 @@
 				8B9977AA18883CCB000F0266 /* LoadingiPad@2x.png in Resources */,
 				8BEC632E18621FC200552ED9 /* DismissPickerButtonImage.png in Resources */,
 				8B9AF8E91858C3E5000DE122 /* Forward@2x.png in Resources */,
+				8BA5665618DB83BA003840B4 /* ayudas_slide3@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1036,7 +1133,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1062,7 +1159,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1165,7 +1262,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "424A1E57-4D29-454D-B2C8-43B630666E47";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

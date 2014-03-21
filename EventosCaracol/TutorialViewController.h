@@ -10,4 +10,5 @@
 #import "LoginViewController.h"
 
 @interface TutorialViewController : UIViewController <UIScrollViewDelegate>
+@property (nonatomic) BOOL tutorialWasPresentedFromSideMenu;
 @end

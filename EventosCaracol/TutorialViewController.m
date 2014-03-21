@@ -11,9 +11,17 @@
 @interface TutorialViewController ()
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UIPageControl *pageControl;
+@property (strong, nonatomic) NSArray *imagesNamesArray;
 @end
 
 @implementation TutorialViewController
+
+-(NSArray *)imagesNamesArray {
+    if (!_imagesNamesArray) {
+        _imagesNamesArray = @[@"ayudas_slide1.png", @"ayudas_slide2.png", @"ayudas_slide3.png", @"ayudas_slide4.png", @"ayudas_slide5.png"];
+    }
+    return _imagesNamesArray;
+}
 
 -(void)viewDidLoad
 {
@@ -34,7 +42,7 @@
     //Create the pages
     int j=0;
     for (int i=0; i<5; i++) {
-        [self createPage:i+1 withImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+        [self createPage:i+1 withImage:[UIImage imageNamed:self.imagesNamesArray[i]]];
         j=i+1;
     }
     self.scrollView.contentSize = CGSizeMake(_scrollView.frame.size.width*j, self.view.frame.size.height);
@@ -42,10 +50,13 @@
     ///////////////////////////////////////////////////////
     //Create a page control to show the user the current page
     self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2- 50.0,
-                                                                       self.view.frame.size.height/1.1,
+                                                                       self.view.frame.size.height/1.33,
                                                                        100.0,
                                                                        37.0)];
     self.pageControl.numberOfPages = j;
+    self.pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    self.pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
+    [self.view bringSubviewToFront:self.pageControl];
     [self.view addSubview:self.pageControl];
     
     //////////////////////////////////////////////////////
@@ -54,8 +65,9 @@
                                                                        20.0,
                                                                        self.view.frame.size.width/2 - 20.0,
                                                                        50.0)];
-    [enterButton setTitle:@"Cerrar" forState:UIControlStateNormal];
-    enterButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+    [enterButton setTitle:@"Omitir" forState:UIControlStateNormal];
+    [enterButton setTitleColor:[UIColor colorWithRed:36.0/255.0 green:56.0/255.0 blue:141.0/255.0 alpha:1.0] forState:UIControlStateNormal];
+    enterButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     enterButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [enterButton addTarget:self
                     action:@selector(dismissVC) forControlEvents:UIControlEventTouchUpInside];
@@ -77,6 +89,9 @@
 
 -(void)dismissVC
 {
+    if (self.tutorialWasPresentedFromSideMenu) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeOpaqueNotification" object:nil userInfo:nil];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

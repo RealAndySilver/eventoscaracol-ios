@@ -53,14 +53,13 @@
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
         statusBarBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.window.frame.size.width, 20)];//statusBarBackgroundView is normal uiview
         //statusBarBackgroundView.backgroundColor = [UIColor blackColor];
-        statusBarBackgroundView.backgroundColor = [UIColor colorWithRed:53.0/255.0 green:98.0/255.0 blue:209.0/255.0 alpha:1.0];
+        statusBarBackgroundView.backgroundColor = [UIColor colorWithRed:199.0/255.0 green:157.0/255.0 blue:9.0/255.0 alpha:1.0];
         statusBarBackgroundView.alpha = 0.0;
         [self.window addSubview:statusBarBackgroundView];
         //self.window.bounds = CGRectMake(0, 20, self.window.frame.size.width, self.window.frame.size.height);
     }
 
     // Override point for customization after application launch.
-    sleep(2);
     [GMSServices provideAPIKey:@"AIzaSyC8pPYE33R1zoeR1GuOMrThOw3nwJrgXtE"];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     

@@ -38,7 +38,7 @@
         self.updateLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, -53.0, 200.0, 30.0)];
         self.updateLabel.font = [UIFont boldSystemFontOfSize:12.0];
     }
-    self.updateLabel.textColor = [UIColor whiteColor];
+    self.updateLabel.textColor = [UIColor lightGrayColor];
     self.updateImageView.image = [UIImage imageNamed:@"updateArrow.png"];
     [self.tableView addSubview:self.updateLabel];
     [self.tableView addSubview:self.updateImageView];
@@ -63,14 +63,19 @@
     
     ///////////////////////////////////////////////////////////////
     //Create the image view
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    imageView.userInteractionEnabled = YES;
+    imageView.clipsToBounds = YES;
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
+    /*UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
                                                                            320.0,
                                                                            188.0)];
     imageView.userInteractionEnabled = YES;
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    imageView.image = [UIImage imageNamed:@"LogoEurocine.png"];
+    imageView.image = [UIImage imageNamed:@"LogoEurocine.png"];*/
     /*if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
     else
@@ -91,13 +96,25 @@
                                                                            self.view.frame.size.height - (self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height))];
     
     self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.rowHeight = 50.0;
+    self.tableView.rowHeight = 45.0;
     self.tableView.delegate = self;
     self.tableView.dataSource =self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView setAlwaysBounceVertical:YES];
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 100.0, 0.0);
     [self.tableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     [self.view addSubview:self.tableView];
+    
+    //White opacity pattern
+    UIView *whiteOpacityPatternView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height - 100.0, self.view.frame.size.width, 100)];
+    UIImage *patternImage = [UIImage imageNamed:@"WhiteOpacityPattern.png"];
+    whiteOpacityPatternView.backgroundColor = [UIColor colorWithPatternImage:patternImage];
+    [self.view addSubview:whiteOpacityPatternView];
+    
+    //Logo caracol mini
+    UIImageView *logoMini = [[UIImageView alloc] initWithFrame:CGRectMake(120.0, self.view.frame.size.height - 40.0, 32.0, 32.0)];
+    logoMini.image = [UIImage imageNamed:@"LogoCaracolMini.png"];
+    [self.view addSubview:logoMini];
     
     ////////////////////////////////////////////////////////////////////////////////
     //'Pull down to refresh' views
@@ -106,11 +123,11 @@
     ////////////////////////////////////////////////////////////////////////////////
     //searchDisplayController configuration.
     [[UISearchBar appearance] setSearchFieldBackgroundImage:[UIImage imageNamed:@"BarraBusqueda.png"] forState:UIControlStateNormal];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor whiteColor]];
-    [[UISearchBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor colorWithRed:108.0/255.0 green:87.0/255.0 blue:14.0/255.0 alpha:1.0]];
+    [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:108.0/255.0 green:87.0/255.0 blue:14.0/255.0 alpha:1.0]];
     [[UIButton appearanceWhenContainedIn:[UISearchBar class], nil] setTitle:@"Cancelar" forState:UIControlStateNormal];
     //self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor redColor];
-    self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:36.0/255.0 blue:103.0/255.0 alpha:1.0];
+    self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor whiteColor];
     [self.searchDisplayController.searchResultsTableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     self.searchDisplayController.searchResultsTableView.rowHeight = 50.0;
     self.searchDisplayController.searchResultsTableView.frame = CGRectMake(0.0,
@@ -164,7 +181,6 @@
         {
             /*AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
             [appDelegate incrementNetworkActivity];*/
-            
             cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
             if (![self.menuArray[indexPath.row][@"type"] isEqualToString:@"general"])
                 [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
@@ -205,6 +221,7 @@
     //If the selected table view was the search bar table view
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil userInfo:nil];
         if ([self.searchResults[indexPath.row][@"type"] isEqualToString:@"locaciones"])
         {
             DetailsViewController *detailsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"EventDetails"];
@@ -370,7 +387,9 @@
             //Menu Tutorial
             if (indexPath.row - [self.menuArray count] == 0)
             {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil userInfo:nil];
                 TutorialViewController *tutorialVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Tutorial"];
+                tutorialVC.tutorialWasPresentedFromSideMenu = YES;
                 [self presentViewController:tutorialVC animated:YES completion:nil];
             }
             
@@ -428,8 +447,9 @@
             {
                 if (![self getDictionaryWithName:@"user"][@"_id"])
                 {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil userInfo:nil];
                     LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
-                    loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
+                    loginVC.loginWasPresentedFromSideBarMenu = YES;
                     [self presentViewController:loginVC animated:YES completion:nil];
                 }
                 
@@ -831,7 +851,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
 - (void) updateMethod
 {
     //[self performSelectorOnMainThread:@selector(startSpinner) withObject:nil waitUntilDone:NO];
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.spinner.center = self.updateImageView.center;
     self.updateImageView.hidden = YES;
     [self.spinner startAnimating];
@@ -858,7 +878,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     self.updateImageView.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.2];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 100, 0);
     [UIView commitAnimations];
     self.isUpdating = NO;
 }
@@ -980,8 +1000,10 @@ shouldReloadTableForSearchString:(NSString *)searchString
 {
     if (buttonIndex == 1)
     {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeTransparentNotification" object:nil userInfo:nil];
         LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Login"];
-        loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
+        loginVC.loginWasPresentedFromSideBarMenu = YES;
+        //loginVC.loginWasPresentedFromFavoriteButtonAlert = YES;
         [self presentViewController:loginVC animated:YES completion:nil];
     }
 }

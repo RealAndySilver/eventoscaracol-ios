@@ -23,7 +23,7 @@
     //////////////////////////////////////////////////////
     //Create the back button of the NavigationBar. When pressed, this button
     //display the slide menu.
-    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 35.0, 35.0)];
+    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 9.0, 30.0, 30.0)];
     [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
     [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
     [self.navigationBar addSubview:self.sideBarButton];
@@ -49,7 +49,7 @@
     self.navigationBar.delegate = self;
     self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     self.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    self.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
     [self.view addSubview:self.navigationBar];
     
     //////////////////////////////

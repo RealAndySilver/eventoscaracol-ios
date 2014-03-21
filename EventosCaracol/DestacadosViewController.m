@@ -31,7 +31,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"Aparecí");
+    NSLog(@"Aparecí y activé el timer");
     self.currentPage = 1;
     
     //Create a timer that fires every five seconds. this timer is used to make
@@ -46,14 +46,14 @@
     //Set the color properties of the NavigationBar. we have to do this every
     //time the view appears, because this properties are differente in the other
     //controllers.
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
     //////////////////////////////////////////////////////
     //Create the back button of the NavigationBar. When pressed, this button
     //display the slide menu.
-    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 5.0, 35.0, 35.0)];
+    self.sideBarButton = [[UIButton alloc] initWithFrame:CGRectMake(5.0, 9.0, 30.0, 30.0)];
     [self.sideBarButton addTarget:self action:@selector(showSideBarMenu:) forControlEvents:UIControlEventTouchUpInside];
     [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
     [self.navigationController.navigationBar addSubview:self.sideBarButton];
@@ -72,6 +72,7 @@
     //Stop the timer.
     [self.timer invalidate];
     self.timer = nil;
+    NSLog(@"desapareceré y desactivaré el timer");
     
     [self.sideBarButton removeFromSuperview];
     [self.shareButton removeFromSuperview];
@@ -131,7 +132,7 @@
     titleLabel.text = [myDictionary objectForKey:@"name"];
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textColor = [UIColor colorWithRed:133.0/255.0 green:101.0/255.0 blue:0.0 alpha:1.0];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     
@@ -161,12 +162,12 @@
     /////////////////////////////////////////////////////////
     //Create UICollectionView that display the list of featured items
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 10.0, self.view.frame.size.width, self.view.frame.size.height - (self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 20.0)) collectionViewLayout:collectionViewLayout];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 6.0, self.view.frame.size.width, self.view.frame.size.height - (self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 6.0)) collectionViewLayout:collectionViewLayout];
     collectionView.tag = 1;
     collectionView.showsVerticalScrollIndicator = NO;
     collectionView.dataSource = self;
     [collectionView setAlwaysBounceVertical:YES];
-    collectionView.contentInset = UIEdgeInsetsMake(0.0, 10.0, 0.0, 10.0);
+    collectionView.contentInset = UIEdgeInsetsMake(0.0, 6.0, 0.0, 6.0);
     collectionView.delegate = self;
     [collectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:FEATURED_IDENTIFIER];
     collectionView.backgroundColor = [UIColor clearColor];
@@ -497,7 +498,7 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             return indexPath.item % 3 ? CGSizeMake(367, 205) : CGSizeMake(collectionView.frame.size.width - 20, 205);
         else
-            return indexPath.item % 3 ? CGSizeMake(144, 114):CGSizeMake(collectionView.frame.size.width - 20, 114);
+            return indexPath.item % 3 ? CGSizeMake(149, 114):CGSizeMake(collectionView.frame.size.width - 12, 114);
     }
     
     else
@@ -607,8 +608,8 @@
         {
             MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
             messageViewController.messageComposeDelegate = self;
-            [messageViewController setBody:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"];
-            //[messageViewController addAttachmentURL:<#(NSURL *)#> withAlternateFilename:<#(NSString *)#>]
+            [messageViewController setBody:[self getDictionaryWithName:@"master"][@"app"][@"social_message"]];
+            //[messageViewController setBody:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"];
             [self presentViewController:messageViewController animated:YES completion:nil];
             NSLog(@"presenté el viewcontroller");
         }
@@ -620,7 +621,7 @@
         NSLog(@"Facebook");
         
         SLComposeViewController *facebookViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-        [facebookViewController setInitialText:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil"];
+        [facebookViewController setInitialText:[self getDictionaryWithName:@"master"][@"app"][@"social_message"]];
         [facebookViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
         [self presentViewController:facebookViewController animated:YES completion:nil];
     }
@@ -631,7 +632,7 @@
         NSLog(@"Twitter");
         
         SLComposeViewController *twitterViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [twitterViewController setInitialText:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil."];
+        [twitterViewController setInitialText:[self getDictionaryWithName:@"master"][@"app"][@"social_message"]];
         [twitterViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
         [self presentViewController:twitterViewController animated:YES completion:nil];
     }
@@ -642,7 +643,7 @@
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
         [mailComposeViewController setSubject:@"Te recomiendo la app 'EuroCine 2014'"];
-        [mailComposeViewController setMessageBody:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8" isHTML:NO];
+        [mailComposeViewController setMessageBody:[self getDictionaryWithName:@"master"][@"app"][@"social_message"] isHTML:NO];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;
         mailComposeViewController.mailComposeDelegate = self;

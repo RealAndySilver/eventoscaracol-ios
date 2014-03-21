@@ -21,4 +21,5 @@
 
 @interface LoginViewController : UIViewController <ServerCommunicatorDelegate>
 @property (nonatomic) BOOL loginWasPresentedFromFavoriteButtonAlert;
+@property (nonatomic) BOOL loginWasPresentedFromSideBarMenu;
 @end

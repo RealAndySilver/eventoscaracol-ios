@@ -17,19 +17,12 @@
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
         
-        self.menuItemLabel = [[UILabel alloc] initWithFrame:CGRectMake(70.0,
-                                                                       self.contentView.frame.size.height/2 - 10.0,
-                                                                       self.contentView.frame.size.width,
-                                                                       20.0)];
-        
+        self.menuItemLabel = [[UILabel alloc] init ];
         self.menuItemLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
-        self.menuItemLabel.textColor = [UIColor whiteColor];
+        self.menuItemLabel.textColor = [UIColor colorWithRed:243.0/255.0 green:195.0/255.0 blue:23.0/255.0 alpha:1.0];
         [self.contentView addSubview:self.menuItemLabel];
         
-        self.menuItemImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0,
-                                                                               self.contentView.frame.size.height/2 - 15,
-                                                                               30.0,
-                                                                               30.0)];
+        self.menuItemImageView = [[UIImageView alloc] init];
         self.menuItemImageView.backgroundColor = [UIColor clearColor];
         self.menuItemImageView.clipsToBounds = YES;
         [self.menuItemImageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -38,11 +31,19 @@
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
+-(void)layoutSubviews {
+    [super layoutSubviews];
+    CGRect bounds = self.contentView.bounds;
+    self.menuItemLabel.frame = CGRectMake(60.0,
+                                          self.contentView.frame.size.height/2 - 10.0,
+                                          self.contentView.frame.size.width,
+                                          20.0);
 
-    // Configure the view for the selected state
+    self.menuItemImageView.frame = CGRectMake(10.0,
+                                              self.contentView.frame.size.height/2 - 17,
+                                              34.0,
+                                              34.0);
+
 }
 
 @end

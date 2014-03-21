@@ -24,7 +24,7 @@
         self.featuredEventNameLabel.numberOfLines = 0;
         self.featuredEventNameLabel.textAlignment = NSTextAlignmentLeft;
         self.featuredEventNameLabel.textColor = [UIColor whiteColor];
-        self.featuredEventNameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+        self.featuredEventNameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:13.0];
         self.featuredEventImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,
                                                                                     0,
                                                                                     self.contentView.bounds.size.width,

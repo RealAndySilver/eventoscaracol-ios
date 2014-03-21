@@ -40,9 +40,9 @@
     //Check if the user is on iPad or iPhone; dependin on this, assign the correct
     //image to the ImageView
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        imageView.image = [UIImage imageNamed:@"LoadingiPad.png"];
+        imageView.image = [UIImage imageNamed:@"HomeScreenBackground.png"];
     else
-    imageView.image = [UIImage imageNamed:@"Loading.png"];
+    imageView.image = [UIImage imageNamed:@"HomeScreenBackground.png"];
     imageView.clipsToBounds = YES;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.view addSubview:imageView];
@@ -52,10 +52,12 @@
     UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.bounds.size.width/2 - 125.0,
                                                                        self.view.bounds.size.height/1.2,
                                                                        250.0,
-                                                                       30.0)];
+                                                                       40.0)];
     //loginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
     [loginButton setTitle:@"Iniciar sesión con Facebook" forState:UIControlStateNormal];
-    loginButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    loginButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:14.0];
+    [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [loginButton setBackgroundImage:[UIImage imageNamed:@"BotonFacebook.png"] forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
     [loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     
@@ -67,14 +69,13 @@
                                                                                       30.0)];*/
     UIButton *continueWithoutLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
     continueWithoutLoginButton.frame = CGRectMake(self.view.frame.size.width/2 - 125.0,
-                                                  loginButton.frame.origin.y + loginButton.frame.size.height + 20,
+                                                  loginButton.frame.origin.y + loginButton.frame.size.height + 10,
                                                   250.0,
                                                   30.0);
     //continueWithoutLoginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
     [continueWithoutLoginButton setTitle:@"Continuar sin iniciar sesión" forState:UIControlStateNormal];
-    [continueWithoutLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [continueWithoutLoginButton setTitleColor:[UIColor blueColor] forState:UIControlStateHighlighted];
-    continueWithoutLoginButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:14.0];
+    [continueWithoutLoginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    continueWithoutLoginButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:14.0];
     [continueWithoutLoginButton addTarget:self action:@selector(goToNextVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:continueWithoutLoginButton];
 }
@@ -253,6 +254,10 @@
     //is so, we dismiss it.
     if (self.loginWasPresentedFromFavoriteButtonAlert)
     {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    } else if (self.loginWasPresentedFromSideBarMenu) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"StatusBarMustBeOpaqueNotification" object:nil userInfo:nil];
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
