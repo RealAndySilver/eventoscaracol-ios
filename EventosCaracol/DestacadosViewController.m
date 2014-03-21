@@ -539,6 +539,8 @@
     if (position == FrontViewPositionLeft) {
         NSLog(@"Cerré el menú");
         [self.blockTouchesView removeFromSuperview];
+        [self.timer invalidate];
+        self.timer = nil;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
                                                       target:self
                                                     selector:@selector(slideShowSpecialItems)

@@ -81,7 +81,7 @@
                                                                                    self.view.frame.size.width,
                                                                                    self.view.frame.size.height)];
     tutorialIMageView.clipsToBounds = YES;
-    tutorialIMageView.contentMode = UIViewContentModeScaleAspectFill;
+    tutorialIMageView.contentMode = UIViewContentModeScaleAspectFit;
     tutorialIMageView.image = image;
     [page addSubview:tutorialIMageView];
     [_scrollView addSubview:page];

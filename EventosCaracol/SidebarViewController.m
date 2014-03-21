@@ -53,7 +53,7 @@
 {
     NSLog(@"me cargué");
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithRed:14.0/255.0 green:36.0/255.0 blue:103.0/255.0 alpha:1.0];
+    self.view.backgroundColor = [UIColor whiteColor];
     [self updateDataFromServer];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -66,7 +66,7 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
     imageView.userInteractionEnabled = YES;
     imageView.clipsToBounds = YES;
-    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    imageView.contentMode = UIViewContentModeScaleToFill;
     imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
     /*UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
@@ -108,6 +108,7 @@
     //White opacity pattern
     UIView *whiteOpacityPatternView = [[UIView alloc] initWithFrame:CGRectMake(0.0, self.view.frame.size.height - 100.0, self.view.frame.size.width, 100)];
     UIImage *patternImage = [UIImage imageNamed:@"WhiteOpacityPattern.png"];
+    whiteOpacityPatternView.userInteractionEnabled = NO;
     whiteOpacityPatternView.backgroundColor = [UIColor colorWithPatternImage:patternImage];
     [self.view addSubview:whiteOpacityPatternView];
     
@@ -127,6 +128,8 @@
     [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:108.0/255.0 green:87.0/255.0 blue:14.0/255.0 alpha:1.0]];
     [[UIButton appearanceWhenContainedIn:[UISearchBar class], nil] setTitle:@"Cancelar" forState:UIControlStateNormal];
     //self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor redColor];
+    self.searchDisplayController.searchBar.frame = CGRectMake(0.0, self.view.frame.size.height/3.94, 259.0, 44.0);
+    
     self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor whiteColor];
     [self.searchDisplayController.searchResultsTableView registerClass:[MenuTableViewCell class] forCellReuseIdentifier:@"menuItemCell"];
     self.searchDisplayController.searchResultsTableView.rowHeight = 50.0;
@@ -244,7 +247,7 @@
             generalInfoDetailsVC.viewControllerWasPresentedFromASearch = YES;
             generalInfoDetailsVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:generalInfoDetailsVC];
-            navigationController.navigationBar.barTintColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];
+            navigationController.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
             navigationController.navigationBar.tintColor = [UIColor whiteColor];
             [self presentViewController:navigationController animated:YES completion:nil];
         }

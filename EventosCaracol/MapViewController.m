@@ -120,7 +120,17 @@
                                                                               target:self.revealViewController
                                                                               action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = slideMenuBarButtonItem;*/
-    self.navigationItem.title = self.navigationBarTitle;
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
+                                                                    0.0,
+                                                                    150.0,
+                                                                    44.0)];
+    titleLabel.text = self.navigationBarTitle;
+    titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
+    titleLabel.backgroundColor = [UIColor clearColor];
+    titleLabel.textColor = [UIColor colorWithRed:133.0/255.0 green:101.0/255.0 blue:0.0 alpha:1.0];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = titleLabel;
+    //self.navigationItem.title = self.navigationBarTitle;
 }
 
 -(void)createPickerView1
