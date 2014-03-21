@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75D8512D18DBC14C009347B4 /* IAmCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75D8512C18DBC14C009347B4 /* IAmCoder.m */; };
 		75EE554E183BBFE900C52654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE554D183BBFE900C52654 /* Foundation.framework */; };
 		75EE5550183BBFE900C52654 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE554F183BBFE900C52654 /* CoreGraphics.framework */; };
 		75EE5552183BBFE900C52654 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE5551183BBFE900C52654 /* UIKit.framework */; };
@@ -160,6 +161,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		75D8512B18DBC14C009347B4 /* IAmCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAmCoder.h; sourceTree = "<group>"; };
+		75D8512C18DBC14C009347B4 /* IAmCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAmCoder.m; sourceTree = "<group>"; };
 		75EE554A183BBFE900C52654 /* EventosCaracol.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventosCaracol.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75EE554D183BBFE900C52654 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		75EE554F183BBFE900C52654 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -386,6 +389,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		75D8512A18DBC12D009347B4 /* iAmCoder */ = {
+			isa = PBXGroup;
+			children = (
+				75D8512B18DBC14C009347B4 /* IAmCoder.h */,
+				75D8512C18DBC14C009347B4 /* IAmCoder.m */,
+			);
+			name = iAmCoder;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		75EE5541183BBFE900C52654 = {
 			isa = PBXGroup;
 			children = (
@@ -467,6 +480,7 @@
 				8B9977A6188820A9000F0266 /* Utility Classes */,
 				8BEFF81F18400A1A004A5C6E /* Custom Cells */,
 				8BCD7D41183FB8ED00849D8A /* Views */,
+				75D8512A18DBC12D009347B4 /* iAmCoder */,
 				75EE558B183BC45B00C52654 /* ServerCommunicator */,
 				75EE558C183BC46900C52654 /* Model */,
 				75EE5568183BBFE900C52654 /* Images.xcassets */,
@@ -813,7 +827,7 @@
 		75EE5542183BBFE900C52654 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = iAmStudio;
 				TargetAttributes = {
 					75EE5549183BBFE900C52654 = {
@@ -963,6 +977,7 @@
 				8B2D0031183D1BBB0007D502 /* ListViewController.m in Sources */,
 				8BB249A61884608700FC6EA4 /* GeneralInfoDetailViewController.m in Sources */,
 				8BBE1242184CDFAA00D90BE5 /* UIFont+Alert.m in Sources */,
+				75D8512D18DBC14C009347B4 /* IAmCoder.m in Sources */,
 				8BBE1249184CDFAA00D90BE5 /* MBFlatAlertAbstract.m in Sources */,
 				8BBE124E184CDFAA00D90BE5 /* MBSpinningCircle.m in Sources */,
 				8B2D003A183D2EF30007D502 /* Location.m in Sources */,
@@ -1042,7 +1057,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1082,7 +1096,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1115,7 +1128,6 @@
 		75EE5580183BBFE900C52654 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1142,7 +1154,6 @@
 		75EE5581183BBFE900C52654 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1168,7 +1179,6 @@
 		75EE5583183BBFE900C52654 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EventosCaracol.app/EventosCaracol";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -1191,7 +1201,6 @@
 		75EE5584183BBFE900C52654 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EventosCaracol.app/EventosCaracol";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
@@ -1211,7 +1220,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1244,7 +1252,6 @@
 		8B8DB4BF186397C00050419E /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1271,7 +1278,6 @@
 		8B8DB4C0186397C00050419E /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EventosCaracol.app/EventosCaracol";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
