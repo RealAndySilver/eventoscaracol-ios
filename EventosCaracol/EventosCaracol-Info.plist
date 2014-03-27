@@ -5,13 +5,18 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>EuroCine</string>
+	<string>eurocine 2014</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.iamstudio.CarnavalDeBarranquilla</string>
+	<string>net.icck.EuroCine</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>Spanish</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
@@ -23,7 +28,7 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>FacebookAppID</key>
-	<string>216322511873442</string>
+	<string>535487489902578</string>
 	<key>FacebookDisplayName</key>
 	<string>Carnaval de Barranquilla</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -50,11 +55,6 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-	</array>
-	<key>CFBundleLocalizations</key>
-	<array>
-		<string>en</string>
-		<string>Spanish</string>
 	</array>
 </dict>
 </plist>

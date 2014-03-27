@@ -60,7 +60,7 @@
     }
 
     // Override point for customization after application launch.
-    [GMSServices provideAPIKey:@"AIzaSyC8pPYE33R1zoeR1GuOMrThOw3nwJrgXtE"];
+    [GMSServices provideAPIKey:@"AIzaSyDxAZJ0eANVycpx0uv6Jlru-93u-G-zAzA"];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     
     NSString *deviceBrand = @"Apple";
