@@ -965,7 +965,7 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"¡EuroCine 2014!"];
+        [mailComposeViewController setSubject:@"¡eurocine 2014!"];
         [mailComposeViewController setMessageBody:self.textToShare isHTML:NO];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;

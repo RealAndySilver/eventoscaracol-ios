@@ -611,7 +611,6 @@
             MFMessageComposeViewController *messageViewController = [[MFMessageComposeViewController alloc] init];
             messageViewController.messageComposeDelegate = self;
             [messageViewController setBody:[self getDictionaryWithName:@"master"][@"app"][@"social_message"]];
-            //[messageViewController setBody:@"¿Ya conoces EuroCine?, EuroCine es el festival de cine mas importante de Colombia. Descarga ya la aplicación oficial para tu dispositivo móvil. https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"];
             [self presentViewController:messageViewController animated:YES completion:nil];
             NSLog(@"presenté el viewcontroller");
         }
@@ -624,7 +623,6 @@
         
         SLComposeViewController *facebookViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
         [facebookViewController setInitialText:[self getDictionaryWithName:@"master"][@"app"][@"social_message"]];
-        [facebookViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
         [self presentViewController:facebookViewController animated:YES completion:nil];
     }
     
@@ -635,7 +633,6 @@
         
         SLComposeViewController *twitterViewController = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
         [twitterViewController setInitialText:[self getDictionaryWithName:@"master"][@"app"][@"social_message"]];
-        [twitterViewController addURL:[NSURL URLWithString:@"https://itunes.apple.com/co/app/bogotaxi/id474509867?mt=8"]];
         [self presentViewController:twitterViewController animated:YES completion:nil];
     }
     
@@ -644,7 +641,7 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"Te recomiendo la app 'EuroCine 2014'"];
+        [mailComposeViewController setSubject:@"Te recomiendo la app 'eurocine 2014'"];
         [mailComposeViewController setMessageBody:[self getDictionaryWithName:@"master"][@"app"][@"social_message"] isHTML:NO];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;

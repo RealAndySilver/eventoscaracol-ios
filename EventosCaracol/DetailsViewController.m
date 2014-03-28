@@ -54,7 +54,8 @@
                                                                     0.0,
                                                                     150.0,
                                                                     44.0)];
-    titleLabel.text = self.navigationBarTitle;
+    titleLabel.text = self.navigationBarTitle.length>18?[NSString stringWithFormat:@"%@..",[self.navigationBarTitle substringWithRange:NSMakeRange(0, 18)]]:self.navigationBarTitle ;
+    //titleLabel.backgroundColor = [UIColor redColor];
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.textColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -320,7 +321,7 @@
     else
         description.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
     
-    description.textAlignment = NSTextAlignmentJustified;
+    description.textAlignment = NSTextAlignmentNatural;
     description.textColor = [UIColor lightGrayColor];
     [self.scrollView addSubview:description];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, description.frame.origin.y + description.frame.size.height + 20);
@@ -584,7 +585,7 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"¡EuroCine 2014!"];
+        [mailComposeViewController setSubject:@"¡eurocine 2014!"];
         [mailComposeViewController setMessageBody:textToShare isHTML:NO];
         
         mailComposeViewController.mailComposeDelegate = self;

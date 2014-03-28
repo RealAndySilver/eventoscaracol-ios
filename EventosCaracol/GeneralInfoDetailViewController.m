@@ -73,7 +73,7 @@
         detailLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
     else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         detailLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
-    detailLabel.textAlignment = NSTextAlignmentJustified;
+    detailLabel.textAlignment = NSTextAlignmentNatural;
     detailLabel.textColor = [UIColor lightGrayColor];
     detailLabel.text = self.detailText;
     detailLabel.userInteractionEnabled = NO;
