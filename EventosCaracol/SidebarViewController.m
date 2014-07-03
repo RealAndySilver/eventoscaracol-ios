@@ -18,6 +18,7 @@
 @property (strong, nonatomic) UILabel *updateLabel;
 @property (strong, nonatomic) UIImageView *updateImageView;
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (nonatomic) BOOL isUpdating;
 @property (nonatomic) BOOL shouldUpdate;
 @property (nonatomic) float offset;
@@ -62,12 +63,16 @@
                                                object:nil];
     
     ///////////////////////////////////////////////////////////////
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    
     //Create the image view
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.frame];
-    imageView.userInteractionEnabled = YES;
-    imageView.clipsToBounds = YES;
-    imageView.contentMode = UIViewContentModeScaleToFill;
-    imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
+    self.backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    self.backgroundImageView.userInteractionEnabled = YES;
+    self.backgroundImageView.clipsToBounds = YES;
+    self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
+    NSURL *backgroundImageURL = [NSURL URLWithString:[fileSaver getDictionary:@"master"][@"app"][@"logo_wide_url"]];
+    [self.backgroundImageView setImageWithURL:backgroundImageURL];
+    //imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
     /*UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
                                                                            320.0,
@@ -81,12 +86,12 @@
     else
         imageView.image = [UIImage imageNamed:@"FondoMenuiPad.png"];*/
   
-    [self.view addSubview:imageView];
+    [self.view addSubview:self.backgroundImageView];
     [self.view bringSubviewToFront:self.searchDisplayController.searchBar];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOnLogoImageView)];
     tap.numberOfTapsRequired = 1;
-    [imageView addGestureRecognizer:tap];
+    [self.backgroundImageView addGestureRecognizer:tap];
     
     ///////////////////////////////////////////////////////////////////////////////
     //Add a tableview to our view.
@@ -931,6 +936,11 @@ shouldReloadTableForSearchString:(NSString *)searchString
     [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"eventos"]];
     [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"locaciones"]];
     [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"general"]];
+    
+    //Update background image
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    NSURL *backgroundImageURL = [NSURL URLWithString:[fileSaver getDictionary:@"master"][@"app"][@"logo_wide_url"]];
+    [self.backgroundImageView setImageWithURL:backgroundImageURL];
 }
 
 -(void)getAllInfoFromServer
