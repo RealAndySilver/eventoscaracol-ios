@@ -161,13 +161,19 @@
     
     /////////////////////////////////////////////////////////
     //Create UICollectionView that display the list of featured items
+    float margin = 0;
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 6.0, self.view.frame.size.width, self.view.frame.size.height - (self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + 6.0)) collectionViewLayout:collectionViewLayout];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + margin, self.view.frame.size.width, self.view.frame.size.height - (self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + margin)) collectionViewLayout:collectionViewLayout];
     collectionView.tag = 1;
+
+    
+    collectionViewLayout.minimumInteritemSpacing = 1;
+    collectionViewLayout.minimumLineSpacing=1;
+    collectionView.contentInset = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0);
+
     collectionView.showsVerticalScrollIndicator = NO;
     collectionView.dataSource = self;
     [collectionView setAlwaysBounceVertical:YES];
-    collectionView.contentInset = UIEdgeInsetsMake(0.0, 6.0, 0.0, 6.0);
     collectionView.delegate = self;
     [collectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:FEATURED_IDENTIFIER];
     collectionView.backgroundColor = [UIColor clearColor];
@@ -475,7 +481,6 @@
         DestacadosCollectionViewCell *featuredEventCell = (DestacadosCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:FEATURED_IDENTIFIER forIndexPath:indexPath];
         
         featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"short_detail"];
-        
         [featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.row][@"thumb_url"]
                                                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]
                                                         completed:^(UIImage *image, NSError *error, SDImageCacheType type){
@@ -498,7 +503,9 @@
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             return indexPath.item % 3 ? CGSizeMake(367, 205) : CGSizeMake(collectionView.frame.size.width - 20, 205);
         else
-            return indexPath.item % 3 ? CGSizeMake(149, 114):CGSizeMake(collectionView.frame.size.width - 12, 114);
+            //return indexPath.item % 3 ? CGSizeMake(149, 114):CGSizeMake(collectionView.frame.size.width - 12, 114);
+            return indexPath.item % 3 ? CGSizeMake(158.5, 114):CGSizeMake(collectionView.frame.size.width - 2, 114);
+
     }
     
     else

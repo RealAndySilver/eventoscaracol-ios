@@ -253,6 +253,10 @@
                                      camera:camera];
     //self.mapView.myLocationEnabled = YES;
     [self.view addSubview:self.mapView];
+    [self createMarkers];
+    
+}
+-(void)createMarkers{
     for (int i = 0; i < [self.locationsArray count]; i++)
     {
         double markerLatitute = [self.locationsArray[i][@"lat"] doubleValue];
@@ -261,24 +265,22 @@
         marker.title = self.locationsArray[i][@"name"];
         marker.snippet = self.locationsArray[i][@"short_detail"];
         marker.map = self.mapView;
-        
         UIImageView *imageView = [[UIImageView alloc] init];
         NSLog(@"thumb url: %@", self.locationsArray[i][@"thumb_url"]);
         [imageView setImageWithURL:[NSURL URLWithString:self.locationsArray[i][@"thumb_url"]] completed:^(UIImage *image, NSError *error, SDImageCacheType imageChache){
+            
             if (image) {
-                NSLog(@"si descargué la imagen");
                 dispatch_async(dispatch_get_main_queue(), ^(){
                     marker.icon = [MyUtilities imageWithName:image ScaleToSize:CGSizeMake(30.0, 30.0)];
-                    [self.markers addObject:marker];
+                    //[self.markers addObject:marker];
                 });
-
+                
             } else {
                 NSLog(@"no descargué ninguna imagen");
             }
         }];
     }
 }
-
 -(void)createFilterButtons
 {
     /////////////////////////////
