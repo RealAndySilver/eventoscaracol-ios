@@ -9,6 +9,7 @@
 #import "ServerCommunicator.h"
 #import "IAmCoder.h"
 #define ENDPOINT @"http://iccknet-eventoscaracol.jit.su/api_1.0"
+//#define ENDPOINT @"http://192.168.1.109:8080"
 //#define ENDPOINT @"http://10.0.1.6:8080/api_1.0"
 //#define ENDPOINT @"http://caracol.aws.af.cm/"
 //#define ENDPOINT @"http://10.0.1.9:8080"

@@ -81,7 +81,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
+    //[self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
 }
 
 -(void)viewDidLoad
@@ -148,15 +148,21 @@
     specialItemsCollectionViewLayout.minimumInteritemSpacing = 0;
     specialItemsCollectionViewLayout.minimumLineSpacing = 0;
     specialItemsCollectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/4.3) collectionViewLayout:specialItemsCollectionViewLayout];
+    specialItemsCollectionViewLayout.itemSize = CGSizeMake(self.view.bounds.size.width, 120.0);
+    /*self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/4.3) collectionViewLayout:specialItemsCollectionViewLayout];*/
+    
+    self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height + 10.0, self.view.frame.size.width, 120.0) collectionViewLayout:specialItemsCollectionViewLayout];
+
     self.specialItemsCollectionView.tag = 0;
     self.specialItemsCollectionView.showsHorizontalScrollIndicator = NO;
     self.specialItemsCollectionView.dataSource = self;
     self.specialItemsCollectionView.delegate = self;
     self.specialItemsCollectionView.alwaysBounceHorizontal = YES;
     self.specialItemsCollectionView.pagingEnabled = YES;
+    self.specialItemsCollectionView.backgroundColor = [UIColor cyanColor];
+    self.specialItemsCollectionView.contentInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
     [self.specialItemsCollectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:SPECIAL_IDENTIFIER];
-    self.specialItemsCollectionView.backgroundColor = [UIColor whiteColor];
+    NSLog(@"Tamaño del collectionview: %f", self.specialItemsCollectionView.frame.size.height);
     [self.view addSubview:self.specialItemsCollectionView];
     
     /////////////////////////////////////////////////////////
@@ -199,6 +205,11 @@
         NSLog(@"el diccionario no existe");
     }*/
 
+}
+
+-(void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.specialItemsCollectionView.frame = CGRectMake(0.0, 64.0 + 10.0, self.view.bounds.size.width, 120.0);
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -491,7 +502,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag == 0)
-        return CGSizeMake(self.view.frame.size.width, self.view.frame.size.height/4.3);
+        return CGSizeMake(self.view.bounds.size.width, 120.0);
     
     else if (collectionView.tag == 1)
     {

@@ -121,7 +121,7 @@
         {
             //Save the dictionary downloaded from the server locally in our app.
             [self setDictionary:dictionary withName:@"master"];
-            NSLog(@"%@", dictionary);
+            //NSLog(@"%@", dictionary);
             
             //At this point we have all the neccessary info, so we can go to the
             //next view controller.

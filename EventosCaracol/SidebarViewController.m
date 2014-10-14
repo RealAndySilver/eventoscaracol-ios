@@ -147,7 +147,7 @@
     
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
-    [revelViewController setFrontViewController:navigationController animated:YES];
+    [revelViewController pushFrontViewController:navigationController animated:YES];
     
     NSLog(@"me tapee");
 }
@@ -283,7 +283,7 @@
                 
                 DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
-                [revelViewController setFrontViewController:navigationController animated:YES];
+                [revelViewController pushFrontViewController:navigationController animated:YES];
                 
                 NSLog(@"me tapee");
             }
@@ -317,7 +317,7 @@
                 
                 FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
-                [revealViewController setFrontViewController:navigationController animated:YES];
+                [revealViewController pushFrontViewController:navigationController animated:YES];
             }
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"locaciones"])
@@ -377,7 +377,7 @@
                 mapVC.menuID = menuID;
                 mapVC.objectType = @"locaciones";
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapVC];
-                [revealViewController setFrontViewController:navigationController animated:YES];
+                [revealViewController pushFrontViewController:navigationController animated:YES];
             }
         }
         
@@ -442,7 +442,7 @@
                 tabBarController.tabBar.barTintColor = [UIColor darkGrayColor];
                 tabBarController.tabBar.tintColor = [UIColor whiteColor];
                 tabBarController.selectedIndex = 0;
-                [revealViewController setFrontViewController:tabBarController animated:YES];
+                [revealViewController pushFrontViewController:tabBarController animated:YES];
             }
             
             //Menú Login
@@ -624,7 +624,7 @@
     
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
-    [revelViewController setFrontViewController:navigationController animated:YES];
+    [revelViewController pushFrontViewController:navigationController animated:YES];
 }
 
 -(void)FacebookLoginNotificationReceived:(NSNotification *)notification
@@ -718,7 +718,7 @@
     listVC.navigationBarTitle = self.menuArray[row][@"name"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
     navigationController.navigationBar.translucent = YES;
-    [revealViewController setFrontViewController:navigationController animated:YES];
+    [revealViewController pushFrontViewController:navigationController animated:YES];
 }
 
 #pragma mark - SearchBar

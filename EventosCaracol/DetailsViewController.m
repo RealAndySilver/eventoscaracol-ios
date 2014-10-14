@@ -87,9 +87,9 @@
     UIImageView *mainImageView;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
-                                                                     self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                     0.0,
                                                                      self.view.frame.size.width,
-                                                                     self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
+                                                                     self.view.frame.size.height)];
     //If the object doen's have a youtube url, create a scroll view to contain all the subviews.
     mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                   0.0,

@@ -315,6 +315,11 @@
     [self.containerDatesPickerView addSubview:dismissDatePickerButton];
 }
 
+-(void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.tableView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height);
+}
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     //If any of the picker containers views is on view, remove it.
@@ -1156,8 +1161,8 @@
         containerView = self.containerLocationPickerView;*/
     UIView *containerView = self.containerDatesPickerView;
     UIView *containerView2 = self.containerLocationPickerView;
-    BOOL picker1;
-    BOOL picker2;
+    BOOL picker1 = NO;
+    BOOL picker2 = NO;
     if (sender.tag == 1)
         picker1 = YES;
     else if (sender.tag == 2)
@@ -1334,10 +1339,10 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)sender {
-    
+    NSLog(@"offset: %f", self.tableView.contentOffset.y);
     self.offset = self.tableView.contentOffset.y;
     self.offset *= -1;
-    if (self.offset > 0 && self.offset < 60) {
+    if (self.offset > 0 && self.offset < 60 + 64.0) {
          if(!self.isUpdating)
          self.updateLabel.text = @"Desliza hacia abajo para actualizar...";
         
@@ -1348,7 +1353,7 @@
         [UIView commitAnimations];
         self.shouldUpdate = NO;
     }
-    if (self.offset >= 60) {
+    if (self.offset >= 60 + 64.0) {
          if(!self.isUpdating)
          self.updateLabel.text = @"Suelta para actualizar...";
         
@@ -1372,7 +1377,7 @@
         [self updateMethod];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.2];
-        self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(60 + 64.0, 0, 0, 0);
         [UIView commitAnimations];
     }
 }
@@ -1421,7 +1426,7 @@
     self.updateImageView.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.2];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     [UIView commitAnimations];
     self.isUpdating = NO;
 }
