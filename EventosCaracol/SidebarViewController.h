@@ -21,6 +21,10 @@
 #import "SocialActivityViewController.h"
 #import <MessageUI/MessageUI.h>
 
-@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate, UITabBarControllerDelegate, MFMailComposeViewControllerDelegate, UISearchDisplayDelegate>
+@interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate, UITabBarControllerDelegate, MFMailComposeViewControllerDelegate, UISearchDisplayDelegate>{
+    BOOL isFacebookTagActive;
+    BOOL isInstagramActive;
+    BOOL isTwitterTagActive;
+}
 
 @end

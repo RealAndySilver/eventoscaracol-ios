@@ -20,7 +20,9 @@
 @property (strong, nonatomic) UIButton *sideBarButton;
 @end
 
-@implementation FavoriteListViewController
+@implementation FavoriteListViewController{
+    NSArray *locationsArray;
+}
 
 #pragma mark - View lifecycle
 
@@ -99,6 +101,7 @@
     
     //Get info from the server
     [self getFavoritesInfoFromServer];
+    locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDataSource
@@ -126,91 +129,112 @@
             eraseImage = [UIImage imageNamed:@"SwipeCellEraseiPad.png"];
         
         [rightButton sw_addUtilityButtonWithColor:[UIColor redColor] icon:eraseImage];
+        UIImageView *imageView;
+        UILabel *nameLabel;
+        UILabel *descriptionLabel;
+        UILabel *eventTimeLabel;
         
-        cell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                      reuseIdentifier:@"FavoriteCell"
-                                  containingTableView:tableView
-                                   leftUtilityButtons:nil
-                                  rightUtilityButtons:rightButton];
+        if (cell==nil) {
+            cell = [[SWTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:@"FavoriteCell"
+                                      containingTableView:tableView
+                                       leftUtilityButtons:nil
+                                      rightUtilityButtons:rightButton];
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, self.view.frame.size.width/3.2, tableView.rowHeight - 20.0)];
+            imageView.clipsToBounds = YES;
+            imageView.tag=11;
+            imageView.contentMode = UIViewContentModeScaleAspectFill;
+            imageView.backgroundColor = [UIColor clearColor];
+            [cell.contentView addSubview:imageView];
+            
+            nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
+                                                                  0.0,
+                                                                  self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10),
+                                                                  40.0)];
+            nameLabel.textAlignment = NSTextAlignmentLeft;
+            nameLabel.numberOfLines = 2;
+            nameLabel.tag=22;
+            [cell.contentView addSubview:nameLabel];
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+                nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
+            else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+                nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
+            
+            ////////////////////////////////////////////////////////////////////
+            //Item location label
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                             40.0,
+                                                                             self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                             20.0)];
+                descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+            } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
+                                                                             40.0,
+                                                                             self.view.frame.size.width - nameLabel.frame.origin.x,
+                                                                             40.0)];
+                descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+                
+            }
+            descriptionLabel.tag=33;
+            descriptionLabel.textColor = [UIColor lightGrayColor];
+            [cell.contentView addSubview:descriptionLabel];
+            if (![self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
+            {
+                
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+                    eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                               descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                               40.0)];
+                    eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
+                } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
+                                                                               descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
+                                                                               40.0)];
+                    eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
+                }
+                eventTimeLabel.numberOfLines = 0;
+                eventTimeLabel.textColor = [UIColor lightGrayColor];
+                eventTimeLabel.tag=44;
+                [cell.contentView addSubview:eventTimeLabel];
+            }
+        }
+        
         cell.delegate = self;
         
         /////////////////////////////////////////////////////////////////////
         //Create the subviews that will contain the cell.
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10.0, 10.0, self.view.frame.size.width/3.2, tableView.rowHeight - 20.0)];
-        imageView.clipsToBounds = YES;
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.backgroundColor = [UIColor clearColor];
+        
         
         //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
-        [imageView setImageWithURL:self.favoritedItems[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+        UIImageView *iv=((UIImageView*)[cell viewWithTag:11]);
+        [iv setImageWithURL:self.favoritedItems[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
         
-        [cell.contentView addSubview:imageView];
+        ((UILabel*)[cell viewWithTag:22]).text = self.favoritedItems[indexPath.row][@"name"];
         
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(imageView.frame.origin.x + imageView.frame.size.width + 10,
-                                                                       0.0,
-                                                                       self.view.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width + 10),
-                                                                       40.0)];
-        nameLabel.textAlignment = NSTextAlignmentLeft;
-        nameLabel.numberOfLines = 2;
-        nameLabel.text = self.favoritedItems[indexPath.row][@"name"];
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-            nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
-        else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-            nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:30.0];
-        [cell.contentView addSubview:nameLabel];
         
-        ////////////////////////////////////////////////////////////////////
-        //Item location label
-        UILabel *descriptionLabel;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
-                                                                         40.0,
-                                                                         self.view.frame.size.width - nameLabel.frame.origin.x,
-                                                                         20.0)];
-            descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
-        } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(nameLabel.frame.origin.x,
-                                                                         40.0,
-                                                                         self.view.frame.size.width - nameLabel.frame.origin.x,
-                                                                         40.0)];
-            descriptionLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
-            
-        }
+        
         self.itemLocation = [self getItemLocation:self.favoritedItems[indexPath.row]];
-        descriptionLabel.text = [NSString stringWithFormat:@"📍%@", self.itemLocation];
-        descriptionLabel.textColor = [UIColor lightGrayColor];
-        [cell.contentView addSubview:descriptionLabel];
+        ((UILabel*)[cell viewWithTag:33]).text = [NSString stringWithFormat:@"📍%@", self.itemLocation];
+        
         
         ////////////////////////////////////////////////////////////////////
         //item date label
         if (![self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"locaciones"])
         {
-            UILabel *eventTimeLabel;
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-                eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                           descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
-                                                                           40.0)];
-                eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:12.0];
-            } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                eventTimeLabel = [[UILabel alloc] initWithFrame:CGRectMake(descriptionLabel.frame.origin.x,
-                                                                           descriptionLabel.frame.origin.y + descriptionLabel.frame.size.height - 5, self.view.frame.size.width - descriptionLabel.frame.origin.x - 10.0,
-                                                                           40.0)];
-                eventTimeLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:24.0];
-            }
-            eventTimeLabel.numberOfLines = 0;
             
             if ([self.favoritedItems[indexPath.row][@"type"] isEqualToString:@"eventos"])
             {
                 self.itemDate = [self getFormattedItemDate:self.favoritedItems[indexPath.row]];
-                eventTimeLabel.text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
+                ((UILabel*)[cell viewWithTag:44]).text = [NSString stringWithFormat:@"🕑 %@", self.itemDate];
             }
             else
             {
-                eventTimeLabel.text = [NSString stringWithFormat:@"📝 %@", self.favoritedItems[indexPath.row][@"short_detail"]];
+                ((UILabel*)[cell viewWithTag:44]).text = [NSString stringWithFormat:@"📝 %@", self.favoritedItems[indexPath.row][@"short_detail"]];
             }
             
-            eventTimeLabel.textColor = [UIColor lightGrayColor];
-            [cell.contentView addSubview:eventTimeLabel];
+            
         }
         
         return cell;
@@ -232,7 +256,7 @@
                                                                              40)];
                 noFavoritesLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
             }
-          
+            
             else {
                 noFavoritesLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 200.0,
                                                                              50.0,
@@ -413,7 +437,7 @@
         if ([item[@"location_id"] length] > 0)
         {
             //Location id exist.
-            NSArray *locationsArray = [self getDictionaryWithName:@"master"][@"locaciones"];
+            
             for (int i = 0; i < [locationsArray count]; i++)
             {
                 if ([item[@"location_id"] isEqualToString:locationsArray[i][@"_id"]])
