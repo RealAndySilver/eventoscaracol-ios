@@ -81,7 +81,7 @@
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
+    //[self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
 }
 
 -(void)viewDidLoad
@@ -462,12 +462,8 @@
         specialEventCell.featuredEventImageView.image = [UIImage imageNamed:@"CaracolPrueba4.png"];
         
         //Use the method -setImageURL to download the image from the server and store it in caché.
-        [specialEventCell.featuredEventImageView setImageWithURL:self.specialItemsArray[indexPath.row][@"thumb_url"]
-                                                placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]
-                                                       completed:^(UIImage *image, NSError *error, SDImageCacheType type){
-                                                           //[appDelegate decrementNetworkActivity];
-                                                       }];
-        
+        [specialEventCell.featuredEventImageView sd_setImageWithURL:self.specialItemsArray[indexPath.row][@"thumb_url"]
+                                                   placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
         
         return specialEventCell;
     }
@@ -481,11 +477,12 @@
         DestacadosCollectionViewCell *featuredEventCell = (DestacadosCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:FEATURED_IDENTIFIER forIndexPath:indexPath];
         
         featuredEventCell.featuredEventNameLabel.text = self.featuredEventsArray[indexPath.item][@"short_detail"];
-        [featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.row][@"thumb_url"]
+        [featuredEventCell.featuredEventImageView sd_setImageWithURL:self.featuredEventsArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+        /*[featuredEventCell.featuredEventImageView setImageWithURL:self.featuredEventsArray[indexPath.row][@"thumb_url"]
                                                  placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]
                                                         completed:^(UIImage *image, NSError *error, SDImageCacheType type){
                                                             //[appDelegate decrementNetworkActivity];
-                                                        }];
+                                                        }];*/
         
         return featuredEventCell;
     }

@@ -232,9 +232,9 @@
     {
         //NSLog(@"No creé los botones de filtrado");
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,
-                                                                       self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                       0.0,
                                                                        self.view.frame.size.width,
-                                                                       self.view.frame.size.height - ( self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))
+                                                                       self.view.frame.size.height)
                                                       style:UITableViewStylePlain];
         //self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 0.0, 0.0);
         [self.view addSubview:self.tableView];
@@ -516,7 +516,8 @@
             }
         }
             
-            [(UIImageView*)[eventCell viewWithTag:11] setImageWithURL:self.tempMenuArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+            NSLog(@"Thumb url: %@", self.tempMenuArray[indexPath.row][@"thumb_url"]);
+            [(UIImageView*)[eventCell viewWithTag:11] sd_setImageWithURL:self.tempMenuArray[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
             ((UILabel *)[eventCell viewWithTag:22]).text =self.tempMenuArray[indexPath.row][@"name"];
             
             ///////////////////////////////////////////////////////////////////////////////
@@ -1394,7 +1395,7 @@
     
     self.offset = self.tableView.contentOffset.y;
     self.offset *= -1;
-    if (self.offset > 0 && self.offset < 60) {
+    if (self.offset > 0 && self.offset < 60 + 64.0) {
          if(!self.isUpdating)
          self.updateLabel.text = @"Desliza hacia abajo para actualizar...";
         
@@ -1405,7 +1406,7 @@
         [UIView commitAnimations];
         self.shouldUpdate = NO;
     }
-    if (self.offset >= 60) {
+    if (self.offset >= 60 + 64.0) {
          if(!self.isUpdating)
          self.updateLabel.text = @"Suelta para actualizar...";
         
@@ -1429,7 +1430,7 @@
         [self updateMethod];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.2];
-        self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(60 + 64.0, 0, 0, 0);
         [UIView commitAnimations];
     }
 }
@@ -1478,7 +1479,7 @@
     self.updateImageView.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.2];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     [UIView commitAnimations];
     self.isUpdating = NO;
 }

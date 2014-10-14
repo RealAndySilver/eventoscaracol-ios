@@ -10,11 +10,11 @@
 #import "ServerCommunicator.h"
 #import "FileSaver.h"
 #import "SWTableViewCell.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "PopUpView.h"
 #import "LoginViewController.h"
 #import "MBHUDView.h"
 #import "DetailsViewController.h"
+#import "UIImageView+WebCache.h"
 
 @interface FavoriteListViewController : UIViewController <ServerCommunicatorDelegate, UITableViewDataSource, UITableViewDelegate, SWTableViewCellDelegate, SWRevealViewControllerDelegate>
 

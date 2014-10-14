@@ -15,9 +15,9 @@
 #import "SidebarViewController.h"
 #import "SWRevealViewController.h"
 #import "MBHUDView.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
 #import "TutorialViewController.h"
+#import "UIImageView+WebCache.h"
 
 @interface LoginViewController : UIViewController <ServerCommunicatorDelegate>
 @property (nonatomic) BOOL loginWasPresentedFromFavoriteButtonAlert;

@@ -12,8 +12,8 @@
 #import "SWRevealViewController.h"
 #import "WebViewController.h"
 #import "FileSaver.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
+#import "UIImageView+WebCache.h"
 
 @interface DestacadosViewController : UIViewController <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, SWRevealViewControllerDelegate>
 

@@ -70,7 +70,7 @@
     NSDictionary *dic = @{@"Model": deviceModel, @"SystemVersion" : systemVersion, @"Brand" : deviceBrand};
     FileSaver *fileSaver = [[FileSaver alloc] init];
     //[fileSaver setDictionary:@{@"app_id": @"528c1c396e9f990000000001"} withKey:@"app_id"];
-    [fileSaver setDictionary:@{@"app_id": @"53769bef28f7e50000000001"} withKey:@"app_id"];
+    [fileSaver setDictionary:@{@"app_id": @"528c1c396e9f990000000001"} withKey:@"app_id"];
 
     [fileSaver setDictionary:dic withKey:@"DeviceInfo"];
     

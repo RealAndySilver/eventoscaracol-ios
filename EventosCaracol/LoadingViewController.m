@@ -117,6 +117,7 @@
     
     //Check if the method returned from the server is the correct one
     if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
+        NSLog(@"entre acaaaaa: %@", dictionary);
         if ([dictionary objectForKey:@"app"])
         {
             //Save the dictionary downloaded from the server locally in our app.

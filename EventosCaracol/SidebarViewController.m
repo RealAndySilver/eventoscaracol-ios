@@ -70,8 +70,9 @@
     self.backgroundImageView.userInteractionEnabled = YES;
     self.backgroundImageView.clipsToBounds = YES;
     self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
-    NSURL *backgroundImageURL = [NSURL URLWithString:[fileSaver getDictionary:@"master"][@"app"][@"logo_wide_url"]];
-    [self.backgroundImageView setImageWithURL:backgroundImageURL];
+    //NSURL *backgroundImageURL = [NSURL URLWithString:[fileSaver getDictionary:@"master"][@"app"][@"logo_wide_url"]];
+    //[self.backgroundImageView setImageWithURL:backgroundImageURL];
+    self.backgroundImageView.image = [UIImage imageNamed:@"FondoMenu.png"];
     //imageView.image = [UIImage imageNamed:@"FondoMenu.png"];
     /*UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                            0.0,
@@ -155,7 +156,7 @@
     
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
-    [revelViewController setFrontViewController:navigationController animated:YES];
+    [revelViewController pushFrontViewController:navigationController animated:YES];
     
     NSLog(@"me tapee");
 }
@@ -182,7 +183,7 @@
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
         cell.menuItemLabel.text = self.searchResults[indexPath.row][@"name"];
-        [cell.menuItemImageView setImageWithURL:self.searchResults[indexPath.row][@"thumb_url"]
+        [cell.menuItemImageView sd_setImageWithURL:self.searchResults[indexPath.row][@"thumb_url"]
                                placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
     }
     
@@ -194,7 +195,7 @@
             [appDelegate incrementNetworkActivity];*/
             cell.menuItemLabel.text = self.menuArray[indexPath.row][@"name"];
             if (![self.menuArray[indexPath.row][@"type"] isEqualToString:@"general"])
-                [cell.menuItemImageView setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
+                [cell.menuItemImageView sd_setImageWithURL:self.menuArray[indexPath.row][@"icon_url"]
                                        placeholderImage:[UIImage imageNamed:@"CaracolPrueba3.png"]];
             else
                 cell.menuItemImageView.image = nil;
@@ -288,7 +289,7 @@
                 
                 DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
-                [revelViewController setFrontViewController:navigationController animated:YES];
+                [revelViewController pushFrontViewController:navigationController animated:YES];
                 
                 NSLog(@"me tapee");
             }
@@ -322,7 +323,7 @@
                 
                 FavoriteListViewController *favoriteListViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FavoriteList"];
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:favoriteListViewController];
-                [revealViewController setFrontViewController:navigationController animated:YES];
+                [revealViewController pushFrontViewController:navigationController animated:YES];
             }
             
             else if ([self.menuArray[indexPath.row][@"type"] isEqualToString:@"locaciones"])
@@ -382,7 +383,7 @@
                 mapVC.menuID = menuID;
                 mapVC.objectType = @"locaciones";
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mapVC];
-                [revealViewController setFrontViewController:navigationController animated:YES];
+                [revealViewController pushFrontViewController:navigationController animated:YES];
             }
         }
         
@@ -447,7 +448,7 @@
                 tabBarController.tabBar.barTintColor = [UIColor darkGrayColor];
                 tabBarController.tabBar.tintColor = [UIColor whiteColor];
                 tabBarController.selectedIndex = 0;
-                [revealViewController setFrontViewController:tabBarController animated:YES];
+                [revealViewController pushFrontViewController:tabBarController animated:YES];
             }
             
             //Menú Login
@@ -629,7 +630,7 @@
     
     DestacadosViewController *destacadosVC = [self.storyboard instantiateViewControllerWithIdentifier:@"Destacados"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:destacadosVC];
-    [revelViewController setFrontViewController:navigationController animated:YES];
+    [revelViewController pushFrontViewController:navigationController animated:YES];
 }
 
 -(void)FacebookLoginNotificationReceived:(NSNotification *)notification
@@ -723,7 +724,7 @@
     listVC.navigationBarTitle = self.menuArray[row][@"name"];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:listVC];
     navigationController.navigationBar.translucent = YES;
-    [revealViewController setFrontViewController:navigationController animated:YES];
+    [revealViewController pushFrontViewController:navigationController animated:YES];
 }
 
 #pragma mark - SearchBar
@@ -940,7 +941,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     //Update background image
     FileSaver *fileSaver = [[FileSaver alloc] init];
     NSURL *backgroundImageURL = [NSURL URLWithString:[fileSaver getDictionary:@"master"][@"app"][@"logo_wide_url"]];
-    [self.backgroundImageView setImageWithURL:backgroundImageURL];
+    [self.backgroundImageView sd_setImageWithURL:backgroundImageURL];
 }
 
 -(void)getAllInfoFromServer

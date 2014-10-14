@@ -209,7 +209,7 @@
         
         //Set the cell's thumb image using the SDWebImage Method -setImageWithURL: (This method saves the image in cache).
         UIImageView *iv=((UIImageView*)[cell viewWithTag:11]);
-        [iv setImageWithURL:self.favoritedItems[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+        [iv sd_setImageWithURL:self.favoritedItems[indexPath.row][@"thumb_url"] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
         
         ((UILabel*)[cell viewWithTag:22]).text = self.favoritedItems[indexPath.row][@"name"];
         

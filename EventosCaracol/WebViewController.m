@@ -51,9 +51,9 @@
     
     //Create a webView to display the URL content.
     self.webView = [[UIWebView alloc] initWithFrame:CGRectMake(0.0,
-                                                                     self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
+                                                                     0.0,
                                                                      self.view.frame.size.width,
-                                                                     self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
+                                                                     self.view.frame.size.height)];
     NSURL *url = [NSURL URLWithString:self.urlString];
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
     self.webView.scalesPageToFit = YES;

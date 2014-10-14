@@ -11,8 +11,8 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "FileSaver.h"
 #import "ListViewController.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "MyUtilities.h"
+#import "UIImageView+WebCache.h"
 
 @interface MapViewController ()
 @property (strong, nonatomic) GMSMapView *mapView;

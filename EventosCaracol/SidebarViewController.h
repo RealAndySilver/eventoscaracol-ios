@@ -16,10 +16,10 @@
 #import "MapViewController.h"
 #import "DetailsViewController.h"
 #import "DestacadosViewController.h"
-#import <SDWebImage/UIImageView+WebCache.h>
 #import "AppDelegate.h"
 #import "SocialActivityViewController.h"
 #import <MessageUI/MessageUI.h>
+#import "UIImageView+WebCache.h"
 
 @interface SidebarViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ServerCommunicatorDelegate, UIAlertViewDelegate, UIActionSheetDelegate, UITabBarControllerDelegate, MFMailComposeViewControllerDelegate, UISearchDisplayDelegate>{
     BOOL isFacebookTagActive;

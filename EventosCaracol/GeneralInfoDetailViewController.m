@@ -25,7 +25,7 @@
         titleLabelHeight = 60.0;
     
     //Create a scroll view
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height)];
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.alwaysBounceVertical = YES;
     [self.view addSubview:scrollView];
