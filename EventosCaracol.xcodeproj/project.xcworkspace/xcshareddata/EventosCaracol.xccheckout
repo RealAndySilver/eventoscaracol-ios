@@ -10,29 +10,29 @@
 	<string>EventosCaracol</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D22CE9F1731F51B0A7F171AB99EF4A755D1391F3</key>
+		<key>5F1ED422-C6D7-4686-AC09-185473BFF522</key>
 		<string>https://bitbucket.org/katsuyapr0/eventoscaracol.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>EventosCaracol.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D22CE9F1731F51B0A7F171AB99EF4A755D1391F3</key>
+		<key>5F1ED422-C6D7-4686-AC09-185473BFF522</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://bitbucket.org/katsuyapr0/eventoscaracol.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>111</integer>
+	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D22CE9F1731F51B0A7F171AB99EF4A755D1391F3</string>
+	<string>5F1ED422-C6D7-4686-AC09-185473BFF522</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D22CE9F1731F51B0A7F171AB99EF4A755D1391F3</string>
+			<string>5F1ED422-C6D7-4686-AC09-185473BFF522</string>
 			<key>IDESourceControlWCCName</key>
 			<string>eventoscaracol</string>
 		</dict>
