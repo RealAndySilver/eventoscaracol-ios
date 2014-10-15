@@ -8,7 +8,7 @@
 
 #import "DetailsViewController.h"
 
-@interface DetailsViewController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIScrollViewDelegate>
+@interface DetailsViewController () <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (nonatomic) BOOL isFavorited;
 @property (strong, nonatomic) UIButton *favoriteButton;
@@ -84,45 +84,56 @@
     }
     
     //UIImageVIew that will display the object's image (artist, news, event).
-    UIImageView *mainImageView;
+    //UIImageView *mainImageView;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
                                                                      0.0,
                                                                      self.view.frame.size.width,
                                                                      self.view.frame.size.height)];
     //If the object doen's have a youtube url, create a scroll view to contain all the subviews.
-    mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+    /*mainImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
                                                                   0.0,
                                                                   self.view.frame.size.width,
                                                                   self.view.frame.size.height/2.5)];
     
-    //Create the scroll view of the entire screen, because there is not map view.
-    NSLog(@"no hay youtube");
-    /*self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0,
-     self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height,
-     self.view.frame.size.width,
-     self.view.frame.size.height - (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height))];*/
     
+    //Main Image View
     mainImageView.backgroundColor = [UIColor cyanColor];
     mainImageView.clipsToBounds = YES;
     mainImageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.scrollView addSubview:mainImageView];*/
     
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Ésta línea de código puede crashear en caso de que no haya nada en el arreglo "image_url"
-    if ([self.objectInfo[@"image_url"] count] > 0)
+    /*if ([self.objectInfo[@"image_url"] count] > 0)
         [mainImageView sd_setImageWithURL:[NSURL URLWithString:self.objectInfo[@"image_url"][0]]
                       placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
     else
-        mainImageView.image = [UIImage imageNamed:@"CaracolPrueba4.png"];
+        mainImageView.image = [UIImage imageNamed:@"CaracolPrueba4.png"];*/
     
+    //Create the collectionview to show the gallery pics
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    layout.minimumInteritemSpacing = 0.0;
+    layout.minimumLineSpacing = 0.0;
+    layout.itemSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height/2.5);
+    NSLog(@"NUMERO DE IMAGENES EN LA GALERIA: %lu", (unsigned long)[self.objectInfo[@"gallery"] count]);
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height/2.5) collectionViewLayout:layout];
+    collectionView.delegate = self;
+    collectionView.dataSource = self;
+    collectionView.pagingEnabled = YES;
+    collectionView.backgroundColor = [UIColor whiteColor];
+    [collectionView registerClass:[DetailGalleryCell class] forCellWithReuseIdentifier:@"GalleryCell"];
+    [self.scrollView addSubview:collectionView];
+    
+    //////////////////////////////////////////
     self.scrollView.delegate = self;
     self.scrollView.alwaysBounceVertical = YES;
-    [self.scrollView addSubview:mainImageView];
     [self.view addSubview:self.scrollView];
     
     //////////////////////////////////////////////////////////////////////////////////////////
     self.favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(10.0,
-                                                                          mainImageView.frame.origin.y + mainImageView.frame.size.height + 10.0,
+                                                                          collectionView.frame.origin.y + collectionView.frame.size.height + 10.0,
                                                                           self.view.frame.size.width/5.33,
                                                                           self.view.frame.size.height/9.46)];
     //[self.favoriteButton setTitle:@"Fav" forState:UIControlStateNormal];
@@ -325,6 +336,18 @@
     description.textColor = [UIColor lightGrayColor];
     [self.scrollView addSubview:description];
     self.scrollView.contentSize = CGSizeMake(self.view.frame.size.width, description.frame.origin.y + description.frame.size.height + 20);
+}
+
+#pragma mark - UICollectionViewDataSource
+
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return [self.objectInfo[@"gallery"] count];
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    DetailGalleryCell *cell = (DetailGalleryCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"GalleryCell" forIndexPath:indexPath];
+    [cell.galleryImageView sd_setImageWithURL:[NSURL URLWithString:self.objectInfo[@"gallery"][indexPath.item]] placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    return cell;
 }
 
 #pragma mark - Custom Methods

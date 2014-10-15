@@ -17,6 +17,7 @@
 #import "MBHUDView.h"
 #import "BannerView.h"
 #import "UIImageView+WebCache.h"
+#import "DetailGalleryCell.h"
 
 @interface DetailsViewController : UIViewController <ServerCommunicatorDelegate, UIAlertViewDelegate>
 @property (strong, nonatomic) NSDictionary *objectInfo;

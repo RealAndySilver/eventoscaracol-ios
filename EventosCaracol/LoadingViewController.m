@@ -117,12 +117,12 @@
     
     //Check if the method returned from the server is the correct one
     if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
-        NSLog(@"entre acaaaaa: %@", dictionary);
+        //NSLog(@"entre acaaaaa: %@", dictionary);
         if ([dictionary objectForKey:@"app"])
         {
             //Save the dictionary downloaded from the server locally in our app.
             [self setDictionary:dictionary withName:@"master"];
-            NSLog(@"%@", dictionary);
+            //NSLog(@"%@", dictionary);
             
             //At this point we have all the neccessary info, so we can go to the
             //next view controller.
