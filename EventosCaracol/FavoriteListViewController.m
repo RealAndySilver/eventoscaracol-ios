@@ -82,7 +82,7 @@
     
     //////////////////////////////////////////////////////////////////////
     //Create a UITableView to display the favorited items
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.frame
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height)
                                                           style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -92,7 +92,7 @@
     else
         self.tableView.rowHeight = 170.0;
     
-    self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, 0.0, 0.0, 0.0);
+    //self.tableView.contentInset = UIEdgeInsetsMake(self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, 0.0, 0.0, 0.0);
     [self.view addSubview:self.tableView];
     
     //Show a HUD indicating that some network activity is going on. dismiss this

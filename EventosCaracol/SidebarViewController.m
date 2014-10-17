@@ -929,7 +929,6 @@ shouldReloadTableForSearchString:(NSString *)searchString
         NSLog(@"Facebook está cerrado y no hay actividad en redes");
     }
 
-    
     //Array that holds of the objects of type artist, events, news and locations. we will use this array later when the
     //user make a search in the search bar. the results of that search will be filtered from this array.
     self.allObjectsTypeArray = [self getDictionaryWithName:@"master"][@"artistas"];
@@ -939,9 +938,9 @@ shouldReloadTableForSearchString:(NSString *)searchString
     [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"general"]];
     
     //Update background image
-    FileSaver *fileSaver = [[FileSaver alloc] init];
+    /*FileSaver *fileSaver = [[FileSaver alloc] init];
     NSURL *backgroundImageURL = [NSURL URLWithString:[fileSaver getDictionary:@"master"][@"app"][@"logo_wide_url"]];
-    [self.backgroundImageView sd_setImageWithURL:backgroundImageURL];
+    [self.backgroundImageView sd_setImageWithURL:backgroundImageURL];*/
 }
 
 -(void)getAllInfoFromServer

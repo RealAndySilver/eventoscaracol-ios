@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) NSArray *featuredEventsArray; //Of NSDictionary
 @property (strong, nonatomic) NSArray *specialItemsArray; //Of NSDictionary
+@property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UICollectionView *specialItemsCollectionView;
 @property (strong, nonatomic) NSTimer * timer;
 @property (nonatomic) NSInteger currentPage;
@@ -22,6 +23,9 @@
 @property (strong, nonatomic) UIView *blockTouchesView;
 @property (strong, nonatomic) UIButton *sideBarButton;
 @property (strong, nonatomic) UIButton *shareButton;
+@property (assign, nonatomic) int numberOfPages;
+@property (assign, nonatomic) BOOL draggingScrollView;
+@property (assign, nonatomic) NSInteger automaticCounter;
 @end
 
 @implementation DestacadosViewController
@@ -65,6 +69,12 @@
     [self.navigationController.navigationBar addSubview:self.shareButton];
 }
 
+-(void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.scrollView.contentOffset = CGPointMake(self.scrollView.contentOffset.x, 0.0);
+}
+
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -78,15 +88,16 @@
     [self.shareButton removeFromSuperview];
 }
 
--(void)viewDidDisappear:(BOOL)animated
+/*-(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     //[self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
-}
+}*/
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    self.automaticCounter = 2;
     self.revealViewController.delegate = self;
     self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
     //Register as an observer of the appStartedFromNotification notification
@@ -144,33 +155,71 @@
     
     /////////////////////////////////////////////////////////////
     //Create UICollectionView to display the special items
-    UICollectionViewFlowLayout *specialItemsCollectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    specialItemsCollectionViewLayout.minimumInteritemSpacing = 0;
-    specialItemsCollectionViewLayout.minimumLineSpacing = 0;
+    /*UICollectionViewFlowLayout *specialItemsCollectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
     specialItemsCollectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height/4.3) collectionViewLayout:specialItemsCollectionViewLayout];
+    self.specialItemsCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height/4.3) collectionViewLayout:specialItemsCollectionViewLayout];
+    
+    specialItemsCollectionViewLayout.minimumInteritemSpacing = 1;
+    specialItemsCollectionViewLayout.minimumLineSpacing = 1;
+    self.specialItemsCollectionView.contentInset = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0);
+    
     self.specialItemsCollectionView.tag = 0;
     self.specialItemsCollectionView.showsHorizontalScrollIndicator = NO;
     self.specialItemsCollectionView.dataSource = self;
     self.specialItemsCollectionView.delegate = self;
     self.specialItemsCollectionView.alwaysBounceHorizontal = YES;
     self.specialItemsCollectionView.pagingEnabled = YES;
+    self.specialItemsCollectionView.backgroundColor = [UIColor cyanColor];
     [self.specialItemsCollectionView registerClass:[DestacadosCollectionViewCell class] forCellWithReuseIdentifier:SPECIAL_IDENTIFIER];
     self.specialItemsCollectionView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.specialItemsCollectionView];
+    [self.view addSubview:self.specialItemsCollectionView];*/
+    
+    /////////////////////////////////////////////////////////////
+    //1. Create a ScrollView to display the main images
+    self.scrollView = [[UIScrollView alloc] init];
+    self.scrollView.frame = CGRectMake(0.0, self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height/4.3);
+    self.scrollView.backgroundColor = [UIColor whiteColor];
+    self.scrollView.pagingEnabled = YES;
+    self.scrollView.delegate = self;
+    self.scrollView.tag = 2;
+    self.scrollView.alwaysBounceVertical = NO;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.directionalLockEnabled = YES;
+    self.scrollView.userInteractionEnabled = YES;
+    [self.view addSubview:self.scrollView];
+    
+    //Create two pages at the left and right limit of the scroll view, this is used to
+    //make the effect of a circular scroll view.
+    [self createPageAtPosition:0 withSpecialItemInfo:[self.specialItemsArray lastObject]];
+    [self createPageAtPosition:[self.specialItemsArray count] + 1 withSpecialItemInfo:[self.specialItemsArray firstObject]];
+    
+    for (int i = 1; i <= [self.specialItemsArray count]; i++) {
+        NSDictionary *specialItemDic = self.specialItemsArray[i - 1];
+        [self createPageAtPosition:i withSpecialItemInfo:specialItemDic];
+        self.numberOfPages = i;
+    }
+    
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width*(self.numberOfPages + 2), self.scrollView.frame.size.height);
+    self.scrollView.contentOffset = CGPointMake(320.0, 0.0);
+    [self.view addSubview:self.scrollView];
+    NSLog(@"Scrollview content size: %@", NSStringFromCGSize(self.scrollView.contentSize));
+    NSLog(@"Scrollview frame: %@", NSStringFromCGRect(self.scrollView.bounds));
+    
+    //Agregar un tap gesture al scrollview
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(specialItemTapped)];
+    [self.scrollView addGestureRecognizer:tapGesture];
     
     /////////////////////////////////////////////////////////
     //Create UICollectionView that display the list of featured items
     float margin = 0;
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + margin, self.view.frame.size.width, self.view.frame.size.height - (self.specialItemsCollectionView.frame.origin.y + self.specialItemsCollectionView.frame.size.height + margin)) collectionViewLayout:collectionViewLayout];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0.0, self.scrollView.frame.origin.y + self.scrollView.frame.size.height + margin, self.view.frame.size.width, self.view.frame.size.height - (self.scrollView.frame.origin.y + self.scrollView.frame.size.height + margin)) collectionViewLayout:collectionViewLayout];
     collectionView.tag = 1;
-
     
     collectionViewLayout.minimumInteritemSpacing = 1;
     collectionViewLayout.minimumLineSpacing=1;
     collectionView.contentInset = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0);
-
+    
     collectionView.showsVerticalScrollIndicator = NO;
     collectionView.dataSource = self;
     [collectionView setAlwaysBounceVertical:YES];
@@ -228,6 +277,46 @@
 
 #pragma mark - Custom Methods
 
+-(void)specialItemTapped {
+    [self goToNextViewControllerFromItemInArray:self.specialItemsArray atIndex:self.currentPage];
+}
+
+-(void)createPageAtPosition:(int)pagePosition withSpecialItemInfo:(NSDictionary *)specialItemDic {
+    //Method used to create the pages of the scroll view.
+    
+    UIView *page = [[UIView alloc] initWithFrame:CGRectMake(self.scrollView.frame.size.width*pagePosition,
+                                                            0.0,
+                                                            self.scrollView.frame.size.width,
+                                                            self.scrollView.frame.size.height)];
+    /*-------------------------------------------------------------*/
+    //1. ImageView to display the main image
+    UIImageView *pageImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0,
+                                                                               0.0,
+                                                                               self.scrollView.frame.size.width,
+                                                                               self.scrollView.frame.size.height)];
+    pageImageView.clipsToBounds = YES;
+    pageImageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    NSURL *pageImageURL = [NSURL URLWithString:specialItemDic[@"thumb_url"]];
+    [pageImageView sd_setImageWithURL:pageImageURL placeholderImage:[UIImage imageNamed:@"CaracolPrueba4.png"]];
+    [page addSubview:pageImageView];
+    
+    //Patter view
+    UIView *patternView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, page.bounds.size.width, page.bounds.size.height)];
+    UIImage *patternImage = [UIImage imageNamed:@"Pattern.png"];
+    patternImage = [MyUtilities imageWithName:patternImage ScaleToSize:CGSizeMake(1.0, page.frame.size.height)];
+    patternView.backgroundColor = [UIColor colorWithPatternImage:patternImage];
+    [page addSubview:patternView];
+    
+    //2. Name label
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(10.0, page.frame.size.height - 40.0, page.frame.size.width - 20.0, 40.0)];
+    nameLabel.text = specialItemDic[@"short_detail"];
+    nameLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:13.0];
+    nameLabel.textColor = [UIColor whiteColor];
+    [page addSubview:nameLabel];
+    [self.scrollView addSubview:page];
+}
+
 -(void)showSideBarMenu:(id)sender {
     NSLog(@"me oprimiste vé");
     [self.revealViewController revealToggle:sender];
@@ -249,7 +338,7 @@
     //It's neccesary to know the max number of 'pages' that are going to be
     //displayed in the top scrollview. So, when the presentation gets to this page
     //it returns to the page 1.
-    NSUInteger maxPage = [self.specialItemsArray count];
+    /*NSUInteger maxPage = [self.specialItemsArray count];
     
     //Change the content offset of the ScrollView.
     [self.specialItemsCollectionView setContentOffset:CGPointMake(self.view.frame.size.width*self.currentPage, 0.0) animated:YES];
@@ -259,7 +348,11 @@
     {
         [self.specialItemsCollectionView setContentOffset:CGPointMake(0.0, 0.0) animated:YES];
         self.currentPage = 1;
-    }
+    }*/
+    
+    [self.scrollView setContentOffset:CGPointMake(self.scrollView.bounds.size.width*self.automaticCounter, 0.0) animated:YES];
+    self.automaticCounter ++;
+    NSLog(@"el contador está en %d", self.automaticCounter);
 }
 
 -(NSString *)getFormattedItemDate:(NSDictionary *)item
@@ -493,7 +586,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag == 0)
-        return CGSizeMake(self.view.frame.size.width, self.view.frame.size.height/4.3);
+        return CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height/4.3);
     
     else if (collectionView.tag == 1)
     {
@@ -514,26 +607,84 @@
 {
     if (scrollView.tag == 0)
     {
-        NSLog(@"terminé de dragearme");
+        /*NSLog(@"terminé de dragearme");
         [self.timer invalidate];
         self.timer = nil;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
                                                       target:self
                                                     selector:@selector(slideShowSpecialItems)
                                                     userInfo:nil
-                                                     repeats:YES];
+                                                     repeats:YES];*/
+    } else if (scrollView.tag == 2) {
+        NSLog(@"Terminaré de draggearme");
+        self.draggingScrollView = NO;
     }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    NSLog(@"Empzaréeee");
+    self.draggingScrollView = YES;
+    [self.timer invalidate];
+    self.timer = nil;
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([scrollView tag] == 0)
+    if (scrollView.tag == 2) {
+        float pageWidth = self.scrollView.frame.size.width;
+        float fractionalPage = self.scrollView.contentOffset.x / pageWidth;
+        NSInteger page = lroundf(fractionalPage);
+        self.currentPage = page - 1;
+        
+        //NSLog(@"Content offset: %f", scrollView.contentOffset.y);
+        if (self.draggingScrollView && scrollView.contentOffset.y != 0) {
+            [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, 0.0) animated:NO];
+        }
+    }
+    else if ([scrollView tag] == 0)
     {
         //We use this method to determine the curren page of the special items ScrollView.
-        CGFloat pageWidth = self.specialItemsCollectionView.frame.size.width;
+        /*CGFloat pageWidth = self.specialItemsCollectionView.frame.size.width;
         float fractionalPage = self.specialItemsCollectionView.contentOffset.x / pageWidth;
-        self.currentPage = round(fractionalPage) + 1;
+        self.currentPage = round(fractionalPage) + 1;*/
     }
+}
+
+-(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    NSLog(@"terminé de animarme");
+    if (self.scrollView.contentOffset.x < 320.0) {
+        //the user scroll from page 1 to the left, so we have to set the content offset
+        //of the scroll view to the last page
+        [self.scrollView setContentOffset:CGPointMake(320.0*self.numberOfPages, 0.0) animated:NO];
+        self.currentPage = [self.specialItemsArray count] - 1;
+    } else if (self.scrollView.contentOffset.x >= 320 * (self.numberOfPages + 1)) {
+        NSLog(@"llegué al final");
+        [self.scrollView setContentOffset:CGPointMake(320.0, 0.0) animated:NO];
+        self.currentPage = 0;
+        self.automaticCounter = 2;
+    }
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (self.scrollView.contentOffset.x < 320.0) {
+        //the user scroll from page 1 to the left, so we have to set the content offset
+        //of the scroll view to the last page
+        [self.scrollView setContentOffset:CGPointMake(320.0*self.numberOfPages, 0.0) animated:NO];
+        self.currentPage = [self.specialItemsArray count] - 1;
+    } else if (self.scrollView.contentOffset.x >= 320 * (self.numberOfPages + 1)) {
+        [self.scrollView setContentOffset:CGPointMake(320.0, 0.0) animated:NO];
+        self.currentPage = 0;
+    }
+    
+    self.automaticCounter = self.currentPage + 2;
+    
+    [self.timer invalidate];
+    self.timer = nil;
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0
+                                                  target:self
+                                                selector:@selector(slideShowSpecialItems)
+                                                userInfo:nil
+                                                 repeats:YES];
 }
 
 #pragma mark - SWRevealViewControllerDelegate

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
         <!--Reveal View Controller-->
@@ -9,8 +9,8 @@
             <objects>
                 <viewController storyboardIdentifier="SWReveal" id="9p7-hI-UGY" customClass="SWRevealViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="dS8-RO-RW7"/>
-                        <viewControllerLayoutGuide type="bottom" id="xjU-cE-0e4"/>
+                        <viewControllerLayoutGuide type="top" id="LSc-Ht-kLq"/>
+                        <viewControllerLayoutGuide type="bottom" id="6Ce-98-9R1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="eKN-u7-8Qp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -27,8 +27,8 @@
             <objects>
                 <viewController storyboardIdentifier="Sidebar" id="2y4-5U-ZUJ" customClass="SidebarViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="wVP-OW-sT3"/>
-                        <viewControllerLayoutGuide type="bottom" id="1P4-CI-BQM"/>
+                        <viewControllerLayoutGuide type="top" id="Gel-aX-Ddw"/>
+                        <viewControllerLayoutGuide type="bottom" id="VBc-Dx-o11"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="TPW-Ni-0li">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -36,7 +36,6 @@
                         <subviews>
                             <searchBar contentMode="redraw" fixedFrame="YES" placeholder="Buscar" backgroundImage="FondoBarraBusqueda.png" translatesAutoresizingMaskIntoConstraints="NO" id="5r9-MZ-tUl">
                                 <rect key="frame" x="0.0" y="144" width="259" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="2y4-5U-ZUJ" id="BO8-Iy-hdq"/>
@@ -66,8 +65,8 @@
             <objects>
                 <viewController storyboardIdentifier="Loading" id="vXZ-lx-hvc" customClass="LoadingViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="L0y-ra-0qC"/>
-                        <viewControllerLayoutGuide type="bottom" id="nDZ-8V-evW"/>
+                        <viewControllerLayoutGuide type="top" id="n2L-zK-aKr"/>
+                        <viewControllerLayoutGuide type="bottom" id="TeC-86-LHF"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -84,8 +83,8 @@
             <objects>
                 <viewController storyboardIdentifier="Login" id="KbS-oW-MaA" customClass="LoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ccz-8Y-rhM"/>
-                        <viewControllerLayoutGuide type="bottom" id="KAr-AG-hCo"/>
+                        <viewControllerLayoutGuide type="top" id="npe-Ti-CQS"/>
+                        <viewControllerLayoutGuide type="bottom" id="uSQ-pd-XYd"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="eKe-0M-5vH">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -102,8 +101,8 @@
             <objects>
                 <viewController storyboardIdentifier="Destacados" id="I69-Ly-VfF" customClass="DestacadosViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="FyE-hC-P2k"/>
-                        <viewControllerLayoutGuide type="bottom" id="Y5d-ke-VbQ"/>
+                        <viewControllerLayoutGuide type="top" id="bYC-rP-h5m"/>
+                        <viewControllerLayoutGuide type="bottom" id="3Gu-Rv-AuG"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="GRq-bm-YNm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -121,8 +120,8 @@
             <objects>
                 <viewController storyboardIdentifier="Map" id="T5A-W7-4pI" customClass="MapViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Kwc-Zv-OTu"/>
-                        <viewControllerLayoutGuide type="bottom" id="pPK-Bs-mmN"/>
+                        <viewControllerLayoutGuide type="top" id="w8x-El-fVd"/>
+                        <viewControllerLayoutGuide type="bottom" id="xpT-x6-4qI"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="B23-Gq-CXa">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -139,8 +138,8 @@
             <objects>
                 <viewController storyboardIdentifier="Tutorial" id="Imt-fx-DJK" customClass="TutorialViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Kdl-Dc-AR3"/>
-                        <viewControllerLayoutGuide type="bottom" id="Zwb-vv-mCZ"/>
+                        <viewControllerLayoutGuide type="top" id="ek6-oS-1Lw"/>
+                        <viewControllerLayoutGuide type="bottom" id="Abr-Xr-kho"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="L9s-oK-Zdm">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -157,8 +156,8 @@
             <objects>
                 <viewController storyboardIdentifier="SocialActivity" id="m0P-Ve-Got" customClass="SocialActivityViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ZK6-Jw-I1h"/>
-                        <viewControllerLayoutGuide type="bottom" id="Ck6-FS-Spl"/>
+                        <viewControllerLayoutGuide type="top" id="RgX-39-kzN"/>
+                        <viewControllerLayoutGuide type="bottom" id="faM-ov-pIG"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="xAP-6F-IRU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -175,8 +174,8 @@
             <objects>
                 <viewController storyboardIdentifier="FAQ" id="HpK-Ug-xev" customClass="FAQViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="twn-R0-iyO"/>
-                        <viewControllerLayoutGuide type="bottom" id="FzW-3v-9BD"/>
+                        <viewControllerLayoutGuide type="top" id="EBR-U5-5CX"/>
+                        <viewControllerLayoutGuide type="bottom" id="sZ7-WK-mzs"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="b1a-gq-4l2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -184,7 +183,6 @@
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ViewController de prueba" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDM-ns-3pI">
                                 <rect key="frame" x="63" y="273" width="194" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -202,8 +200,8 @@
             <objects>
                 <viewController storyboardIdentifier="FavoriteList" id="Cv7-vj-hIY" customClass="FavoriteListViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="1wk-nF-z02"/>
-                        <viewControllerLayoutGuide type="bottom" id="hXO-qg-s13"/>
+                        <viewControllerLayoutGuide type="top" id="uNo-FZ-Sly"/>
+                        <viewControllerLayoutGuide type="bottom" id="aYE-Mb-DDp"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="KjR-zC-6MF">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -220,8 +218,8 @@
             <objects>
                 <viewController storyboardIdentifier="GeneralInfoDetail" id="Yud-Ak-k5V" customClass="GeneralInfoDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qOm-LQ-Sxv"/>
-                        <viewControllerLayoutGuide type="bottom" id="r2v-aw-v62"/>
+                        <viewControllerLayoutGuide type="top" id="aG3-ZF-BDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="Sj8-BD-G1s"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="1z1-KT-nqE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -238,8 +236,8 @@
             <objects>
                 <viewController storyboardIdentifier="EventsList" id="L6G-Jd-bSs" customClass="ListViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="oXr-1I-gcE"/>
-                        <viewControllerLayoutGuide type="bottom" id="95a-9B-96R"/>
+                        <viewControllerLayoutGuide type="top" id="GwJ-TL-cxA"/>
+                        <viewControllerLayoutGuide type="bottom" id="ccx-xl-vuw"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bQd-Vj-xps">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -257,8 +255,8 @@
             <objects>
                 <viewController storyboardIdentifier="EventDetails" id="oLY-Je-WTq" customClass="DetailsViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ff5-6C-XX1"/>
-                        <viewControllerLayoutGuide type="bottom" id="rRf-QK-1th"/>
+                        <viewControllerLayoutGuide type="top" id="94Z-tW-woW"/>
+                        <viewControllerLayoutGuide type="bottom" id="pnl-wu-dRt"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Fu5-I7-Zg7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -275,8 +273,8 @@
             <objects>
                 <viewController storyboardIdentifier="Web" id="7tw-1R-7dt" customClass="WebViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="TfZ-cE-57R"/>
-                        <viewControllerLayoutGuide type="bottom" id="52G-SF-rMI"/>
+                        <viewControllerLayoutGuide type="top" id="d26-Th-ErQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="Gg7-mL-gUV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="l5v-mL-54B">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>

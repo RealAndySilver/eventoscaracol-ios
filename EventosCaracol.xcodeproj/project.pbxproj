@@ -1220,7 +1220,7 @@
 				INFOPLIST_FILE = "EventosCaracol/EventosCaracol-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "0C1E9164-F94C-44B1-B349-EBCC577E5EF1";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1247,7 +1247,7 @@
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
 				INFOPLIST_FILE = "EventosCaracol/EventosCaracol-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8ED12DB2-DA70-46E1-A56D-6B191FCA97AD";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1347,7 +1347,7 @@
 				GCC_PREFIX_HEADER = "EventosCaracol/EventosCaracol-Prefix.pch";
 				INFOPLIST_FILE = "EventosCaracol/EventosCaracol-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;

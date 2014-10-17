@@ -97,7 +97,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:YES];
+    [super viewWillAppear:animated];
     
     //We need to set this properties every time the view appears, because
     //there are more view controllers that change this properties.
@@ -114,6 +114,29 @@
         [self.sideBarButton setBackgroundImage:[UIImage imageNamed:@"SidebarIcon.png"] forState:UIControlStateNormal];
         [self.navigationController.navigationBar addSubview:self.sideBarButton];
     }
+    
+    [self.tableView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
+    self.tableView.contentInset = UIEdgeInsetsZero;
+    NSLog(@"Seteé el onffset del table view*******************************: %f", self.tableView.contentOffset.y);
+    NSLog(@"Settee los insets del table view ****************************: %f", self.tableView.contentInset.top);
+}
+
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    static BOOL firstTimeLayout = YES;
+    
+    if (firstTimeLayout) {
+        self.tableView.contentOffset = CGPointMake(0.0, 0.0);
+        self.tableView.contentInset = UIEdgeInsetsZero;
+        firstTimeLayout = NO;
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear: animated];
+    NSLog(@"Apareciiiiiiii");
+    self.tableView.contentOffset = CGPointMake(0.0, 0.0);
+    self.tableView.contentInset = UIEdgeInsetsZero;
 }
 
 -(void)viewDidLoad
@@ -230,13 +253,13 @@
     
     else
     {
+        NSLog(@"Estoy entrando aca porque no hay filtros ");
         //NSLog(@"No creé los botones de filtrado");
         self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0,
-                                                                       0.0,
+                                                                       64.0,
                                                                        self.view.frame.size.width,
-                                                                       self.view.frame.size.height)
+                                                                       self.view.frame.size.height - 64.0)
                                                       style:UITableViewStylePlain];
-        //self.tableView.contentInset = UIEdgeInsetsMake(64.0, 0.0, 0.0, 0.0);
         [self.view addSubview:self.tableView];
     }
     
@@ -1392,10 +1415,12 @@
 #pragma mark - UIScrollViewDelegate
 
 -(void)scrollViewDidScroll:(UIScrollView *)sender {
-    
+    NSLog(@"***************** ENTRE ACAAAAA *******************");
+    NSLog(@"Offset del table view: %f", self.tableView.contentOffset.y);
+    NSLog(@"Insets del table view: %f", self.tableView.contentInset.top);
     self.offset = self.tableView.contentOffset.y;
     self.offset *= -1;
-    if (self.offset > 0 && self.offset < 60 + 64.0) {
+    if (self.offset > 0 && self.offset < 60) {
          if(!self.isUpdating)
          self.updateLabel.text = @"Desliza hacia abajo para actualizar...";
         
@@ -1406,7 +1431,7 @@
         [UIView commitAnimations];
         self.shouldUpdate = NO;
     }
-    if (self.offset >= 60 + 64.0) {
+    if (self.offset >= 60) {
          if(!self.isUpdating)
          self.updateLabel.text = @"Suelta para actualizar...";
         
@@ -1425,12 +1450,13 @@
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    NSLog(@"Entre al end dragginggggg ******************************");
     if (self.shouldUpdate)
     {
         [self updateMethod];
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.2];
-        self.tableView.contentInset = UIEdgeInsetsMake(60 + 64.0, 0, 0, 0);
+        self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
         [UIView commitAnimations];
     }
 }
@@ -1479,7 +1505,7 @@
     self.updateImageView.hidden = NO;
     [UIView beginAnimations:nil context:NULL];
     [UIView setAnimationDuration:0.2];
-    self.tableView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     [UIView commitAnimations];
     self.isUpdating = NO;
 }
