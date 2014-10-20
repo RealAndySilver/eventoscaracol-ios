@@ -145,9 +145,9 @@
                                                                            100 /*self.view.frame.size.height - (self.searchDisplayController.searchBar.frame.origin.y + self.searchDisplayController.searchBar.frame.size.height)*/);
     
     self.searchDisplayController.searchResultsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
-    isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
-    isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+    //isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
+    //isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
+    //isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
 }
 
 -(void)tapOnLogoImageView
@@ -896,16 +896,18 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 -(void)updateDataFromServer
 {
-    isFacebookTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"facebook_tag_is_active"] boolValue];
-    isInstagramActive = [[self getDictionaryWithName:@"master"][@"app"][@"instagram_tag_is_active"] boolValue];
-    isTwitterTagActive = [[self getDictionaryWithName:@"master"][@"app"][@"twitter_tag_is_active"] boolValue];
+    FileSaver *fileSaver = [[FileSaver alloc] init];
+    NSDictionary *masterDic = [fileSaver getDictionary:@"master"];
+    isFacebookTagActive = [masterDic[@"app"][@"facebook_tag_is_active"] boolValue];
+    isInstagramActive = [masterDic[@"app"][@"instagram_tag_is_active"] boolValue];
+    isTwitterTagActive = [masterDic[@"app"][@"twitter_tag_is_active"] boolValue];
     
     //Array that holds all the menu objects to display in the table view(like artists, news, locations, etc)
     //self.menuArray = [self.fileSaver getDictionary:@"master"][@"menu"];
-    self.menuArray = [self getDictionaryWithName:@"master"][@"menu"];
+    self.menuArray = masterDic[@"menu"];
     
     //Store the info for the aditional buttons of the slide menu table view
-    if ([self getDictionaryWithName:@"user"][@"_id"])
+    if ([fileSaver getDictionary:@"user"][@"_id"])
     {
         if (isFacebookTagActive || isInstagramActive || isTwitterTagActive)
         {
@@ -931,11 +933,11 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
     //Array that holds of the objects of type artist, events, news and locations. we will use this array later when the
     //user make a search in the search bar. the results of that search will be filtered from this array.
-    self.allObjectsTypeArray = [self getDictionaryWithName:@"master"][@"artistas"];
-    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"noticias"]];
-    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"eventos"]];
-    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"locaciones"]];
-    [self.allObjectsTypeArray addObjectsFromArray:[self getDictionaryWithName:@"master"][@"general"]];
+    self.allObjectsTypeArray = masterDic[@"artistas"];
+    [self.allObjectsTypeArray addObjectsFromArray:masterDic[@"noticias"]];
+    [self.allObjectsTypeArray addObjectsFromArray:masterDic[@"eventos"]];
+    [self.allObjectsTypeArray addObjectsFromArray:masterDic[@"locaciones"]];
+    [self.allObjectsTypeArray addObjectsFromArray:masterDic[@"general"]];
     
     //Update background image
     /*FileSaver *fileSaver = [[FileSaver alloc] init];

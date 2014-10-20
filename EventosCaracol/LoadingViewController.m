@@ -99,10 +99,7 @@
     
     //Load the info from the server asynchronously. this is very important because
     //if we don't do it, the application will freeze until the info gets downloaded.
-    dispatch_queue_t infoLoader = dispatch_queue_create("InfoLoader", nil);
-    dispatch_async(infoLoader, ^(){
-        [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
-    });
+    [server callServerWithGETMethod:@"GetAllInfoWithAppID" andParameter:[[self getDictionaryWithName:@"app_id"] objectForKey:@"app_id"]];
 }
 
 #pragma mark - Server Response
@@ -117,6 +114,7 @@
     
     //Check if the method returned from the server is the correct one
     if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
+        NSLog(@"Recibi la info del login");
         //NSLog(@"entre acaaaaa: %@", dictionary);
         if ([dictionary objectForKey:@"app"])
         {
