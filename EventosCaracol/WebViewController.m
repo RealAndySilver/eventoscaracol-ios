@@ -25,7 +25,8 @@
                                                                     0.0,
                                                                     100.0,
                                                                     44.0)];
-    titleLabel.text = @"eurocine 2014";
+
+    titleLabel.text = @"Muralismo";
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.textColor = [UIColor colorWithRed:29.0/255.0 green:80.0/255.0 blue:204.0/255.0 alpha:1.0];

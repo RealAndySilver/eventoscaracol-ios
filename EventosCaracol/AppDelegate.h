@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DetailsViewController.h"
-#import <GoogleMaps/GoogleMaps.h>
+//#import <GoogleMaps/GoogleMaps.h>
 #import "FileSaver.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>

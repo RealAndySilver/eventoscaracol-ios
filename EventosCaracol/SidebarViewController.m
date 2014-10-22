@@ -19,12 +19,21 @@
 @property (strong, nonatomic) UIImageView *updateImageView;
 @property (strong, nonatomic) UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) UIImageView *backgroundImageView;
+@property (strong, nonatomic) NSString *appName;
 @property (nonatomic) BOOL isUpdating;
 @property (nonatomic) BOOL shouldUpdate;
 @property (nonatomic) float offset;
 @end
 
 @implementation SidebarViewController
+
+-(NSString *)appName {
+    if (!_appName) {
+        FileSaver *fileSaver = [[FileSaver alloc] init];
+        _appName = [fileSaver getDictionary:@"master"][@"app"][@"name"];
+    }
+    return _appName;
+}
 
 #pragma mark - View lifecycle
 
@@ -119,7 +128,7 @@
     [self.view addSubview:whiteOpacityPatternView];
     
     //Logo caracol mini
-    UIImageView *logoMini = [[UIImageView alloc] initWithFrame:CGRectMake(120.0, self.view.frame.size.height - 40.0, 32.0, 32.0)];
+    UIImageView *logoMini = [[UIImageView alloc] initWithFrame:CGRectMake(15.0, self.view.frame.size.height - 40.0, 228.0, 39.0)];
     logoMini.image = [UIImage imageNamed:@"LogoCaracolMini.png"];
     [self.view addSubview:logoMini];
     
@@ -130,8 +139,8 @@
     ////////////////////////////////////////////////////////////////////////////////
     //searchDisplayController configuration.
     [[UISearchBar appearance] setSearchFieldBackgroundImage:[UIImage imageNamed:@"BarraBusqueda.png"] forState:UIControlStateNormal];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor colorWithRed:108.0/255.0 green:87.0/255.0 blue:14.0/255.0 alpha:1.0]];
-    [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:108.0/255.0 green:87.0/255.0 blue:14.0/255.0 alpha:1.0]];
+    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[UIColor colorWithRed:45.0/255.0 green:49.0/255.0 blue:133.0/255.0 alpha:1.0]];
+    [[UISearchBar appearance] setTintColor:[UIColor colorWithRed:45.0/255.0 green:49.0/255.0 blue:133.0/255.0 alpha:1.0]];
     [[UIButton appearanceWhenContainedIn:[UISearchBar class], nil] setTitle:@"Cancelar" forState:UIControlStateNormal];
     //self.searchDisplayController.searchResultsTableView.backgroundColor = [UIColor redColor];
     self.searchDisplayController.searchBar.frame = CGRectMake(0.0, self.view.frame.size.height/3.94, 259.0, 44.0);
@@ -413,7 +422,7 @@
                     mailComposeVC.mailComposeDelegate = self;
                     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
                         mailComposeVC.modalPresentationStyle = UIModalPresentationFormSheet;
-                    [mailComposeVC setSubject:@"Reporte de problema App 'EuroCine 2014'"];
+                    [mailComposeVC setSubject:[NSString stringWithFormat:@"Reporte de problema 'App %@'", self.appName]];
                     NSString *contactEmail = [self getDictionaryWithName:@"master"][@"app"][@"contact_email"];
                     [mailComposeVC setToRecipients:@[contactEmail]];
                     [self presentViewController:mailComposeVC animated:YES completion:nil];
@@ -933,7 +942,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
     //Array that holds of the objects of type artist, events, news and locations. we will use this array later when the
     //user make a search in the search bar. the results of that search will be filtered from this array.
-    self.allObjectsTypeArray = masterDic[@"artistas"];
+    self.allObjectsTypeArray = nil;
+    self.allObjectsTypeArray = [NSMutableArray arrayWithArray:masterDic[@"artistas"]];
     [self.allObjectsTypeArray addObjectsFromArray:masterDic[@"noticias"]];
     [self.allObjectsTypeArray addObjectsFromArray:masterDic[@"eventos"]];
     [self.allObjectsTypeArray addObjectsFromArray:masterDic[@"locaciones"]];

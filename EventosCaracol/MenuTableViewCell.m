@@ -19,7 +19,7 @@
         
         self.menuItemLabel = [[UILabel alloc] init ];
         self.menuItemLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:15.0];
-        self.menuItemLabel.textColor = [UIColor colorWithRed:243.0/255.0 green:195.0/255.0 blue:23.0/255.0 alpha:1.0];
+        self.menuItemLabel.textColor = [UIColor lightGrayColor];
         [self.contentView addSubview:self.menuItemLabel];
         
         self.menuItemImageView = [[UIImageView alloc] init];

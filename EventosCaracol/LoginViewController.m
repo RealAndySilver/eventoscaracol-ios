@@ -74,7 +74,7 @@
                                                   30.0);
     //continueWithoutLoginButton.backgroundColor = [UIColor colorWithRed:74.0/255.0 green:179.0/255.0 blue:1.0 alpha:1.0];
     [continueWithoutLoginButton setTitle:@"Continuar sin iniciar sesión" forState:UIControlStateNormal];
-    [continueWithoutLoginButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [continueWithoutLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     continueWithoutLoginButton.titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:14.0];
     [continueWithoutLoginButton addTarget:self action:@selector(goToNextVC) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:continueWithoutLoginButton];
@@ -195,7 +195,7 @@
     //Check if the method returned by the server is the correct one.
     if ([methodName isEqualToString:@"SignUp"])
     {
-        //NSLog(@"Result: %@",dictionary);
+        NSLog(@"Result: %@",dictionary);
         
         //Check if the status returned by the server is 1 (this means that everything
         //was correct). if it is 1, we store the user info locally in the app and pass

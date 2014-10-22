@@ -16,6 +16,7 @@
 #import "MBHUDView.h"
 #import "AppDelegate.h"
 #import "TutorialViewController.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @interface LoadingViewController : UIViewController<ServerCommunicatorDelegate>
 

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		75D8512D18DBC14C009347B4 /* IAmCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 75D8512C18DBC14C009347B4 /* IAmCoder.m */; };
 		75D8513518DBECB5009347B4 /* WhiteOpacityPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = 75D8513418DBECB5009347B4 /* WhiteOpacityPattern.png */; };
-		75D8513718DBF310009347B4 /* BarraBusqueda.png in Resources */ = {isa = PBXBuildFile; fileRef = 75D8513618DBF310009347B4 /* BarraBusqueda.png */; };
 		75EE554E183BBFE900C52654 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE554D183BBFE900C52654 /* Foundation.framework */; };
 		75EE5550183BBFE900C52654 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE554F183BBFE900C52654 /* CoreGraphics.framework */; };
 		75EE5552183BBFE900C52654 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EE5551183BBFE900C52654 /* UIKit.framework */; };
@@ -129,6 +128,7 @@
 		8BC88E8C188999DF00854F97 /* SwipeCellEraseiPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E8A188999DE00854F97 /* SwipeCellEraseiPad.png */; };
 		8BC88E8D188999DF00854F97 /* SwipeCellEraseiPad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BC88E8B188999DF00854F97 /* SwipeCellEraseiPad@2x.png */; };
 		8BCD7D40183FB8DC00849D8A /* DestacadosViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */; };
+		8BE41BB319F58FB6001C9BD9 /* BarraBusqueda.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BE41BB219F58FB6001C9BD9 /* BarraBusqueda.png */; };
 		8BEA46CB185F43BC00E775FF /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 8BEA46CA185F43BC00E775FF /* Facebook.png */; };
 		8BEF416A19EDD36C009204A0 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BEF414A19EDD36B009204A0 /* MKAnnotationView+WebCache.m */; };
 		8BEF416B19EDD36C009204A0 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BEF414C19EDD36B009204A0 /* NSData+ImageContentType.m */; };
@@ -172,7 +172,6 @@
 		75D8512B18DBC14C009347B4 /* IAmCoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAmCoder.h; sourceTree = "<group>"; };
 		75D8512C18DBC14C009347B4 /* IAmCoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAmCoder.m; sourceTree = "<group>"; };
 		75D8513418DBECB5009347B4 /* WhiteOpacityPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WhiteOpacityPattern.png; sourceTree = "<group>"; };
-		75D8513618DBF310009347B4 /* BarraBusqueda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BarraBusqueda.png; sourceTree = "<group>"; };
 		75EE554A183BBFE900C52654 /* EventosCaracol.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventosCaracol.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75EE554D183BBFE900C52654 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		75EE554F183BBFE900C52654 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -335,6 +334,7 @@
 		8BC88E8B188999DF00854F97 /* SwipeCellEraseiPad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "SwipeCellEraseiPad@2x.png"; path = "Resources/Images/SwipeCellEraseiPad@2x.png"; sourceTree = "<group>"; };
 		8BCD7D3E183FB8DC00849D8A /* DestacadosViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DestacadosViewController.h; sourceTree = "<group>"; };
 		8BCD7D3F183FB8DC00849D8A /* DestacadosViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DestacadosViewController.m; sourceTree = "<group>"; };
+		8BE41BB219F58FB6001C9BD9 /* BarraBusqueda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BarraBusqueda.png; path = Resources/Images/BarraBusqueda.png; sourceTree = "<group>"; };
 		8BEA46CA185F43BC00E775FF /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Facebook.png; path = Resources/Images/Facebook.png; sourceTree = "<group>"; };
 		8BEF414919EDD36B009204A0 /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		8BEF414A19EDD36B009204A0 /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
@@ -754,8 +754,8 @@
 				8BB2499A18842E9B00FC6EA4 /* TabBar Icons */,
 				8BEA46CA185F43BC00E775FF /* Facebook.png */,
 				8B1B1236185BBA18007383CA /* Pattern.png */,
-				75D8513618DBF310009347B4 /* BarraBusqueda.png */,
 				8BA5664418DB69EC003840B4 /* BarraBusqueda@2x.png */,
+				8BE41BB219F58FB6001C9BD9 /* BarraBusqueda.png */,
 				8B9AF8E21858C1F7000DE122 /* Back.png */,
 				8B9AF8E61858C3E5000DE122 /* Back@2x.png */,
 				8B9AF8E71858C3E5000DE122 /* Forward@2x.png */,
@@ -898,7 +898,7 @@
 				ORGANIZATIONNAME = iAmStudio;
 				TargetAttributes = {
 					75EE5549183BBFE900C52654 = {
-						DevelopmentTeam = VY536C84VC;
+						DevelopmentTeam = 38FJK6SX58;
 					};
 					75EE556D183BBFE900C52654 = {
 						TestTargetID = 75EE5549183BBFE900C52654;
@@ -992,9 +992,9 @@
 				8BC88E87188992FB00854F97 /* SwipCellFavoriteActiveiPad.png in Resources */,
 				8B3BC99018528A0000CAD92E /* CorazonPrendido.png in Resources */,
 				8BC88E8C188999DF00854F97 /* SwipeCellEraseiPad.png in Resources */,
-				75D8513718DBF310009347B4 /* BarraBusqueda.png in Resources */,
 				8B3BC988185278D300CAD92E /* SidebarIcon.png in Resources */,
 				8B9AF8E91858C3E5000DE122 /* Forward@2x.png in Resources */,
+				8BE41BB319F58FB6001C9BD9 /* BarraBusqueda.png in Resources */,
 				8BA5665618DB83BA003840B4 /* ayudas_slide3@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1207,8 +1207,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Diego Fernando Vidal Illera (9JA65WT89C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Diego Fernando Vidal Illera (77ZZMV54A3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Diego Fernando Vidal Illera (77ZZMV54A3)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/developer/eventoscaracol,
@@ -1222,7 +1222,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0C1E9164-F94C-44B1-B349-EBCC577E5EF1";
+				PROVISIONING_PROFILE = "a8b06cac-00b4-44dd-8a96-745772372d65";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -1335,7 +1335,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

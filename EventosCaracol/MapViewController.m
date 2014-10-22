@@ -106,7 +106,7 @@
     self.blockTouchesView = [[UIView alloc] initWithFrame:self.view.frame];
     self.markers = [[NSMutableArray alloc] init];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
@@ -127,7 +127,7 @@
     titleLabel.text = self.navigationBarTitle;
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor colorWithRed:133.0/255.0 green:101.0/255.0 blue:0.0 alpha:1.0];
+    titleLabel.textColor = [UIColor whiteColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     //self.navigationItem.title = self.navigationBarTitle;
@@ -242,10 +242,13 @@
     [self.locationManager stopUpdatingLocation];
     self.locationManager = nil;
     
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[self.locationsArray[nearestLocationFromUserIndex][@"lat"] doubleValue]
-                                                            longitude:[self.locationsArray[nearestLocationFromUserIndex][@"lon"] doubleValue]
-                                                                 zoom:12.0];
-    
+    GMSCameraPosition *camera = nil;
+    if ([self.locationsArray count] > 0) {
+        camera = [GMSCameraPosition cameraWithLatitude:[self.locationsArray[nearestLocationFromUserIndex][@"lat"] doubleValue]
+                                    longitude:[self.locationsArray[nearestLocationFromUserIndex][@"lon"] doubleValue]
+                                         zoom:12.0];
+
+    }
     self.mapView = [GMSMapView mapWithFrame:CGRectMake(0.0,
                                                        0.0,
                                                        self.view.frame.size.width,
@@ -254,11 +257,11 @@
     //self.mapView.myLocationEnabled = YES;
     [self.view addSubview:self.mapView];
     [self createMarkers];
-    
 }
 -(void)createMarkers{
     for (int i = 0; i < [self.locationsArray count]; i++)
     {
+        NSLog(@"Entré a poner los marcadoresssss");
         double markerLatitute = [self.locationsArray[i][@"lat"] doubleValue];
         double markerLongitude = [self.locationsArray[i][@"lon"] doubleValue];
         GMSMarker *marker = [GMSMarker markerWithPosition:CLLocationCoordinate2DMake(markerLatitute, markerLongitude)];

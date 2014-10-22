@@ -51,16 +51,19 @@
                                                  name:@"StatusBarMustBeOpaqueNotification" object:nil];
     // Window framing changes condition for iOS7 or greater
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
+        NSLog(@"Entraré al statussssssssss");
         statusBarBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.window.frame.size.width, 20)];//statusBarBackgroundView is normal uiview
         //statusBarBackgroundView.backgroundColor = [UIColor blackColor];
-        statusBarBackgroundView.backgroundColor = [UIColor colorWithRed:199.0/255.0 green:157.0/255.0 blue:9.0/255.0 alpha:1.0];
+        statusBarBackgroundView.backgroundColor = [UIColor colorWithRed:13.0/255.0 green:142.0/255.0 blue:186.0/255.0 alpha:1.0];
         statusBarBackgroundView.alpha = 0.0;
+        statusBarBackgroundView.tag = 1;
         [self.window addSubview:statusBarBackgroundView];
         //self.window.bounds = CGRectMake(0, 20, self.window.frame.size.width, self.window.frame.size.height);
     }
 
     // Override point for customization after application launch.
-    [GMSServices provideAPIKey:@"AIzaSyDxAZJ0eANVycpx0uv6Jlru-93u-G-zAzA"];
+    [GMSServices provideAPIKey:@"AIzaSyCYdMYjLiWP-3bi_yxX2DraxK7wCl9EpDE"];
+    
     
     //Register for remote notifications
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
@@ -81,10 +84,13 @@
     
     NSDictionary *dic = @{@"Model": deviceModel, @"SystemVersion" : systemVersion, @"Brand" : deviceBrand};
     FileSaver *fileSaver = [[FileSaver alloc] init];
-    //[fileSaver setDictionary:@{@"app_id": @"528c1c396e9f990000000001"} withKey:@"app_id"];
-    [fileSaver setDictionary:@{@"app_id": @"528c1c396e9f990000000001"} withKey:@"app_id"];
-
+    [fileSaver setDictionary:@{@"app_id": @"54456cb71169060000000001"} withKey:@"app_id"];
     [fileSaver setDictionary:dic withKey:@"DeviceInfo"];
+    
+    if ([fileSaver getDictionary:@"master"]) {
+        NSString *apiKey = [fileSaver getDictionary:@"master"][@"app"][@"googleios_apikey"];
+        [GMSServices provideAPIKey:apiKey];
+    }
     
     ////////////////////////////////////////////////////////////////////////
     //If the application launch from a local notification

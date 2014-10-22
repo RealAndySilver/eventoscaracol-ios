@@ -26,9 +26,18 @@
 @property (assign, nonatomic) int numberOfPages;
 @property (assign, nonatomic) BOOL draggingScrollView;
 @property (assign, nonatomic) NSInteger automaticCounter;
+@property (strong, nonatomic) NSString *appName;
 @end
 
 @implementation DestacadosViewController
+
+-(NSString *)appName {
+    if (!_appName) {
+        FileSaver *fileSaver = [[FileSaver alloc] init];
+        _appName = [fileSaver getDictionary:@"master"][@"app"][@"name"];
+    }
+    return _appName;
+}
 
 #pragma mark - View Lifecycle
 
@@ -37,6 +46,8 @@
     [super viewWillAppear:animated];
     NSLog(@"Aparecí y activé el timer");
     self.currentPage = 1;
+    UIView *statusBarView = [[UIApplication sharedApplication].keyWindow viewWithTag:1];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:statusBarView];
     
     //Create a timer that fires every five seconds. this timer is used to make
     //a slide show (like a presentation) of the special events that are displayed
@@ -50,7 +61,7 @@
     //Set the color properties of the NavigationBar. we have to do this every
     //time the view appears, because this properties are differente in the other
     //controllers.
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
@@ -135,15 +146,14 @@
     
     ///////////////////////////////////////////////////////////////////////////
     //Store the JSON info in a dictionary
-    NSDictionary *myDictionary = [self getDictionaryWithName:@"master"][@"app"];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0,
                                                                     0.0,
                                                                     200.0,
                                                                     44.0)];
-    titleLabel.text = [myDictionary objectForKey:@"name"];
+    titleLabel.text = self.appName;
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor colorWithRed:133.0/255.0 green:101.0/255.0 blue:0.0 alpha:1.0];
+    titleLabel.textColor = [UIColor whiteColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     
@@ -186,6 +196,7 @@
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.directionalLockEnabled = YES;
     self.scrollView.userInteractionEnabled = YES;
+    self.scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.scrollView];
     
     //Create two pages at the left and right limit of the scroll view, this is used to
@@ -796,7 +807,7 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"Te recomiendo la app 'eurocine 2014'"];
+        [mailComposeViewController setSubject:[NSString stringWithFormat:@"Te recomiendo la app '%@'", self.appName]];
         [mailComposeViewController setMessageBody:[self getDictionaryWithName:@"master"][@"app"][@"social_message"] isHTML:NO];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;

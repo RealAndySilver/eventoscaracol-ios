@@ -49,7 +49,7 @@
     self.navigationBar.delegate = self;
     self.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     self.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
+    self.navigationBar.barTintColor = [UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0];
     [self.view addSubview:self.navigationBar];
     
     //////////////////////////////
@@ -69,7 +69,7 @@
     titleLabel.text = @"ACTIVIDAD EN REDES";
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor colorWithRed:133.0/255.0 green:101.0/255.0 blue:0.0 alpha:1.0];
+    titleLabel.textColor = [UIColor whiteColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     
     navigationItem.titleView = titleLabel;

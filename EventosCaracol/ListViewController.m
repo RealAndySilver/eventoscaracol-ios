@@ -46,6 +46,8 @@
 @property (strong, nonatomic) NSMutableArray *itemsOfPicker1Arrray;
 @property (strong, nonatomic) NSMutableArray *itemsOfPicker2Array;
 
+@property (strong, nonatomic) NSString *appName;
+
 @end
 
 #define ROW_HEIGHT 95.0
@@ -56,6 +58,14 @@
 }
 
 #pragma mark - Lazy Instantiation 
+
+-(NSString *)appName {
+    if (!_appName) {
+        FileSaver *fileSaver = [[FileSaver alloc] init];
+        _appName = [fileSaver getDictionary:@"master"][@"app"][@"name"];
+    }
+    return _appName;
+}
 
 -(NSMutableArray *)itemsOfPicker1Arrray {
     if (!_itemsOfPicker1Arrray) {
@@ -101,7 +111,7 @@
     
     //We need to set this properties every time the view appears, because
     //there are more view controllers that change this properties.
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
@@ -135,7 +145,8 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear: animated];
     NSLog(@"Apareciiiiiiii");
-    self.tableView.contentOffset = CGPointMake(0.0, 0.0);
+    [self.tableView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
+    //self.tableView.contentOffset = CGPointMake(0.0, 0.0);
     self.tableView.contentInset = UIEdgeInsetsZero;
 }
 
@@ -184,7 +195,7 @@
     titleLabel.text = self.navigationBarTitle;
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
     titleLabel.backgroundColor = [UIColor clearColor];
-    titleLabel.textColor = [UIColor colorWithRed:133.0/255.0 green:101.0/255.0 blue:0.0 alpha:1.0];
+    titleLabel.textColor = [UIColor whiteColor];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     //self.navigationItem.title = self.navigationBarTitle;
@@ -317,11 +328,11 @@
     
     //BLue bar in top of the picker view
     UIView *blueBar = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.containerDatesPickerView.frame.size.width, 44.0)];
-    blueBar.backgroundColor = [[UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0] colorWithAlphaComponent:0.8];
+    blueBar.backgroundColor = [[UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0] colorWithAlphaComponent:0.8];
     [self.containerDatesPickerView addSubview:blueBar];
     
     UIView *blueBar2 = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.containerLocationPickerView.frame.size.width, 44.0)];
-    blueBar2.backgroundColor = [[UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0] colorWithAlphaComponent:0.8];
+    blueBar2.backgroundColor = [[UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0] colorWithAlphaComponent:0.8];
     [self.containerLocationPickerView addSubview:blueBar2];
     
     /////////////////////////////////////////////////////////////////
@@ -390,6 +401,9 @@
     
     //Remove the slie menu button from the navigation bar
     [self.sideBarButton removeFromSuperview];
+    
+    [self.tableView setContentOffset:CGPointMake(0.0, 0.0) animated:NO];
+    self.tableView.contentInset = UIEdgeInsetsZero;
 }
 
 #pragma mark - UITableViewDelegate & UITableViewDataSource
@@ -1038,7 +1052,7 @@
     {
         //NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"¡eurocine 2014!"];
+        [mailComposeViewController setSubject:self.appName];
         [mailComposeViewController setMessageBody:self.textToShare isHTML:NO];
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
             mailComposeViewController.modalPresentationStyle = UIModalPresentationFormSheet;

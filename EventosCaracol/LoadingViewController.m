@@ -114,13 +114,16 @@
     
     //Check if the method returned from the server is the correct one
     if ([methodName isEqualToString:@"GetAllInfoWithAppID"]) {
-        NSLog(@"Recibi la info del login");
-        //NSLog(@"entre acaaaaa: %@", dictionary);
+        //NSLog(@"Recibi la info del login");
+        NSLog(@"entre acaaaaa: %@", dictionary);
         if ([dictionary objectForKey:@"app"])
         {
             //Save the dictionary downloaded from the server locally in our app.
             [self setDictionary:dictionary withName:@"master"];
-            //NSLog(@"%@", dictionary);
+            
+            //Set the google API Key received
+            NSString *apiKey = dictionary[@"app"][@"googleios_apikey"];
+            [GMSServices provideAPIKey:apiKey];
             
             //At this point we have all the neccessary info, so we can go to the
             //next view controller.

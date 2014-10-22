@@ -14,7 +14,7 @@
 		<string>https://bitbucket.org/katsuyapr0/eventoscaracol.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>EventosCaracol.xcodeproj/project.xcworkspace</string>
+	<string>EventosCaracol.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D22CE9F1731F51B0A7F171AB99EF4A755D1391F3</key>

@@ -14,9 +14,18 @@
 @property (strong, nonatomic) UIButton *favoriteButton;
 @property (strong, nonatomic) UILabel *favoriteCountLabel;
 @property (strong, nonatomic) UIButton *shareButton;
+@property (strong, nonatomic) NSString *appName;
 @end
 
 @implementation DetailsViewController
+
+-(NSString *)appName {
+    if (!_appName) {
+        FileSaver *fileSaver = [[FileSaver alloc] init];
+        _appName = [fileSaver getDictionary:@"master"][@"app"][@"name"];
+    }
+    return _appName;
+}
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -27,8 +36,8 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0]};
+    self.navigationController.navigationBar.tintColor = [UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0]};
     
     //ShareButton
     self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width - 40.0, 5.0, 35.0, 35.0)];
@@ -55,9 +64,8 @@
                                                                     150.0,
                                                                     44.0)];
     titleLabel.text = self.navigationBarTitle.length>18?[NSString stringWithFormat:@"%@..",[self.navigationBarTitle substringWithRange:NSMakeRange(0, 18)]]:self.navigationBarTitle ;
-    //titleLabel.backgroundColor = [UIColor redColor];
     titleLabel.font = [UIFont fontWithName:@"Montserrat-Regular" size:17.0];
-    titleLabel.textColor = [UIColor colorWithRed:249.0/255.0 green:170.0/255.0 blue:0.0 alpha:1.0];
+    titleLabel.textColor = [UIColor colorWithRed:39.0/255.0 green:178.0/255.0 blue:229.0/255.0 alpha:1.0];
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     //self.navigationItem.title = self.navigationBarTitle;
@@ -122,6 +130,7 @@
     collectionView.delegate = self;
     collectionView.dataSource = self;
     collectionView.pagingEnabled = YES;
+    collectionView.showsHorizontalScrollIndicator = NO;
     collectionView.backgroundColor = [UIColor whiteColor];
     [collectionView registerClass:[DetailGalleryCell class] forCellWithReuseIdentifier:@"GalleryCell"];
     [self.scrollView addSubview:collectionView];
@@ -608,7 +617,7 @@
     {
         NSLog(@"Mail");
         MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
-        [mailComposeViewController setSubject:@"¡eurocine 2014!"];
+        [mailComposeViewController setSubject:self.appName];
         [mailComposeViewController setMessageBody:textToShare isHTML:NO];
         
         mailComposeViewController.mailComposeDelegate = self;
