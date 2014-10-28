@@ -78,7 +78,7 @@
     self.backgroundImageView = [[UIImageView alloc] initWithFrame:self.view.frame];
     self.backgroundImageView.userInteractionEnabled = YES;
     self.backgroundImageView.clipsToBounds = YES;
-    self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFit;
     //NSURL *backgroundImageURL = [NSURL URLWithString:[fileSaver getDictionary:@"master"][@"app"][@"logo_wide_url"]];
     //[self.backgroundImageView setImageWithURL:backgroundImageURL];
     self.backgroundImageView.image = [UIImage imageNamed:@"FondoMenu.png"];
