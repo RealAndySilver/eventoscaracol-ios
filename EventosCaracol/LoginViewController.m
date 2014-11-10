@@ -195,7 +195,7 @@
     //Check if the method returned by the server is the correct one.
     if ([methodName isEqualToString:@"SignUp"])
     {
-        NSLog(@"Result: %@",dictionary);
+        //NSLog(@"Result: %@",dictionary);
         
         //Check if the status returned by the server is 1 (this means that everything
         //was correct). if it is 1, we store the user info locally in the app and pass
