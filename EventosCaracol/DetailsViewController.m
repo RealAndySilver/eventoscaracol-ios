@@ -158,7 +158,7 @@
     //If the current object is favorite, show the favorite button with purple color.
     if ([favoritedObjectsArray containsObject:self.objectInfo[@"_id"]])
     {
-        NSLog(@"el objeto está favoriteado oís");
+        //NSLog(@"el objeto está favoriteado oís");
         //self.favoriteButton.backgroundColor = [UIColor purpleColor];
         [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonPrendido.png"] forState:UIControlStateNormal];
         self.isFavorited = YES;
@@ -167,7 +167,7 @@
     //...if not, show it with gray color.
     else
     {
-        NSLog(@"el objeto no está favoriteado oís");
+        //NSLog(@"el objeto no está favoriteado oís");
         self.isFavorited = NO;
         [self.favoriteButton setImage:[UIImage imageNamed:@"CorazonApagado.png"] forState:UIControlStateNormal];
         //self.favoriteButton.backgroundColor = [UIColor grayColor];
